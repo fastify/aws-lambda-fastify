@@ -1,0 +1,23 @@
+{
+  "name": "aws-lambda-fastify",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "test": "npm run lint && mocha --colors --reporter spec --recursive test"
+  },
+  "dependencies": {
+    "binary-case": "1.1.4"
+  },
+  "devDependencies": {
+    "eslint": "6.0.1",
+    "eslint-config-standard": "13.0.1",
+    "eslint-plugin-import": "2.18.0",
+    "eslint-plugin-node": "9.1.0",
+    "eslint-plugin-promise": "4.2.1",
+    "eslint-plugin-standard": "4.0.0",
+    "fastify": "2.6.0",
+    "mocha": "6.1.4",
+    "should": "13.2.3"
+  }
+}

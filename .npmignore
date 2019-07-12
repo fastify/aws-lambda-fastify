@@ -1,0 +1,10 @@
+.DS_Store
+setup
+test
+.eslintrc
+.gitignore
+.npmignore
+.editorconfig
+.vscode
+README.md
+.eslintignore
