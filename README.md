@@ -55,7 +55,7 @@ if (require.main !== module) {
 
 When executed in your lambda function we don't need to listen to a specific port,
 so we just export the `app` in this case.
-The [`lambda.js`](https://github.com/adrai/aws-lambda-fastify/blob/master/README.md#lambdajs) file will use this export.
+The [`lambda.js`](https://github.com/adrai/aws-lambda-fastify#lambdajs) file will use this export.
 
 When you execute your Fastify application like always,
 i.e. `node app.js` *(the detection for this could be `require.main === module`)*,
