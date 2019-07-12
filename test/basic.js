@@ -9,7 +9,7 @@ describe('basic', () => {
       const app = fastify()
       app.get('/test', async (request, reply) => {
         should(request.headers).have.property('x-my-header', 'wuuusaaa')
-        should(request.headers).have.property('x-apigateway-event', '%7B%22httpMethod%22%3A%22GET%22%2C%22path%22%3A%22%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%7D%7D')
+        should(request.headers).have.property('x-apigateway-event', '%7B%22httpMethod%22%3A%22GET%22%2C%22path%22%3A%22%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%7D%2C%22queryStringParameters%22%3A%22%22%7D')
         should(request.headers).have.property('user-agent', 'lightMyRequest')
         should(request.headers).have.property('host', 'localhost:80')
         should(request.headers).have.property('content-length', '0')
@@ -23,7 +23,8 @@ describe('basic', () => {
         path: '/test',
         headers: {
           'X-My-Header': 'wuuusaaa'
-        }
+        },
+        queryStringParameters: ''
       })
       should(ret).have.property('statusCode', 200)
       should(ret).have.property('body', '{"hello":"world"}')
