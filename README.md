@@ -92,4 +92,4 @@ Fastest is **aws-lambda-fastify**
  - For apps that may not see traffic for several minutes at a time, you could see [cold starts](https://aws.amazon.com/blogs/compute/container-reuse-in-lambda/)
  - Stateless only
  - API Gateway has a timeout of 29 seconds, and Lambda has a maximum execution time of 15 minutes.
- - If you are using another web framework () or want to use a more generic serverless proxy framework, have a look at: [serverless-http](https://github.com/dougmoscrop/serverless-http)
+ - If you are using another web framework (Connect, Express, Koa, Restana, Sails, Hapi, Fastify, Restify) or want to use a more generic serverless proxy framework, have a look at: [serverless-http](https://github.com/dougmoscrop/serverless-http)
