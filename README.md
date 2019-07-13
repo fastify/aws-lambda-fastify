@@ -6,7 +6,7 @@ Inspired by the AWSLABS [aws-serverless-express](https://github.com/awslabs/aws-
 
 **No use of internal sockets, makes use of Fastify's [inject](https://www.fastify.io/docs/latest/Testing/#testing-with-http-injection) function.**
 
-**Seems [faster](https://github.com/adrai/aws-lambda-fastify#some-basic-performance-metrics)** *(as the name implies)* **than [aws-serverless-express](https://github.com/awslabs/aws-serverless-express) and [aws-serverless-fastify](https://github.com/benMain/aws-serverless-fastify) ;-)**
+**Seems [faster](https://github.com/adrai/aws-lambda-fastify#some-basic-performance-metrics)** *(as the name implies)* **than [aws-serverless-express](https://github.com/awslabs/aws-serverless-express) and [aws-serverless-fastify](https://github.com/benMain/aws-serverless-fastify) 😉**
 
 ## Installation
 
