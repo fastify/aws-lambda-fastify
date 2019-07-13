@@ -1,5 +1,35 @@
 {
   "name": "aws-lambda-fastify",
+  "description": "Insipired by aws-serverless-express to work with Fastify with inject functionality.",
+  "keywords": [
+    "aws",
+    "lambda",
+    "serverless",
+    "amazon",
+    "cloud",
+    "node",
+    "nodejs",
+    "javascript",
+    "proxy",
+    "api",
+    "api-gateway",
+    "fastify",
+    "web"
+  ],
+  "homepage": "https://github.com/adrai/aws-lambda-fastify",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:adrai/aws-lambda-fastify.git"
+  },
+  "bugs": {
+    "url": "https://github.com/adrai/aws-lambda-fastify/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://raw.github.com/adrai/aws-lambda-fastify/master/LICENSE"
+    }
+  ],
   "version": "1.0.1",
   "main": "index.js",
   "scripts": {
