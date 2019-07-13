@@ -8,13 +8,13 @@ Inspired by the AWSLABS [aws-serverless-express](https://github.com/awslabs/aws-
 
 **Seems [faster](https://github.com/adrai/aws-lambda-fastify#some-basic-performance-metrics)** *(as the name implies)* **than [aws-serverless-express](https://github.com/awslabs/aws-serverless-express) and [aws-serverless-fastify](https://github.com/benMain/aws-serverless-fastify) 😉**
 
-## Installation
+## 👨🏻‍💻Installation
 
 ```bash
 $ npm install aws-lambda-fastify
 ```
 
-## Example
+## 📖Example
 
 ### lambda.js
 
@@ -63,7 +63,7 @@ When you execute your Fastify application like always,
 i.e. `node app.js` *(the detection for this could be `require.main === module`)*,
 you can normally listen to your port, so you can still run your Fastify function locally.
 
-### Hint
+### 📣Hint
 
 The original lambda event and context are passed via headers and can be used like this:
 
@@ -75,7 +75,7 @@ app.get('/', (request, reply) => {
 })
 ```
 
-## Some basic performance metrics
+## ⚡️Some basic performance metrics
 
 **aws-lambda-fastify** x **13,992 ops/sec** ±5.68% (78 runs sampled)
 
@@ -85,7 +85,7 @@ app.get('/', (request, reply) => {
 
 Fastest is **aws-lambda-fastify**
 
-#### Considerations
+#### ⚠️Considerations
 
  - For apps that may not see traffic for several minutes at a time, you could see [cold starts](https://aws.amazon.com/blogs/compute/container-reuse-in-lambda/)
  - Stateless only
