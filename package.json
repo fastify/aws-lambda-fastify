@@ -4,12 +4,16 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "test": "npm run lint && mocha --colors --reporter spec --recursive test"
+    "test": "npm run lint && mocha --colors --reporter spec --recursive test",
+    "performance": "npm run lint && node performanceTest/test"
   },
   "dependencies": {
     "binary-case": "1.1.4"
   },
   "devDependencies": {
+    "aws-serverless-express": "3.3.6",
+    "aws-serverless-fastify": "1.0.10",
+    "benchmark": "2.1.4",
     "eslint": "6.0.1",
     "eslint-config-standard": "13.0.1",
     "eslint-plugin-import": "2.18.0",

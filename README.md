@@ -4,7 +4,9 @@
 
 Inspired by the AWSLABS [aws-serverless-express](https://github.com/awslabs/aws-serverless-express) library tailor made for the [Fastify](https://www.fastify.io/) web framework.
 
-No use of internal sockets, makes use of Fastify's [inject](https://www.fastify.io/docs/latest/Testing/#testing-with-http-injection) function.
+**No use of internal sockets, makes use of Fastify's [inject](https://www.fastify.io/docs/latest/Testing/#testing-with-http-injection) function.**
+
+**Seems faster** *(as the name implies)* **than aws-serverless-express and aws-serverless-fastify ;-)**
 
 ## Installation
 
@@ -72,6 +74,16 @@ app.get('/', (request, reply) => {
   // ...
 })
 ```
+
+## Some basic performance metrics
+
+**aws-lambda-fastify** x **13,992 ops/sec** ±5.68% (78 runs sampled)
+
+**aws-serverless-express** x **2,140 ops/sec** ±6.36% (70 runs sampled)
+
+**aws-serverless-fastify** x **2,487 ops/sec** ±1.57% (77 runs sampled)
+
+Fastest is **aws-lambda-fastify**
 
 #### Considerations
 
