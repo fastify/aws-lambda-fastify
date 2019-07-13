@@ -30,6 +30,12 @@ const proxyAwsServerlessFastify = require('aws-serverless-fastify').proxy
 const appAwsServerlessFastify = fastify()
 appAwsServerlessFastify.get('/test', async () => ({ hello: 'world' }))
 
+// serverless-http stuff:
+const serverlessHttp = require('serverless-http')
+const appServerlessHttp = fastify()
+appServerlessHttp.get('/test', async () => ({ hello: 'world' }))
+const serverlessHttpProxy = serverlessHttp(appServerlessHttp)
+
 suite
   .add('aws-lambda-fastify', (deferred) => {
     proxy(event, {}, () => deferred.resolve())
@@ -43,6 +49,10 @@ suite
 
   .add('aws-serverless-fastify', (deferred) => {
     proxyAwsServerlessFastify(appAwsServerlessFastify, event, {}).then(() => deferred.resolve())
+  }, { defer: true })
+
+  .add('serverless-http', (deferred) => {
+    serverlessHttpProxy(event, {}).then(() => deferred.resolve())
   }, { defer: true })
 
   .on('cycle', (event) => {

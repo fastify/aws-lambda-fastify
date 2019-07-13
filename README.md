@@ -77,11 +77,13 @@ app.get('/', (request, reply) => {
 
 ## ⚡️Some basic performance metrics
 
-**aws-lambda-fastify** x **13,992 ops/sec** ±5.68% (78 runs sampled)
+**aws-lambda-fastify** x **14,706 ops/sec** ±5.68% (80 runs sampled)
 
-**[aws-serverless-express](https://github.com/awslabs/aws-serverless-express)** x **2,140 ops/sec** ±6.36% (70 runs sampled)
+**[serverless-http](https://github.com/dougmoscrop/serverless-http)** x **10,986 ops/sec** ±2.90% (78 runs sampled)
 
-**[aws-serverless-fastify](https://github.com/benMain/aws-serverless-fastify)** x **2,487 ops/sec** ±1.57% (77 runs sampled)
+**[aws-serverless-fastify](https://github.com/benMain/aws-serverless-fastify)** x **3,017 ops/sec** ±1.57% (76 runs sampled)
+
+**[aws-serverless-express](https://github.com/awslabs/aws-serverless-express)** x **2,607 ops/sec** ±6.36% (71 runs sampled)
 
 Fastest is **aws-lambda-fastify**
 
@@ -90,3 +92,4 @@ Fastest is **aws-lambda-fastify**
  - For apps that may not see traffic for several minutes at a time, you could see [cold starts](https://aws.amazon.com/blogs/compute/container-reuse-in-lambda/)
  - Stateless only
  - API Gateway has a timeout of 29 seconds, and Lambda has a maximum execution time of 15 minutes.
+ - If you are using another web framework () or want to use a more generic serverless proxy framework, have a look at: [serverless-http](https://github.com/dougmoscrop/serverless-http)
