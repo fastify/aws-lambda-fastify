@@ -30,7 +30,7 @@
       "url": "https://raw.github.com/adrai/aws-lambda-fastify/master/LICENSE"
     }
   ],
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
