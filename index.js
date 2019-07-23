@@ -15,6 +15,10 @@ module.exports = (app, options) => (event, context, callback) => {
   headers['x-apigateway-event'] = encodeURIComponent(JSON.stringify(event))
   if (context) headers['x-apigateway-context'] = encodeURIComponent(JSON.stringify(context))
 
+  if (event.requestContext && event.requestContext.requestId) {
+    headers['x-request-id'] = headers['x-request-id'] || event.requestContext.requestId
+  }
+
   const prom = new Promise((resolve, reject) => {
     app.inject({ method, url, query, payload, headers }, (err, res) => {
       if (err) {
