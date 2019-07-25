@@ -1,6 +1,6 @@
 # Introduction
 
-[![travis](https://img.shields.io/travis/adrai/aws-lambda-fastify.svg)](https://travis-ci.org/adrai/aws-lambda-fastify) [![npm](https://img.shields.io/npm/v/aws-lambda-fastify.svg)](https://npmjs.org/package/aws-lambda-fastify)
+[![travis](https://img.shields.io/travis/adrai/aws-lambda-fastify.svg)](https://travis-ci.org/adrai/aws-lambda-fastify) [![npm](https://img.shields.io/npm/v/aws-lambda-fastify.svg)](https://npmjs.org/package/aws-lambda-fastify) [![Greenkeeper badge](https://badges.greenkeeper.io/fastify/aws-lambda-fastify.svg)](https://greenkeeper.io/)
 
 Inspired by the AWSLABS [aws-serverless-express](https://github.com/awslabs/aws-serverless-express) library tailor made for the [Fastify](https://www.fastify.io/) web framework.
 
