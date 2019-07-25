@@ -9,3 +9,5 @@ performanceTest
 .vscode
 README.md
 .eslintignore
+.nyc_output
+.travis
