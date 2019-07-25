@@ -1,12 +1,12 @@
 # Introduction
 
-[![travis](https://img.shields.io/travis/adrai/aws-lambda-fastify.svg)](https://travis-ci.org/adrai/aws-lambda-fastify) [![npm](https://img.shields.io/npm/v/aws-lambda-fastify.svg)](https://npmjs.org/package/aws-lambda-fastify) [![Greenkeeper badge](https://badges.greenkeeper.io/fastify/aws-lambda-fastify.svg)](https://greenkeeper.io/)
+[![travis](https://img.shields.io/travis/fastify/aws-lambda-fastify.svg)](https://travis-ci.org/fastify/aws-lambda-fastify) [![npm](https://img.shields.io/npm/v/aws-lambda-fastify.svg)](https://npmjs.org/package/aws-lambda-fastify) [![Greenkeeper badge](https://badges.greenkeeper.io/fastify/aws-lambda-fastify.svg)](https://greenkeeper.io/)
 
 Inspired by the AWSLABS [aws-serverless-express](https://github.com/awslabs/aws-serverless-express) library tailor made for the [Fastify](https://www.fastify.io/) web framework.
 
 **No use of internal sockets, makes use of Fastify's [inject](https://www.fastify.io/docs/latest/Testing/#testing-with-http-injection) function.**
 
-**Seems [faster](https://github.com/adrai/aws-lambda-fastify#some-basic-performance-metrics)** *(as the name implies)* **than [aws-serverless-express](https://github.com/awslabs/aws-serverless-express) and [aws-serverless-fastify](https://github.com/benMain/aws-serverless-fastify) 😉**
+**Seems [faster](https://github.com/fastify/aws-lambda-fastify#some-basic-performance-metrics)** *(as the name implies)* **than [aws-serverless-express](https://github.com/awslabs/aws-serverless-express) and [aws-serverless-fastify](https://github.com/benMain/aws-serverless-fastify) 😉**
 
 ## 👨🏻‍💻Installation
 
@@ -57,7 +57,7 @@ if (require.main !== module) {
 
 When executed in your lambda function we don't need to listen to a specific port,
 so we just export the `app` in this case.
-The [`lambda.js`](https://github.com/adrai/aws-lambda-fastify#lambdajs) file will use this export.
+The [`lambda.js`](https://github.com/fastify/aws-lambda-fastify#lambdajs) file will use this export.
 
 When you execute your Fastify application like always,
 i.e. `node app.js` *(the detection for this could be `require.main === module`)*,

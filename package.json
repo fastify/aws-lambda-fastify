@@ -16,18 +16,18 @@
     "fastify",
     "web"
   ],
-  "homepage": "https://github.com/adrai/aws-lambda-fastify",
+  "homepage": "https://github.com/fastify/aws-lambda-fastify",
   "repository": {
     "type": "git",
-    "url": "git@github.com:adrai/aws-lambda-fastify.git"
+    "url": "git@github.com:fastify/aws-lambda-fastify.git"
   },
   "bugs": {
-    "url": "https://github.com/adrai/aws-lambda-fastify/issues"
+    "url": "https://github.com/fastify/aws-lambda-fastify/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://raw.github.com/adrai/aws-lambda-fastify/master/LICENSE"
+      "url": "https://raw.github.com/fastify/aws-lambda-fastify/master/LICENSE"
     }
   ],
   "version": "1.0.3",
