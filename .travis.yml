@@ -9,6 +9,7 @@ node_js:
 branches:
   only:
     - master
+    - /^greenkeeper/.*$/
 
 notifications:
   email:
