@@ -52,7 +52,7 @@
     "eslint-plugin-promise": "4.2.1",
     "eslint-plugin-standard": "4.0.0",
     "fastify": "2.7.1",
-    "serverless-http": "2.1.1",
+    "serverless-http": "2.2.0",
     "tap": "14.6.1"
   }
 }
