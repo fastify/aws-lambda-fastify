@@ -1,6 +1,9 @@
 module.exports = (app, options) => (event, context, callback) => {
   options = options || {}
   options.binaryMimeTypes = options.binaryMimeTypes || []
+  if (options.callbackWaitsForEmptyEventLoop !== undefined) {
+    context.callbackWaitsForEmptyEventLoop = options.callbackWaitsForEmptyEventLoop
+  }
   event.body = event.body || ''
 
   const method = event.httpMethod
