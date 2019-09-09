@@ -43,7 +43,7 @@ const fastify = require('fastify');
 const app = fastify();
 app.get('/', (request, reply) => reply.send({ hello: 'world' }));
 
-if (require.main !== module) {
+if (require.main === module) {
   // called directly i.e. "node app"
   app.listen(3000, (err) => {
     if (err) console.error(err);
