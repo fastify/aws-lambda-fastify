@@ -38,9 +38,6 @@
     "test": "npm run lint && tap --no-esm -J -R specy test/*test.js",
     "performance": "npm run lint && node performanceTest/test"
   },
-  "dependencies": {
-    "binary-case": "1.1.4"
-  },
   "devDependencies": {
     "aws-serverless-express": "3.3.6",
     "aws-serverless-fastify": "1.0.10",

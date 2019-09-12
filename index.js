@@ -36,12 +36,12 @@ module.exports = (app, options) => (event, context, callback) => {
       if (headers['transfer-encoding'] === 'chunked') delete headers['transfer-encoding']
       if (headers['Transfer-Encoding'] === 'chunked') delete headers['Transfer-Encoding']
 
-      // HACK: modifies header casing to get around API Gateway's limitation of not allowing multiple
-      // headers with the same name, as discussed on the AWS Forum https://forums.aws.amazon.com/message.jspa?messageID=725953#725953
+      let multiValueHeaders
       Object.keys(res.headers).forEach((h) => {
         if (Array.isArray(res.headers[h])) {
           if (h.toLowerCase() === 'set-cookie') {
-            res.headers[h].forEach((value, i) => { res.headers[require('binary-case')(h, i + 1)] = value })
+            multiValueHeaders = multiValueHeaders || {}
+            multiValueHeaders[h] = res.headers[h]
             delete res.headers[h]
           } else res.headers[h] = res.headers[h].join(',')
         }
@@ -50,12 +50,14 @@ module.exports = (app, options) => (event, context, callback) => {
       const contentType = (res.headers['content-type'] || res.headers['Content-Type'] || '').split(';')[0]
       const isBase64Encoded = options.binaryMimeTypes.indexOf(contentType) > -1
 
-      resolve({
+      const ret = {
         statusCode: res.statusCode,
         body: isBase64Encoded ? res.rawPayload.toString('base64') : res.payload,
         headers: res.headers,
         isBase64Encoded
-      })
+      }
+      if (multiValueHeaders) ret.multiValueHeaders = multiValueHeaders
+      resolve(ret)
     })
   })
   if (!callback) return prom

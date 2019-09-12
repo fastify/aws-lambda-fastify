@@ -5,7 +5,7 @@ const fs = require('fs')
 const awsLambdaFastify = require('../index')
 
 test('GET', async (t) => {
-  t.plan(15)
+  t.plan(14)
 
   const app = fastify()
   app.get('/test', async (request, reply) => {
@@ -35,12 +35,11 @@ test('GET', async (t) => {
   t.equal(ret.headers['content-length'], '17')
   t.ok(ret.headers.date)
   t.equal(ret.headers.connection, 'keep-alive')
-  t.equal(ret.headers['Set-cookie'], 'qwerty=one')
-  t.equal(ret.headers['sEt-cookie'], 'qwerty=two')
+  t.same(ret.multiValueHeaders['set-cookie'], ['qwerty=one', 'qwerty=two'])
 })
 
 test('GET with base64 encoding response', async (t) => {
-  t.plan(15)
+  t.plan(14)
 
   const readFileAsync = promisify(fs.readFile)
   const fileBuffer = await readFileAsync(__filename)
@@ -72,8 +71,7 @@ test('GET with base64 encoding response', async (t) => {
   t.ok(ret.headers['content-length'])
   t.ok(ret.headers.date)
   t.equal(ret.headers.connection, 'keep-alive')
-  t.equal(ret.headers['Set-cookie'], 'qwerty=one')
-  t.equal(ret.headers['sEt-cookie'], 'qwerty=two')
+  t.same(ret.multiValueHeaders['set-cookie'], ['qwerty=one', 'qwerty=two'])
 })
 
 test('GET with multi-value query params', async (t) => {
@@ -100,7 +98,7 @@ test('GET with multi-value query params', async (t) => {
 })
 
 test('POST', async (t) => {
-  t.plan(18)
+  t.plan(17)
 
   const app = fastify()
   app.post('/test', async (request, reply) => {
@@ -134,13 +132,12 @@ test('POST', async (t) => {
   t.equal(ret.headers['content-length'], '18')
   t.ok(ret.headers.date)
   t.equal(ret.headers.connection, 'keep-alive')
-  t.equal(ret.headers['Set-cookie'], 'qwerty=one')
-  t.equal(ret.headers['sEt-cookie'], 'qwerty=two')
+  t.same(ret.multiValueHeaders['set-cookie'], ['qwerty=one', 'qwerty=two'])
   t.equal(ret.headers['x-custom-header'], 'ciao,salve')
 })
 
 test('POST with base64 encoding', async (t) => {
-  t.plan(17)
+  t.plan(16)
 
   const app = fastify()
   app.post('/test', async (request, reply) => {
@@ -175,6 +172,5 @@ test('POST with base64 encoding', async (t) => {
   t.equal(ret.headers['content-length'], '18')
   t.ok(ret.headers.date)
   t.equal(ret.headers.connection, 'keep-alive')
-  t.equal(ret.headers['Set-cookie'], 'qwerty=one')
-  t.equal(ret.headers['sEt-cookie'], 'qwerty=two')
+  t.same(ret.multiValueHeaders['set-cookie'], ['qwerty=one', 'qwerty=two'])
 })
