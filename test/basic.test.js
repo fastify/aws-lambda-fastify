@@ -137,14 +137,15 @@ test('POST', async (t) => {
 })
 
 test('POST with base64 encoding', async (t) => {
-  t.plan(16)
+  t.plan(17)
 
   const app = fastify()
   app.post('/test', async (request, reply) => {
     t.equal(request.headers['content-type'], 'application/json')
     t.equal(request.headers['x-my-header'], 'wuuusaaa')
-    t.equal(request.headers['x-apigateway-event'], '%7B%22httpMethod%22%3A%22POST%22%2C%22path%22%3A%22%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%2C%22Content-Type%22%3A%22application%2Fjson%22%7D%2C%22isBase64Encoded%22%3Atrue%2C%22requestContext%22%3A%7B%22requestId%22%3A%22my-req-id%22%7D%7D')
+    t.equal(request.headers['x-apigateway-event'], '%7B%22httpMethod%22%3A%22POST%22%2C%22path%22%3A%22%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%2C%22Content-Type%22%3A%22application%2Fjson%22%2C%22x-multi%22%3A%22just-the-first%22%7D%2C%22multiValueHeaders%22%3A%7B%22x-multi%22%3A%5B%22just-the-first%22%2C%22and-the-second%22%5D%7D%2C%22isBase64Encoded%22%3Atrue%2C%22requestContext%22%3A%7B%22requestId%22%3A%22my-req-id%22%7D%7D')
     t.equal(request.headers['user-agent'], 'lightMyRequest')
+    t.same(request.headers['x-multi'], ['just-the-first', 'and-the-second'])
     t.equal(request.headers.host, 'localhost:80')
     t.equal(request.headers['content-length'], 15)
     t.equal(request.body.greet, 'hi')
@@ -158,7 +159,11 @@ test('POST with base64 encoding', async (t) => {
     path: '/test',
     headers: {
       'X-My-Header': 'wuuusaaa',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'x-multi': 'just-the-first'
+    },
+    multiValueHeaders: {
+      'x-multi': ['just-the-first', 'and-the-second']
     },
     body: 'eyJncmVldCI6ICJoaSJ9',
     isBase64Encoded: true,

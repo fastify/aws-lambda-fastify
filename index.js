@@ -10,6 +10,13 @@ module.exports = (app, options) => (event, context, callback) => {
   const url = event.path
   const query = event.multiValueQueryStringParameters || event.queryStringParameters || {}
   const headers = Object.assign({}, event.headers)
+  if (event.multiValueHeaders) {
+    Object.keys(event.multiValueHeaders).forEach((h) => {
+      if (event.multiValueHeaders[h].length > 1) {
+        headers[h] = event.multiValueHeaders[h]
+      }
+    })
+  }
   const payload = Buffer.from(event.body, event.isBase64Encoded ? 'base64' : 'utf8')
   // NOTE: API Gateway is not setting Content-Length header on requests even when they have a body
   if (event.body && !headers['Content-Length'] && !headers['content-length']) headers['content-length'] = Buffer.byteLength(payload)
