@@ -50,6 +50,6 @@
     "eslint-plugin-standard": "^4.0.1",
     "fastify": "^2.9.0",
     "serverless-http": "^2.3.0",
-    "tap": "^14.6.7"
+    "tap": "^14.8.0"
   }
 }
