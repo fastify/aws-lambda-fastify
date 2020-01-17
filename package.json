@@ -40,16 +40,16 @@
   },
   "devDependencies": {
     "aws-serverless-express": "^3.3.6",
-    "aws-serverless-fastify": "^1.0.11",
+    "aws-serverless-fastify": "^1.0.13",
     "benchmark": "^2.1.4",
-    "eslint": "^6.7.2",
+    "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-import": "^2.20.0",
+    "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "fastify": "^2.11.0",
     "serverless-http": "^2.3.0",
-    "tap": "^14.10.2"
+    "tap": "^14.10.6"
   }
 }
