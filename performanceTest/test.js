@@ -6,6 +6,7 @@ const event = {
   httpMethod: 'GET',
   path: '/test',
   headers: {},
+  requestContext: { requestId: 'requestId' },
   queryStringParameters: ''
 }
 
