@@ -20,38 +20,38 @@ $ npm install aws-lambda-fastify
 
 ```js
 const awsLambdaFastify = require('aws-lambda-fastify')
-const app = require('./app');
+const app = require('./app')
 
 const proxy = awsLambdaFastify(app)
 // or
 // const proxy = awsLambdaFastify(app, { binaryMimeTypes: ['application/octet-stream'] })
 
-exports.handler = proxy;
+exports.handler = proxy
 // or
-// exports.handler = (event, context, callback) => proxy(event, context, callback);
+// exports.handler = (event, context, callback) => proxy(event, context, callback)
 // or
-// exports.handler = (event, context) => proxy(event, context);
+// exports.handler = (event, context) => proxy(event, context)
 // or
-// exports.handler = async (event, context) => proxy(event, context);
+// exports.handler = async (event, context) => proxy(event, context)
 ```
 
 ### app.js
 
 ```js
-const fastify = require('fastify');
+const fastify = require('fastify')
 
-const app = fastify();
-app.get('/', (request, reply) => reply.send({ hello: 'world' }));
+const app = fastify()
+app.get('/', (request, reply) => reply.send({ hello: 'world' }))
 
 if (require.main === module) {
   // called directly i.e. "node app"
   app.listen(3000, (err) => {
-    if (err) console.error(err);
-    console.log('server listening on 3000');
-  });
+    if (err) console.error(err)
+    console.log('server listening on 3000')
+  })
 } else {
   // required as a module => executed on aws lambda
-  module.exports = app;
+  module.exports = app
 }
 ```
 
@@ -70,7 +70,7 @@ The original lambda event and context are passed via headers and can be used lik
 ```js
 app.get('/', (request, reply) => {
   const event = JSON.parse(decodeURIComponent(request.headers['x-apigateway-event']))
-  const context = JSON.parse(decodeURIComponent(request.headers['x-apigateway-context']))});
+  const context = JSON.parse(decodeURIComponent(request.headers['x-apigateway-context']))
   // ...
 })
 ```
