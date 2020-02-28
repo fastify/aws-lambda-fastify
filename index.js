@@ -57,6 +57,9 @@ module.exports = (app, options) => (event, context, callback) => {
             multiValueHeaders[h] = res.headers[h]
             delete res.headers[h]
           } else res.headers[h] = res.headers[h].join(',')
+        } else if (typeof res.headers[h] !== 'undefined' && typeof res.headers[h] !== 'string') {
+          // NOTE: API Gateway (i.e. HttpApi) validates all headers to be a string
+          res.headers[h] = res.headers[h].toString()
         }
       })
 
