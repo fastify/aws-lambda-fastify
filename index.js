@@ -6,13 +6,13 @@ module.exports = (app, options) => (event, context, callback) => {
   }
   event.body = event.body || ''
 
-  const method = event.httpMethod
-  let url = event.path
+  const method = event.httpMethod || (event.requestContext && event.requestContext.http ? event.requestContext.http.method : undefined)
+  let url = event.path || event.rawPath // seen rawPath for HTTP-API
   // NOTE: if used directly via API Gateway domain and /stage
   if (event.requestContext && event.requestContext.stage && event.requestContext.resourcePath &&
-      event.path.indexOf(`/${event.requestContext.stage}/`) === 0 &&
+      (event.path || event.rawPath).indexOf(`/${event.requestContext.stage}/`) === 0 &&
       event.requestContext.resourcePath.indexOf(`/${event.requestContext.stage}/`) !== 0) {
-    url = event.path.substring(event.requestContext.stage.length + 1)
+    url = (event.path || event.rawPath).substring(event.requestContext.stage.length + 1)
   }
   const query = event.multiValueQueryStringParameters || event.queryStringParameters || {}
   const headers = Object.assign({}, event.headers)
