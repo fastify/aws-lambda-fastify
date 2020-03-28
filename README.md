@@ -93,3 +93,18 @@ Fastest is **aws-lambda-fastify**
  - Stateless only
  - API Gateway has a timeout of 29 seconds, and Lambda has a maximum execution time of 15 minutes. (Using Application Load Balancer has no timeout limit, so the lambda maximum execution time is relevant)
  - If you are using another web framework (Connect, Express, Koa, Restana, Sails, Hapi, Fastify, Restify) or want to use a more generic serverless proxy framework, have a look at: [serverless-http](https://github.com/dougmoscrop/serverless-http)
+
+
+#### 🎖Who is using it?
+
+<a href="https://locize.com" target="_blank" rel="nofollow">
+  <img style="max-height: 80px;" src="https://raw.githubusercontent.com/fastify/aws-lambda-fastify/master/images/logos/locize.svg" alt="locize is using aws-lambda-fastify"/>
+</a>
+<br />
+<a href="https://localistars.com" target="_blank" rel="nofollow">
+  <img style="max-height: 80px;" src="https://raw.githubusercontent.com/fastify/aws-lambda-fastify/master/images/logos/localistars.svg" alt="localistars is using aws-lambda-fastify"/>
+</a>
+
+---
+<small>The logos displayed in this page are property of the respective organisations and they are
+not distributed under the same license as aws-lambda-fastify (MIT).</small>
