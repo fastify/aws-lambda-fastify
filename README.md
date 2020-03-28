@@ -1,6 +1,6 @@
 # Introduction
 
-[![travis](https://img.shields.io/travis/fastify/aws-lambda-fastify.svg)](https://travis-ci.org/fastify/aws-lambda-fastify) [![npm](https://img.shields.io/npm/v/aws-lambda-fastify.svg)](https://npmjs.org/package/
+[![travis](https://img.shields.io/travis/fastify/aws-lambda-fastify.svg)](https://travis-ci.org/fastify/aws-lambda-fastify) [![npm](https://img.shields.io/npm/v/aws-lambda-fastify.svg)](https://npmjs.org/package/aws-lambda-fastify)
 
 Inspired by the AWSLABS [aws-serverless-express](https://github.com/awslabs/aws-serverless-express) library tailor made for the [Fastify](https://www.fastify.io/) web framework.
 
