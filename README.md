@@ -98,11 +98,11 @@ Fastest is **aws-lambda-fastify**
 #### 🎖Who is using it?
 
 <a href="https://locize.com" target="_blank" rel="nofollow">
-  <img style="max-height: 80px;" src="https://raw.githubusercontent.com/fastify/aws-lambda-fastify/master/images/logos/locize.svg" alt="locize is using aws-lambda-fastify"/>
+  <img style="max-height: 80px;" src="https://raw.githubusercontent.com/fastify/aws-lambda-fastify/master/images/logos/locize.png" alt="locize is using aws-lambda-fastify"/>
 </a>
 <br />
 <a href="https://localistars.com" target="_blank" rel="nofollow">
-  <img style="max-height: 80px;" src="https://raw.githubusercontent.com/fastify/aws-lambda-fastify/master/images/logos/localistars.svg" alt="localistars is using aws-lambda-fastify"/>
+  <img style="max-height: 80px;" src="https://raw.githubusercontent.com/fastify/aws-lambda-fastify/master/images/logos/localistars.png" alt="localistars is using aws-lambda-fastify"/>
 </a>
 
 ---
