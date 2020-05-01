@@ -10,9 +10,9 @@ module.exports = (app, options) => (event, context, callback) => {
   let url = event.path || event.rawPath // seen rawPath for HTTP-API
   // NOTE: if used directly via API Gateway domain and /stage
   if (event.requestContext && event.requestContext.stage && event.requestContext.resourcePath &&
-      (event.path || event.rawPath).indexOf(`/${event.requestContext.stage}/`) === 0 &&
+      (url).indexOf(`/${event.requestContext.stage}/`) === 0 &&
       event.requestContext.resourcePath.indexOf(`/${event.requestContext.stage}/`) !== 0) {
-    url = (event.path || event.rawPath).substring(event.requestContext.stage.length + 1)
+    url = url.substring(event.requestContext.stage.length + 1)
   }
   const query = event.multiValueQueryStringParameters || event.queryStringParameters || {}
   const headers = Object.assign({}, event.headers)
@@ -27,7 +27,7 @@ module.exports = (app, options) => (event, context, callback) => {
   // NOTE: API Gateway is not setting Content-Length header on requests even when they have a body
   if (event.body && !headers['Content-Length'] && !headers['content-length']) headers['content-length'] = Buffer.byteLength(payload)
 
-  delete event.body
+  event.body = undefined
   headers['x-apigateway-event'] = encodeURIComponent(JSON.stringify(event))
   if (context) headers['x-apigateway-context'] = encodeURIComponent(JSON.stringify(context))
 
@@ -35,7 +35,7 @@ module.exports = (app, options) => (event, context, callback) => {
     headers['x-request-id'] = headers['x-request-id'] || event.requestContext.requestId
   }
 
-  const prom = new Promise((resolve, reject) => {
+  const prom = new Promise((resolve) => {
     app.inject({ method, url, query, payload, headers }, (err, res) => {
       if (err) {
         console.error(err)
