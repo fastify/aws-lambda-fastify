@@ -146,10 +146,11 @@ test('GET stub inject', (t) => new Promise((resolve, reject) => {
   const proxy = awsLambdaFastify(app)
 
   proxy(event, null, function callback (err, ret) {
-    if (err) return reject
+    if (err) return reject(err)
 
     t.same(ret.headers, {})
     t.same(ret.statusCode, 500)
     t.same(ret.body, '')
+    resolve()
   })
 }))
