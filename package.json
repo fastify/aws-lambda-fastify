@@ -31,7 +31,7 @@
       "url": "https://raw.github.com/fastify/aws-lambda-fastify/master/LICENSE"
     }
   ],
-  "version": "1.4.3",
+  "version": "1.4.4",
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
