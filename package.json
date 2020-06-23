@@ -42,7 +42,7 @@
     "aws-serverless-express": "^3.3.8",
     "aws-serverless-fastify": "^1.0.13",
     "benchmark": "^2.1.4",
-    "eslint": "^6.8.0",
+    "eslint": "^7.3.1",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-node": "^11.1.0",

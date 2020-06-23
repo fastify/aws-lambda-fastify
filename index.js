@@ -7,7 +7,7 @@ module.exports = (app, options) => (event, context, callback) => {
   event.body = event.body || ''
 
   const method = event.httpMethod || (event.requestContext && event.requestContext.http ? event.requestContext.http.method : undefined)
-  let url = event.path || event.rawPath // seen rawPath for HTTP-API
+  let url = event.path || event.rawPath || '/' // seen rawPath for HTTP-API
   // NOTE: if used directly via API Gateway domain and /stage
   if (event.requestContext && event.requestContext.stage && event.requestContext.resourcePath &&
       (url).indexOf(`/${event.requestContext.stage}/`) === 0 &&
