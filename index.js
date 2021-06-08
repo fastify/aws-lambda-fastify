@@ -35,7 +35,7 @@ module.exports = (app, options) => (event, context, callback) => {
     headers['x-request-id'] = headers['x-request-id'] || event.requestContext.requestId
   }
 
-  // API gateway v2 cookies
+  // API gateway v2 cookies: https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html
   if (event.cookies && event.cookies.length) {
     headers['cookie'] = event.cookies.join(';')
   }
