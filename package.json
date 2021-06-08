@@ -25,12 +25,7 @@
   "bugs": {
     "url": "https://github.com/fastify/aws-lambda-fastify/issues"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://raw.github.com/fastify/aws-lambda-fastify/master/LICENSE"
-    }
-  ],
+  "license": "MIT",
   "version": "1.4.4",
   "main": "index.js",
   "scripts": {
