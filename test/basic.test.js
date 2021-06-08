@@ -5,12 +5,13 @@ const fs = require('fs')
 const awsLambdaFastify = require('../index')
 
 test('GET', async (t) => {
-  t.plan(14)
+  t.plan(15)
 
   const app = fastify()
   app.get('/test', async (request, reply) => {
     t.equal(request.headers['x-my-header'], 'wuuusaaa')
-    t.equal(request.headers['x-apigateway-event'], '%7B%22httpMethod%22%3A%22GET%22%2C%22path%22%3A%22%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%7D%2C%22queryStringParameters%22%3A%22%22%7D')
+    t.equal(request.headers['cookie'], 'foo=bar')
+    t.equal(request.headers['x-apigateway-event'], '%7B%22httpMethod%22%3A%22GET%22%2C%22path%22%3A%22%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%7D%2C%22cookies%22%3A%5B%22foo%3Dbar%22%5D%2C%22queryStringParameters%22%3A%22%22%7D')
     t.equal(request.headers['user-agent'], 'lightMyRequest')
     t.equal(request.headers.host, 'localhost:80')
     t.equal(request.headers['content-length'], '0')
@@ -25,6 +26,7 @@ test('GET', async (t) => {
     headers: {
       'X-My-Header': 'wuuusaaa'
     },
+    cookies: ['foo=bar'],
     queryStringParameters: ''
   })
   t.equal(ret.statusCode, 200)
