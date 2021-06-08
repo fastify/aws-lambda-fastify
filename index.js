@@ -35,6 +35,11 @@ module.exports = (app, options) => (event, context, callback) => {
     headers['x-request-id'] = headers['x-request-id'] || event.requestContext.requestId
   }
 
+  // API gateway v2 cookies
+  if (event.cookies && event.cookies.length) {
+    headers['cookie'] = event.cookies.join(';')
+  }
+
   const prom = new Promise((resolve) => {
     app.inject({ method, url, query, payload, headers }, (err, res) => {
       if (err) {
