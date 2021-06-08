@@ -30,7 +30,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "test": "npm run lint && tap -J -R specy test/*test.js",
+    "test": "npm run lint && tap -J -R specy --no-coverage test/*test.js",
     "performance": "npm run lint && node performanceTest/test"
   },
   "devDependencies": {
