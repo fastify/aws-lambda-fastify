@@ -9,6 +9,7 @@
     "afterEach": false
   },
   "rules": {
-    "array-bracket-spacing": 0
+    "array-bracket-spacing": 0,
+    "dot-notation": 0
   }
 }
