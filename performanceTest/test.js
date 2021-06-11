@@ -3,6 +3,7 @@ const suite = new Benchmark.Suite()
 
 const fastify = require('fastify')
 const event = {
+  version: '1.0',
   httpMethod: 'GET',
   path: '/test',
   headers: {},
