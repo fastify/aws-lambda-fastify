@@ -27,7 +27,7 @@ const app = require('./app')
 
 const proxy = awsLambdaFastify(app)
 // or
-// const proxy = awsLambdaFastify(app, { binaryMimeTypes: ['application/octet-stream'] })
+// const proxy = awsLambdaFastify(app, { binaryMimeTypes: ['application/octet-stream'], serializeLambdaArguments: false /* default is true */ })
 
 exports.handler = proxy
 // or

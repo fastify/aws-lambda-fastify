@@ -1,6 +1,7 @@
 module.exports = (app, options) => (event, context, callback) => {
   options = options || {}
   options.binaryMimeTypes = options.binaryMimeTypes || []
+  options.serializeLambdaArguments = options.serializeLambdaArguments !== undefined ? options.serializeLambdaArguments : true
   if (options.callbackWaitsForEmptyEventLoop !== undefined) {
     context.callbackWaitsForEmptyEventLoop = options.callbackWaitsForEmptyEventLoop
   }
@@ -28,8 +29,10 @@ module.exports = (app, options) => (event, context, callback) => {
   if (event.body && !headers['Content-Length'] && !headers['content-length']) headers['content-length'] = Buffer.byteLength(payload)
 
   event.body = undefined
-  headers['x-apigateway-event'] = encodeURIComponent(JSON.stringify(event))
-  if (context) headers['x-apigateway-context'] = encodeURIComponent(JSON.stringify(context))
+  if (options.serializeLambdaArguments) {
+    headers['x-apigateway-event'] = encodeURIComponent(JSON.stringify(event))
+    if (context) headers['x-apigateway-context'] = encodeURIComponent(JSON.stringify(context))
+  }
 
   if (event.requestContext && event.requestContext.requestId) {
     headers['x-request-id'] = headers['x-request-id'] || event.requestContext.requestId
