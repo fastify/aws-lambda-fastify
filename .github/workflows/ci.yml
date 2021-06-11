@@ -1,12 +1,14 @@
-name: ci
+name: CI
 
 on:
   push:
     paths-ignore:
-      - "*.md"
+      - 'docs/**'
+      - '*.md'
   pull_request:
     paths-ignore:
-      - "*.md"
+      - 'docs/**'
+      - '*.md'
 
 jobs:
   tests:
@@ -26,3 +28,11 @@ jobs:
       - name: Run tests
         run: |
           npm run test
+
+  automerge:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: fastify/github-action-merge-dependabot@v2.1.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

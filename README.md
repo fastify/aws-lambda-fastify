@@ -1,6 +1,9 @@
 # Introduction
 
-[![travis](https://img.shields.io/travis/fastify/aws-lambda-fastify.svg)](https://travis-ci.org/fastify/aws-lambda-fastify) [![npm](https://img.shields.io/npm/v/aws-lambda-fastify.svg)](https://npmjs.org/package/aws-lambda-fastify)
+![CI](https://github.com/fastify/aws-lambda-fastify/workflows/CI/badge.svg)
+[![NPM version](https://img.shields.io/npm/v/aws-lambda-fastify.svg?style=flat)](https://www.npmjs.com/package/aws-lambda-fastify)
+[![Known Vulnerabilities](https://snyk.io/test/github/fastify/aws-lambda-fastify/badge.svg)](https://snyk.io/test/github/fastify/aws-lambda-fastify)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://standardjs.com/)
 
 Inspired by the AWSLABS [aws-serverless-express](https://github.com/awslabs/aws-serverless-express) library tailor made for the [Fastify](https://www.fastify.io/) web framework.
 
