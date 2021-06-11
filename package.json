@@ -46,5 +46,8 @@
     "fastify": "^3.17.0",
     "serverless-http": "^2.7.0",
     "tap": "^15.0.9"
+  },
+  "dependencies": {
+    "fast-json-stringify": "^2.7.6"
   }
 }

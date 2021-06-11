@@ -1,3 +1,15 @@
+const stringifiers = require('./stringifiers')
+
+function getStringifier (version) {
+  switch (version) {
+    case '1.0':
+    case '2.0':
+      return stringifiers[version]
+    default:
+      return JSON.stringify
+  }
+}
+
 module.exports = (app, options) => (event, context, callback) => {
   options = options || {}
   options.binaryMimeTypes = options.binaryMimeTypes || []
@@ -17,19 +29,19 @@ module.exports = (app, options) => (event, context, callback) => {
   const query = event.multiValueQueryStringParameters || event.queryStringParameters || {}
   const headers = Object.assign({}, event.headers)
   if (event.multiValueHeaders) {
-    Object.keys(event.multiValueHeaders).forEach((h) => {
+    for (const h in event.multiValueHeaders) {
       if (event.multiValueHeaders[h].length > 1) {
         headers[h] = event.multiValueHeaders[h]
       }
-    })
+    }
   }
   const payload = Buffer.from(event.body, event.isBase64Encoded ? 'base64' : 'utf8')
   // NOTE: API Gateway is not setting Content-Length header on requests even when they have a body
   if (event.body && !headers['Content-Length'] && !headers['content-length']) headers['content-length'] = Buffer.byteLength(payload)
 
   event.body = undefined
-  headers['x-apigateway-event'] = encodeURIComponent(JSON.stringify(event))
-  if (context) headers['x-apigateway-context'] = encodeURIComponent(JSON.stringify(context))
+  headers['x-apigateway-event'] = encodeURIComponent(getStringifier(event.version)(event))
+  if (context) headers['x-apigateway-context'] = encodeURIComponent(getStringifier(event.version)(context))
 
   if (event.requestContext && event.requestContext.requestId) {
     headers['x-request-id'] = headers['x-request-id'] || event.requestContext.requestId

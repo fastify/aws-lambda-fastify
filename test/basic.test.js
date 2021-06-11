@@ -11,7 +11,7 @@ test('GET', async (t) => {
   app.get('/test', async (request, reply) => {
     t.equal(request.headers['x-my-header'], 'wuuusaaa')
     t.equal(request.headers['cookie'], 'foo=bar')
-    t.equal(request.headers['x-apigateway-event'], '%7B%22httpMethod%22%3A%22GET%22%2C%22path%22%3A%22%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%7D%2C%22cookies%22%3A%5B%22foo%3Dbar%22%5D%2C%22queryStringParameters%22%3A%22%22%7D')
+    t.equal(request.headers['x-apigateway-event'], '%7B%22version%22%3A%222.0%22%2C%22cookies%22%3A%5B%22foo%3Dbar%22%5D%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%7D%2C%22queryStringParameters%22%3A%7B%7D%7D')
     t.equal(request.headers['user-agent'], 'lightMyRequest')
     t.equal(request.headers.host, 'localhost:80')
     t.equal(request.headers['content-length'], '0')
@@ -21,6 +21,7 @@ test('GET', async (t) => {
   })
   const proxy = awsLambdaFastify(app)
   const ret = await proxy({
+    version: '2.0',
     httpMethod: 'GET',
     path: '/test',
     headers: {
@@ -48,7 +49,7 @@ test('GET with base64 encoding response', async (t) => {
   const app = fastify()
   app.get('/test', async (request, reply) => {
     t.equal(request.headers['x-my-header'], 'wuuusaaa')
-    t.equal(request.headers['x-apigateway-event'], '%7B%22httpMethod%22%3A%22GET%22%2C%22path%22%3A%22%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%2C%22Content-Type%22%3A%22application%2Fjson%22%7D%7D')
+    t.equal(request.headers['x-apigateway-event'], '%7B%22version%22%3A%221.0%22%2C%22path%22%3A%22%2Ftest%22%2C%22httpMethod%22%3A%22GET%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%2C%22Content-Type%22%3A%22application%2Fjson%22%7D%7D')
     t.equal(request.headers['user-agent'], 'lightMyRequest')
     t.equal(request.headers.host, 'localhost:80')
     t.equal(request.headers['content-length'], '0')
@@ -58,6 +59,7 @@ test('GET with base64 encoding response', async (t) => {
   })
   const proxy = awsLambdaFastify(app, { binaryMimeTypes: ['application/octet-stream'] })
   const ret = await proxy({
+    version: '1.0',
     httpMethod: 'GET',
     path: '/test',
     headers: {
