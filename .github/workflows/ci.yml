@@ -11,7 +11,7 @@ on:
       - '*.md'
 
 jobs:
-  tests:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
