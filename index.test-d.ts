@@ -1,4 +1,4 @@
-import fastify, { FastifyInstance } from "fastify";
+import fastify from "fastify";
 import awsLambdaFastify, { PromiseHandler, LambdaFastifyOptions } from ".";
 import { expectType, expectError, expectAssignable } from "tsd";
 
