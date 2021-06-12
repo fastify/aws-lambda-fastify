@@ -1,6 +1,6 @@
 {
   "name": "aws-lambda-fastify",
-  "description": "Insipired by aws-serverless-express to work with Fastify with inject functionality.",
+  "description": "Inspired by aws-serverless-express to work with Fastify with inject functionality.",
   "keywords": [
     "aws",
     "lambda",

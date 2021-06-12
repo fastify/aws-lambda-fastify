@@ -80,15 +80,17 @@ app.get('/', (request, reply) => {
 
 ## ⚡️Some basic performance metrics
 
-**aws-lambda-fastify** x **28,189 ops/sec** ±4.59% (79 runs sampled)
+**aws-lambda-fastify (serializeLambdaArguments : false)** x **25,700 ops/sec** ±2.28% (81 runs sampled)
 
-**[serverless-http](https://github.com/dougmoscrop/serverless-http)** x **20,975 ops/sec** ±4.65% (79 runs sampled)
+**aws-lambda-fastify** x **23,981 ops/sec** ±9.16% (76 runs sampled)
 
-**[aws-serverless-fastify](https://github.com/benMain/aws-serverless-fastify)** x **4,042 ops/sec** ±2.14% (75 runs sampled)
+**[serverless-http](https://github.com/dougmoscrop/serverless-http)** x **16,969 ops/sec** ±4.88% (73 runs sampled)
 
-**[aws-serverless-express](https://github.com/awslabs/aws-serverless-express)** x **3,558 ops/sec** ±4.48% (71 runs sampled)
+**[aws-serverless-fastify](https://github.com/benMain/aws-serverless-fastify)** x **3,157 ops/sec** ±1.91% (78 runs sampled)
 
-Fastest is **aws-lambda-fastify**
+**[aws-serverless-express](https://github.com/awslabs/aws-serverless-express)** x **2,569 ops/sec** ±5.49% (75 runs sampled)
+
+Fastest is **aws-lambda-fastify (serializeLambdaArguments : false), aws-lambda-fastify**
 
 #### ⚠️Considerations
 
