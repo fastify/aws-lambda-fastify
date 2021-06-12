@@ -42,6 +42,10 @@ suite
     proxy(event, {}, () => deferred.resolve())
   }, { defer: true })
 
+  .add('aws-lambda-fastify (serializeLambdaArguments : false)', (deferred) => {
+    proxy(event, { serializeLambdaArguments: false }, () => deferred.resolve())
+  }, { defer: true })
+
   .add('aws-serverless-express', (deferred) => {
     appAwsServerlessExpress.ready(() => {
       awsServerlessExpress.proxy(server, event, {}, 'CALLBACK', () => deferred.resolve())
