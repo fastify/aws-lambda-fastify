@@ -30,10 +30,12 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "test": "npm run lint && tap -J -R specy --no-coverage test/*test.js",
+    "test": "npm run lint && tap -J -R specy --no-coverage test/*test.js && npm run test:typescript",
+    "test:typescript": "tsd",
     "performance": "npm run lint && node performanceTest/test"
   },
   "devDependencies": {
+    "aws-lambda": "^1.0.6",
     "aws-serverless-express": "^3.4.0",
     "aws-serverless-fastify": "^1.0.26",
     "benchmark": "^2.1.4",
@@ -45,6 +47,7 @@
     "eslint-plugin-standard": "^5.0.0",
     "fastify": "^3.17.0",
     "serverless-http": "^2.7.0",
-    "tap": "^15.0.9"
+    "tap": "^15.0.9",
+    "tsd": "^0.17.0"
   }
 }
