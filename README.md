@@ -17,6 +17,16 @@ Inspired by the AWSLABS [aws-serverless-express](https://github.com/awslabs/aws-
 $ npm install aws-lambda-fastify
 ```
 
+## Options
+
+**aws-lambda-fastify** can take options by passing them with : `awsLambdaFastify(app, options)`
+
+| property                       | description                                                                                                                          | default value |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ | ------------- |
+| binaryMimeTypes                | Array of binary MimeTypes to handle                                                                                                  | `[]`          |
+| serializeLambdaArguments       | Activate the serialization of lambda Event and Context in http header `x-apigateway-event` `x-apigateway-context`                    | `true`        |
+| callbackWaitsForEmptyEventLoop | See: [Official Documentation](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-context.html#nodejs-prog-model-context-properties) | `undefined`   |
+
 ## 📖Example
 
 ### lambda.js
