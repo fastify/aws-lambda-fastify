@@ -132,7 +132,7 @@ test('GET stub inject', async (t) => {
 })
 
 test('GET stub inject', (t) => new Promise((resolve, reject) => {
-  t.plan(3)
+  t.plan(4)
 
   const event = {
     requestContext: { },
@@ -145,7 +145,7 @@ test('GET stub inject', (t) => new Promise((resolve, reject) => {
 
   const proxy = awsLambdaFastify(app)
 
-  proxy(event, null, function callback (err, ret) {
+  const ret = proxy(event, null, function callback (err, ret) {
     if (err) return reject(err)
 
     t.same(ret.headers, {})
@@ -153,4 +153,5 @@ test('GET stub inject', (t) => new Promise((resolve, reject) => {
     t.same(ret.body, '')
     resolve()
   })
+  t.type(ret.then, 'function')
 }))

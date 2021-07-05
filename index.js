@@ -86,4 +86,5 @@ module.exports = (app, options) => (event, context, callback) => {
   })
   if (!callback) return prom
   prom.then((ret) => callback(null, ret)).catch(callback)
+  return prom
 }
