@@ -38,14 +38,6 @@ appServerlessHttp.get('/test', async () => ({ hello: 'world' }))
 const serverlessHttpProxy = serverlessHttp(appServerlessHttp)
 
 suite
-  .add('aws-lambda-fastify', (deferred) => {
-    proxy(event, {}, () => deferred.resolve())
-  }, { defer: true })
-
-  .add('aws-lambda-fastify (serializeLambdaArguments : false)', (deferred) => {
-    proxy(event, { serializeLambdaArguments: false }, () => deferred.resolve())
-  }, { defer: true })
-
   .add('aws-serverless-express', (deferred) => {
     appAwsServerlessExpress.ready(() => {
       awsServerlessExpress.proxy(server, event, {}, 'CALLBACK', () => deferred.resolve())
@@ -58,6 +50,14 @@ suite
 
   .add('serverless-http', (deferred) => {
     serverlessHttpProxy(event, {}).then(() => deferred.resolve())
+  }, { defer: true })
+
+  .add('aws-lambda-fastify', (deferred) => {
+    proxy(event, {}, () => deferred.resolve())
+  }, { defer: true })
+
+  .add('aws-lambda-fastify (serializeLambdaArguments : false)', (deferred) => {
+    proxy(event, { serializeLambdaArguments: false }, () => deferred.resolve())
   }, { defer: true })
 
   .on('cycle', (event) => {

@@ -82,7 +82,7 @@ test('GET Broken', async (t) => new Promise((resolve, reject) => {
     t.equal(request.headers['content-length'], '0')
     reply.header('Set-Cookie', 'qwerty=one')
     reply.header('Set-Cookie', 'qwerty=two')
-    reply.header('x-Non-String', new Date())
+    reply.header('x-Non-String', Date.now())
     reply.removeHeader('content-type')
 
     reply.send(undefined)

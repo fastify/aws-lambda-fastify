@@ -35,19 +35,19 @@
     "performance": "npm run lint && node performanceTest/test"
   },
   "devDependencies": {
-    "aws-lambda": "^1.0.6",
+    "aws-lambda": "^1.0.7",
     "aws-serverless-express": "^3.4.0",
-    "aws-serverless-fastify": "^1.0.26",
+    "aws-serverless-fastify": "^1.0.28",
     "benchmark": "^2.1.4",
-    "eslint": "^8.0.1",
+    "eslint": "^8.2.0",
     "eslint-config-standard": "^16.0.3",
-    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-promise": "^5.1.1",
     "eslint-plugin-standard": "^5.0.0",
-    "fastify": "^3.18.1",
+    "fastify": "^3.23.1",
     "serverless-http": "^2.7.0",
-    "tap": "^15.0.9",
+    "tap": "^15.0.10",
     "tsd": "^0.18.0"
   }
 }
