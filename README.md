@@ -105,17 +105,21 @@ app.get('/', (request, reply) => {
 
 ## ⚡️Some basic performance metrics
 
-**aws-lambda-fastify (serializeLambdaArguments : false)** x **25,700 ops/sec** ±2.28% (81 runs sampled)
+**aws-lambda-fastify (decorateRequest : false, serializeLambdaArguments : false)** x **51,927 ops/sec** ±2.87% (84 runs sampled)
 
-**aws-lambda-fastify** x **23,981 ops/sec** ±9.16% (76 runs sampled)
+**aws-lambda-fastify (serializeLambdaArguments : false)** x **51,818 ops/sec** ±2.28% (83 runs sampled)
 
-**[serverless-http](https://github.com/dougmoscrop/serverless-http)** x **16,969 ops/sec** ±4.88% (73 runs sampled)
+**aws-lambda-fastify (decorateRequest : false)** x **51,447 ops/sec** ±2.79% (81 runs sampled)
 
-**[aws-serverless-fastify](https://github.com/benMain/aws-serverless-fastify)** x **3,157 ops/sec** ±1.91% (78 runs sampled)
+**aws-lambda-fastify** x **51,318 ops/sec** ±3.23% (82 runs sampled)
 
-**[aws-serverless-express](https://github.com/awslabs/aws-serverless-express)** x **2,569 ops/sec** ±5.49% (75 runs sampled)
+**[serverless-http](https://github.com/dougmoscrop/serverless-http)** x **45,867 ops/sec** ±4.42% (83 runs sampled)
 
-Fastest is **aws-lambda-fastify (serializeLambdaArguments : false), aws-lambda-fastify**
+**[aws-serverless-fastify](https://github.com/benMain/aws-serverless-fastify)** x **17,937 ops/sec** ±1.83% (86 runs sampled)
+
+**[aws-serverless-express](https://github.com/awslabs/aws-serverless-express)** x **16,647 ops/sec** ±2.88% (87 runs sampled)
+
+Fastest is **aws-lambda-fastify (decorateRequest : false, serializeLambdaArguments : false), aws-lambda-fastify (serializeLambdaArguments : false), aws-lambda-fastify (decorateRequest : false), aws-lambda-fastify**
 
 #### ⚠️Considerations
 
