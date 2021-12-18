@@ -61,6 +61,8 @@ expectAssignable<LambdaFastifyOptions>({
   binaryMimeTypes: ["foo", "bar"],
   callbackWaitsForEmptyEventLoop: true,
   serializeLambdaArguments: true,
+  decorateRequest: true,
+  decorationPropertyName: "myAWSstuff",
 });
 
 expectError(awsLambdaFastify());

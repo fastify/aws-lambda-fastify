@@ -5,6 +5,8 @@ export interface LambdaFastifyOptions {
   binaryMimeTypes?: string[];
   callbackWaitsForEmptyEventLoop?: boolean;
   serializeLambdaArguments?: boolean;
+  decorateRequest?: boolean;
+  decorationPropertyName?: string;
 }
 
 export interface LambdaResponse {
