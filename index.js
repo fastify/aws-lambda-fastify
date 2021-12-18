@@ -1,7 +1,7 @@
 module.exports = (app, options) => {
   options = options || {}
   options.binaryMimeTypes = options.binaryMimeTypes || []
-  options.serializeLambdaArguments = options.serializeLambdaArguments !== undefined ? options.serializeLambdaArguments : true
+  options.serializeLambdaArguments = options.serializeLambdaArguments !== undefined ? options.serializeLambdaArguments : false
   options.decorateRequest = options.decorateRequest !== undefined ? options.decorateRequest : true
   let currentAwsArguments = {}
   if (options.decorateRequest) {

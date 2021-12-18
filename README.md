@@ -24,7 +24,7 @@ $ npm install aws-lambda-fastify
 | property                       | description                                                                                                                          | default value |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ | ------------- |
 | binaryMimeTypes                | Array of binary MimeTypes to handle                                                                                                  | `[]`          |
-| serializeLambdaArguments       | Activate the serialization of lambda Event and Context in http header `x-apigateway-event` `x-apigateway-context`                    | `true`        |
+| serializeLambdaArguments       | Activate the serialization of lambda Event and Context in http header `x-apigateway-event` `x-apigateway-context`                    | `false` *(was `true` for <v2.0.0)*        |
 | decorateRequest       | Decorates the fastify request with the lambda Event and Context `request.awsLambda.event` `request.awsLambda.context`                    | `true`        |
 | decorationPropertyName       | The default property name for request decoration                    | `awsLambda`        |
 | callbackWaitsForEmptyEventLoop | See: [Official Documentation](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-context.html#nodejs-prog-model-context-properties) | `undefined`   |
@@ -89,10 +89,10 @@ app.get('/', (request, reply) => {
   // ...
 })
 ```
-*If you do not like it, you can disable this by setting the `decorateRequest` option to `false`,*
+*If you do not like it, you can disable this by setting the `decorateRequest` option to `false`.*
 
 
-Alternatively the original lambda event and context are passed via headers and can be used like this:
+Alternatively the original lambda event and context are passed via headers and can be used like this, if setting the `serializeLambdaArguments` option to `true`:
 
 ```js
 app.get('/', (request, reply) => {
@@ -101,17 +101,15 @@ app.get('/', (request, reply) => {
   // ...
 })
 ```
-*If you do not like it, you can disable this by setting the `serializeLambdaArguments` option to `false`,*
+
 
 ## ⚡️Some basic performance metrics
 
-**aws-lambda-fastify (decorateRequest : false, serializeLambdaArguments : false)** x **51,927 ops/sec** ±2.87% (84 runs sampled)
+**aws-lambda-fastify (decorateRequest : false)** x **56,892 ops/sec** ±3.73% (79 runs sampled)
 
-**aws-lambda-fastify (serializeLambdaArguments : false)** x **51,818 ops/sec** ±2.28% (83 runs sampled)
+**aws-lambda-fastify** x **56,571 ops/sec** ±3.52% (82 runs sampled)
 
-**aws-lambda-fastify (decorateRequest : false)** x **51,447 ops/sec** ±2.79% (81 runs sampled)
-
-**aws-lambda-fastify** x **51,318 ops/sec** ±3.23% (82 runs sampled)
+**aws-lambda-fastify (serializeLambdaArguments : true)** x **56,499 ops/sec** ±3.56% (76 runs sampled)
 
 **[serverless-http](https://github.com/dougmoscrop/serverless-http)** x **45,867 ops/sec** ±4.42% (83 runs sampled)
 
@@ -119,7 +117,7 @@ app.get('/', (request, reply) => {
 
 **[aws-serverless-express](https://github.com/awslabs/aws-serverless-express)** x **16,647 ops/sec** ±2.88% (87 runs sampled)
 
-Fastest is **aws-lambda-fastify (decorateRequest : false, serializeLambdaArguments : false), aws-lambda-fastify (serializeLambdaArguments : false), aws-lambda-fastify (decorateRequest : false), aws-lambda-fastify**
+Fastest is **aws-lambda-fastify (decorateRequest : false), aws-lambda-fastify**
 
 #### ⚠️Considerations
 

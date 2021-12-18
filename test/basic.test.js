@@ -29,7 +29,7 @@ test('GET', async (t) => {
     reply.header('Set-Cookie', 'qwerty=two')
     reply.send({ hello: 'world' })
   })
-  const proxy = awsLambdaFastify(app)
+  const proxy = awsLambdaFastify(app, { serializeLambdaArguments: true })
   const ret = await proxy(evt)
   t.equal(ret.statusCode, 200)
   t.equal(ret.body, '{"hello":"world"}')
@@ -58,7 +58,7 @@ test('GET with base64 encoding response', async (t) => {
     reply.header('Set-Cookie', 'qwerty=two')
     reply.send(fileBuffer)
   })
-  const proxy = awsLambdaFastify(app, { binaryMimeTypes: ['application/octet-stream'] })
+  const proxy = awsLambdaFastify(app, { binaryMimeTypes: ['application/octet-stream'], serializeLambdaArguments: true })
   const ret = await proxy({
     httpMethod: 'GET',
     path: '/test',
@@ -118,7 +118,7 @@ test('POST', async (t) => {
     reply.header('X-Custom-Header', ['ciao', 'salve'])
     reply.send({ hello: 'world2' })
   })
-  const proxy = awsLambdaFastify(app)
+  const proxy = awsLambdaFastify(app, { serializeLambdaArguments: true })
   const ret = await proxy({
     httpMethod: 'POST',
     path: '/test',
@@ -157,7 +157,7 @@ test('POST with base64 encoding', async (t) => {
     reply.header('Set-Cookie', 'qwerty=two')
     reply.send({ hello: 'world2' })
   })
-  const proxy = awsLambdaFastify(app)
+  const proxy = awsLambdaFastify(app, { serializeLambdaArguments: true })
   const ret = await proxy({
     httpMethod: 'POST',
     path: '/test',
@@ -198,7 +198,7 @@ test('subpath', async (t) => {
     reply.header('Set-Cookie', 'qwerty=two')
     reply.send({ hello: 'world' })
   })
-  const proxy = awsLambdaFastify(app)
+  const proxy = awsLambdaFastify(app, { serializeLambdaArguments: true })
   const ret = await proxy({
     httpMethod: 'GET',
     path: '/dev/test',
@@ -236,7 +236,7 @@ test('serializeLambdaArguments = false', async (t) => {
     reply.header('Set-Cookie', 'qwerty=two')
     reply.send({ hello: 'world' })
   })
-  const proxy = awsLambdaFastify(app, { serializeLambdaArguments: false })
+  const proxy = awsLambdaFastify(app)
   const ret = await proxy({
     httpMethod: 'GET',
     path: '/dev/test',
