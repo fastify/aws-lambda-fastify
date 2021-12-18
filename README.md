@@ -25,6 +25,8 @@ $ npm install aws-lambda-fastify
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ | ------------- |
 | binaryMimeTypes                | Array of binary MimeTypes to handle                                                                                                  | `[]`          |
 | serializeLambdaArguments       | Activate the serialization of lambda Event and Context in http header `x-apigateway-event` `x-apigateway-context`                    | `true`        |
+| decorateRequest       | Decorates the fastify request with the lambda Event and Context `request.awsLambda.event` `request.awsLambda.context`                    | `true`        |
+| decorationPropertyName       | The default property name for request decoration                    | `awsLambda`        |
 | callbackWaitsForEmptyEventLoop | See: [Official Documentation](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-context.html#nodejs-prog-model-context-properties) | `undefined`   |
 
 ## 📖Example
@@ -78,7 +80,19 @@ you can normally listen to your port, so you can still run your Fastify function
 
 ### 📣Hint
 
-The original lambda event and context are passed via headers and can be used like this:
+The original lambda event and context are passed via Fastify request and can be used like this:
+
+```js
+app.get('/', (request, reply) => {
+  const event = request.event
+  const context = request.context
+  // ...
+})
+```
+*If you do not like it, you can disable this by setting the `decorateRequest` option to `false`,*
+
+
+Alternatively the original lambda event and context are passed via headers and can be used like this:
 
 ```js
 app.get('/', (request, reply) => {
@@ -87,6 +101,7 @@ app.get('/', (request, reply) => {
   // ...
 })
 ```
+*If you do not like it, you can disable this by setting the `serializeLambdaArguments` option to `false`,*
 
 ## ⚡️Some basic performance metrics
 

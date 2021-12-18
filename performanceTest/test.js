@@ -60,6 +60,14 @@ suite
     proxy(event, { serializeLambdaArguments: false }, () => deferred.resolve())
   }, { defer: true })
 
+  .add('aws-lambda-fastify (decorateRequest : false)', (deferred) => {
+    proxy(event, { decorateRequest: false }, () => deferred.resolve())
+  }, { defer: true })
+
+  .add('aws-lambda-fastify (decorateRequest : false, serializeLambdaArguments : false)', (deferred) => {
+    proxy(event, { decorateRequest: false, serializeLambdaArguments: false }, () => deferred.resolve())
+  }, { defer: true })
+
   .on('cycle', (event) => {
     console.log(String(event.target))
   })
