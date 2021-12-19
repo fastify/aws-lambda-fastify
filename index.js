@@ -7,7 +7,9 @@ module.exports = (app, options) => {
   if (options.decorateRequest) {
     options.decorationPropertyName = options.decorationPropertyName || 'awsLambda'
     app.decorateRequest(options.decorationPropertyName)
-    app.addHook('onRequest', async (req) => {
+    // this way this onRequest hook is always the first
+    const Sym = require('fastify/lib/symbols.js')
+    app[Sym.kHooks].add('onRequest', async (req) => {
       req[options.decorationPropertyName] = {
         event: currentAwsArguments.event,
         context: currentAwsArguments.context
