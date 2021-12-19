@@ -84,8 +84,8 @@ The original lambda event and context are passed via Fastify request and can be 
 
 ```js
 app.get('/', (request, reply) => {
-  const event = request.event
-  const context = request.context
+  const event = request.awsLambda.event
+  const context = request.awsLambda.context
   // ...
 })
 ```
