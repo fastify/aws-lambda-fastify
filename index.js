@@ -6,11 +6,12 @@ module.exports = (app, options) => {
   let currentAwsArguments = {}
   if (options.decorateRequest) {
     options.decorationPropertyName = options.decorationPropertyName || 'awsLambda'
-    app.decorateRequest(options.decorationPropertyName)
-    app.addHook('onRequest', async (req) => {
-      req[options.decorationPropertyName] = {
-        event: currentAwsArguments.event,
-        context: currentAwsArguments.context
+    app.decorateRequest(options.decorationPropertyName, {
+      get event () {
+        return currentAwsArguments.event
+      },
+      get context () {
+        return currentAwsArguments.context
       }
     })
   }

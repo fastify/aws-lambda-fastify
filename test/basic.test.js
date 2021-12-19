@@ -260,7 +260,7 @@ test('serializeLambdaArguments = false', async (t) => {
   t.same(ret.multiValueHeaders['set-cookie'], ['qwerty=one', 'qwerty=two'])
 })
 
-test('with existing onRequest hook', { skip: true }, async (t) => {
+test('with existing onRequest hook', async (t) => {
   t.plan(16)
 
   const app = fastify()
