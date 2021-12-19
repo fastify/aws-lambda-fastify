@@ -259,3 +259,43 @@ test('serializeLambdaArguments = false', async (t) => {
   t.equal(ret.headers.connection, 'keep-alive')
   t.same(ret.multiValueHeaders['set-cookie'], ['qwerty=one', 'qwerty=two'])
 })
+
+test('with existing onRequest hook', { skip: true }, async (t) => {
+  t.plan(16)
+
+  const app = fastify()
+  const evt = {
+    httpMethod: 'GET',
+    path: '/test',
+    headers: {
+      'X-My-Header': 'wuuusaaa'
+    },
+    cookies: ['foo=bar'],
+    queryStringParameters: ''
+  }
+  app.addHook('onRequest', async (request) => {
+    t.equal(request.awsLambda.event, evt)
+  })
+  app.get('/test', async (request, reply) => {
+    t.equal(request.headers['x-my-header'], 'wuuusaaa')
+    t.equal(request.headers['cookie'], 'foo=bar')
+    t.equal(request.awsLambda.event, evt)
+    t.equal(request.headers['user-agent'], 'lightMyRequest')
+    t.equal(request.headers.host, 'localhost:80')
+    t.equal(request.headers['content-length'], '0')
+    reply.header('Set-Cookie', 'qwerty=one')
+    reply.header('Set-Cookie', 'qwerty=two')
+    reply.send({ hello: 'world' })
+  })
+  const proxy = awsLambdaFastify(app)
+  const ret = await proxy(evt)
+  t.equal(ret.statusCode, 200)
+  t.equal(ret.body, '{"hello":"world"}')
+  t.equal(ret.isBase64Encoded, false)
+  t.ok(ret.headers)
+  t.equal(ret.headers['content-type'], 'application/json; charset=utf-8')
+  t.equal(ret.headers['content-length'], '17')
+  t.ok(ret.headers.date)
+  t.equal(ret.headers.connection, 'keep-alive')
+  t.same(ret.multiValueHeaders['set-cookie'], ['qwerty=one', 'qwerty=two'])
+})
