@@ -56,8 +56,12 @@ suite
     proxy(event, {}, () => deferred.resolve())
   }, { defer: true })
 
-  .add('aws-lambda-fastify (serializeLambdaArguments : false)', (deferred) => {
-    proxy(event, { serializeLambdaArguments: false }, () => deferred.resolve())
+  .add('aws-lambda-fastify (serializeLambdaArguments : true)', (deferred) => {
+    proxy(event, { serializeLambdaArguments: true }, () => deferred.resolve())
+  }, { defer: true })
+
+  .add('aws-lambda-fastify (decorateRequest : false)', (deferred) => {
+    proxy(event, { decorateRequest: false }, () => deferred.resolve())
   }, { defer: true })
 
   .on('cycle', (event) => {

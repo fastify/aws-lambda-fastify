@@ -6,18 +6,6 @@ test('GET', async (t) => new Promise((resolve, reject) => {
   t.plan(14)
 
   const app = fastify()
-  app.get('/test', async (request, reply) => {
-    t.equal(request.headers['x-my-header'], 'wuuusaaa')
-    t.equal(request.headers['x-apigateway-event'], '%7B%22requestContext%22%3A%7B%22http%22%3A%7B%22method%22%3A%22GET%22%7D%7D%2C%22rawPath%22%3A%22%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%2C%22transfer-encoding%22%3A%22chunked%22%2C%22Transfer-Encoding%22%3A%22chunked%22%2C%22Content-Type%22%3A%22application%2Fjson%22%7D%2C%22queryStringParameters%22%3A%22%22%7D')
-    t.equal(request.headers['user-agent'], 'lightMyRequest')
-    t.equal(request.headers.host, 'localhost:80')
-    t.equal(request.headers['content-length'], '0')
-    reply.header('Set-Cookie', 'qwerty=one')
-    reply.header('Set-Cookie', 'qwerty=two')
-    reply.send({ hello: 'world' })
-  })
-
-  const proxy = awsLambdaFastify(app, { callbackWaitsForEmptyEventLoop: null })
   const event = {
     requestContext: { http: { method: 'GET' } },
     rawPath: '/test',
@@ -29,6 +17,18 @@ test('GET', async (t) => new Promise((resolve, reject) => {
     },
     queryStringParameters: ''
   }
+  app.get('/test', async (request, reply) => {
+    t.equal(request.headers['x-my-header'], 'wuuusaaa')
+    t.equal(request.awsLambda.event, event)
+    t.equal(request.headers['user-agent'], 'lightMyRequest')
+    t.equal(request.headers.host, 'localhost:80')
+    t.equal(request.headers['content-length'], '0')
+    reply.header('Set-Cookie', 'qwerty=one')
+    reply.header('Set-Cookie', 'qwerty=two')
+    reply.send({ hello: 'world' })
+  })
+
+  const proxy = awsLambdaFastify(app, { callbackWaitsForEmptyEventLoop: null })
   const context = {}
   proxy(event, context, function callback (err, ret) {
     if (err) return reject(err)
@@ -73,10 +73,10 @@ test('GET Broken', async (t) => new Promise((resolve, reject) => {
   const app = fastify()
   app.get('/test', async (request, reply) => {
     t.equal(request.headers['x-my-header'], 'wuuusaaa')
-    t.equal('x-apigateway-context' in request.headers, true)
     t.equal('x-custom-multi-bad' in request.headers, false)
     t.equal('x-custom-multi-gut' in request.headers, true)
-    t.equal(request.headers['x-apigateway-event'], encodeURIComponent(JSON.stringify(event)))
+    t.equal(request.awsLambda.event, event)
+    t.equal(request.awsLambda.context, context)
     t.equal(request.headers['user-agent'], 'lightMyRequest')
     t.equal(request.headers.host, 'localhost:80')
     t.equal(request.headers['content-length'], '0')

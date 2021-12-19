@@ -5,22 +5,10 @@ const fs = require('fs')
 const awsLambdaFastify = require('../index')
 
 test('GET', async (t) => {
-  t.plan(15)
+  t.plan(16)
 
   const app = fastify()
-  app.get('/test', async (request, reply) => {
-    t.equal(request.headers['x-my-header'], 'wuuusaaa')
-    t.equal(request.headers['cookie'], 'foo=bar')
-    t.equal(request.headers['x-apigateway-event'], '%7B%22httpMethod%22%3A%22GET%22%2C%22path%22%3A%22%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%7D%2C%22cookies%22%3A%5B%22foo%3Dbar%22%5D%2C%22queryStringParameters%22%3A%22%22%7D')
-    t.equal(request.headers['user-agent'], 'lightMyRequest')
-    t.equal(request.headers.host, 'localhost:80')
-    t.equal(request.headers['content-length'], '0')
-    reply.header('Set-Cookie', 'qwerty=one')
-    reply.header('Set-Cookie', 'qwerty=two')
-    reply.send({ hello: 'world' })
-  })
-  const proxy = awsLambdaFastify(app)
-  const ret = await proxy({
+  const evt = {
     httpMethod: 'GET',
     path: '/test',
     headers: {
@@ -28,7 +16,21 @@ test('GET', async (t) => {
     },
     cookies: ['foo=bar'],
     queryStringParameters: ''
+  }
+  app.get('/test', async (request, reply) => {
+    t.equal(request.headers['x-my-header'], 'wuuusaaa')
+    t.equal(request.headers['cookie'], 'foo=bar')
+    t.equal(request.headers['x-apigateway-event'], '%7B%22httpMethod%22%3A%22GET%22%2C%22path%22%3A%22%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%7D%2C%22cookies%22%3A%5B%22foo%3Dbar%22%5D%2C%22queryStringParameters%22%3A%22%22%7D')
+    t.equal(request.awsLambda.event, evt)
+    t.equal(request.headers['user-agent'], 'lightMyRequest')
+    t.equal(request.headers.host, 'localhost:80')
+    t.equal(request.headers['content-length'], '0')
+    reply.header('Set-Cookie', 'qwerty=one')
+    reply.header('Set-Cookie', 'qwerty=two')
+    reply.send({ hello: 'world' })
   })
+  const proxy = awsLambdaFastify(app, { serializeLambdaArguments: true })
+  const ret = await proxy(evt)
   t.equal(ret.statusCode, 200)
   t.equal(ret.body, '{"hello":"world"}')
   t.equal(ret.isBase64Encoded, false)
@@ -56,7 +58,7 @@ test('GET with base64 encoding response', async (t) => {
     reply.header('Set-Cookie', 'qwerty=two')
     reply.send(fileBuffer)
   })
-  const proxy = awsLambdaFastify(app, { binaryMimeTypes: ['application/octet-stream'] })
+  const proxy = awsLambdaFastify(app, { binaryMimeTypes: ['application/octet-stream'], serializeLambdaArguments: true })
   const ret = await proxy({
     httpMethod: 'GET',
     path: '/test',
@@ -116,7 +118,7 @@ test('POST', async (t) => {
     reply.header('X-Custom-Header', ['ciao', 'salve'])
     reply.send({ hello: 'world2' })
   })
-  const proxy = awsLambdaFastify(app)
+  const proxy = awsLambdaFastify(app, { serializeLambdaArguments: true })
   const ret = await proxy({
     httpMethod: 'POST',
     path: '/test',
@@ -155,7 +157,7 @@ test('POST with base64 encoding', async (t) => {
     reply.header('Set-Cookie', 'qwerty=two')
     reply.send({ hello: 'world2' })
   })
-  const proxy = awsLambdaFastify(app)
+  const proxy = awsLambdaFastify(app, { serializeLambdaArguments: true })
   const ret = await proxy({
     httpMethod: 'POST',
     path: '/test',
@@ -196,7 +198,7 @@ test('subpath', async (t) => {
     reply.header('Set-Cookie', 'qwerty=two')
     reply.send({ hello: 'world' })
   })
-  const proxy = awsLambdaFastify(app)
+  const proxy = awsLambdaFastify(app, { serializeLambdaArguments: true })
   const ret = await proxy({
     httpMethod: 'GET',
     path: '/dev/test',
@@ -234,7 +236,7 @@ test('serializeLambdaArguments = false', async (t) => {
     reply.header('Set-Cookie', 'qwerty=two')
     reply.send({ hello: 'world' })
   })
-  const proxy = awsLambdaFastify(app, { serializeLambdaArguments: false })
+  const proxy = awsLambdaFastify(app)
   const ret = await proxy({
     httpMethod: 'GET',
     path: '/dev/test',
