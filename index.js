@@ -7,12 +7,14 @@ module.exports = (app, options) => {
   if (options.decorateRequest) {
     options.decorationPropertyName = options.decorationPropertyName || 'awsLambda'
     app.decorateRequest(options.decorationPropertyName, {
-      get event () {
-        return currentAwsArguments.event
-      },
-      get context () {
-        return currentAwsArguments.context
-      }
+      getter: () => ({
+        get event () {
+          return currentAwsArguments.event
+        },
+        get context () {
+          return currentAwsArguments.context
+        }
+      })
     })
   }
   return (event, context, callback) => {
