@@ -80,6 +80,8 @@ you can normally listen to your port, so you can still run your Fastify function
 
 ### 📣Hint
 
+#### Lambda arguments
+
 The original lambda event and context are passed via Fastify request and can be used like this:
 
 ```js
@@ -101,6 +103,21 @@ app.get('/', (request, reply) => {
   // ...
 })
 ```
+
+#### Lower cold start latency
+
+Since [AWS Lambda now enables the use of ECMAScript (ES) modules](https://aws.amazon.com/blogs/compute/using-node-js-es-modules-and-top-level-await-in-aws-lambda/) in Node.js 14 runtimes, you could lower the cold start latency when used with [Provisioned Concurrency](https://aws.amazon.com/blogs/compute/new-for-aws-lambda-predictable-start-up-times-with-provisioned-concurrency/) thanks to the top-level await functionality.
+
+We can use this by calling the [`fastify.ready()`](https://www.fastify.io/docs/latest/Reference/Server/#ready) function outside of the Lambda handler function, like this:
+
+```js
+import awsLambdaFastify from 'aws-lambda-fastify'
+import app from './app.js'
+export const handler = awsLambdaFastify(app)
+await app.ready() // needs to be placed after awsLambdaFastify call because of the decoration: https://github.com/fastify/aws-lambda-fastify/blob/master/index.js#L9
+```
+
+*[Here](https://github.com/fastify/aws-lambda-fastify/issues/89) you can find the approriate issue discussing this feature.*
 
 
 ## ⚡️Some basic performance metrics
