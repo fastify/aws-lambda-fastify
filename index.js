@@ -33,7 +33,20 @@ module.exports = (app, options) => {
         event.requestContext.resourcePath.indexOf(`/${event.requestContext.stage}/`) !== 0) {
       url = url.substring(event.requestContext.stage.length + 1)
     }
-    const query = event.multiValueQueryStringParameters || event.queryStringParameters || {}
+    const query = {}
+    if (event.requestContext && event.requestContext.elb) {
+      if (event.multiValueQueryStringParameters) {
+        Object.keys(event.multiValueQueryStringParameters).forEach((q) => {
+          query[decodeURIComponent(q)] = event.multiValueQueryStringParameters[q].map((val) => decodeURIComponent(val))
+        })
+      } else if (event.queryStringParameters) {
+        Object.keys(event.queryStringParameters).forEach((q) => {
+          query[decodeURIComponent(q)] = decodeURIComponent(event.queryStringParameters[q])
+        })
+      }
+    } else {
+      Object.assign(query, event.multiValueQueryStringParameters || event.queryStringParameters)
+    }
     const headers = Object.assign({}, event.headers)
     if (event.multiValueHeaders) {
       Object.keys(event.multiValueHeaders).forEach((h) => {

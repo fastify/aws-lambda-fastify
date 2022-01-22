@@ -155,3 +155,48 @@ test('GET stub inject', (t) => new Promise((resolve, reject) => {
   })
   t.type(ret.then, 'function')
 }))
+
+test('GET with encoded query values', async (t) => {
+  t.plan(2)
+
+  const app = fastify()
+  app.get('/test', async (request, reply) => {
+    reply.send(request.query)
+  })
+  const proxy = awsLambdaFastify(app)
+
+  const ret = await proxy({
+    requestContext: { elb: { targetGroupArn: 'xxx' } },
+    httpMethod: 'GET',
+    path: '/test',
+    queryStringParameters: {
+      'q%24': 'foo%3Fbar'
+    }
+  })
+  t.equal(ret.statusCode, 200)
+  t.equal(ret.body, '{"q$":"foo?bar"}')
+})
+
+test('GET with encoded multi-value query', async (t) => {
+  t.plan(2)
+
+  const app = fastify()
+  app.get('/test', async (request, reply) => {
+    reply.send(request.query)
+  })
+  const proxy = awsLambdaFastify(app)
+
+  const ret = await proxy({
+    requestContext: { elb: { targetGroupArn: 'xxx' } },
+    httpMethod: 'GET',
+    path: '/test',
+    queryStringParameters: {
+      'q%24': 'foo%3Fbar'
+    },
+    multiValueQueryStringParameters: {
+      'q%24': ['foo%40bar', 'foo%3Fbar']
+    }
+  })
+  t.equal(ret.statusCode, 200)
+  t.equal(ret.body, '{"q$":["foo@bar","foo?bar"]}')
+})
