@@ -59,8 +59,8 @@ module.exports = (app, options) => {
     // NOTE: API Gateway is not setting Content-Length header on requests even when they have a body
     if (event.body && !headers['Content-Length'] && !headers['content-length']) headers['content-length'] = Buffer.byteLength(payload)
 
-    event.body = undefined
     if (options.serializeLambdaArguments) {
+      event.body = undefined // remove body from event only when setting request headers
       headers['x-apigateway-event'] = encodeURIComponent(JSON.stringify(event))
       if (context) headers['x-apigateway-context'] = encodeURIComponent(JSON.stringify(context))
     }
