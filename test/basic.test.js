@@ -284,7 +284,7 @@ test('serializeLambdaArguments = false', async (t) => {
 })
 
 test('with existing onRequest hook', async (t) => {
-  t.plan(16)
+  t.plan(17)
 
   const app = fastify()
   const evt = {
@@ -321,4 +321,5 @@ test('with existing onRequest hook', async (t) => {
   t.ok(ret.headers.date)
   t.equal(ret.headers.connection, 'keep-alive')
   t.same(ret.multiValueHeaders['set-cookie'], ['qwerty=one', 'qwerty=two'])
+  t.same(ret.cookies, ['qwerty=one', 'qwerty=two'])
 })

@@ -14,6 +14,7 @@ export interface LambdaResponse {
   body: string;
   headers: Record<string, string>;
   isBase64Encoded: boolean;
+  cookies?: string[]
 }
 
 export type PromiseHandler<TEvent = any, TResult = LambdaResponse> = (

@@ -90,16 +90,21 @@ module.exports = (app, options) => {
         if (headers['Transfer-Encoding'] === 'chunked') delete headers['Transfer-Encoding']
 
         let multiValueHeaders
+        let cookies
         Object.keys(res.headers).forEach((h) => {
+          const isSetCookie = h.toLowerCase() === 'set-cookie'
           if (Array.isArray(res.headers[h])) {
-            if (h.toLowerCase() === 'set-cookie') {
+            if (isSetCookie) {
               multiValueHeaders = multiValueHeaders || {}
               multiValueHeaders[h] = res.headers[h]
-              delete res.headers[h]
             } else res.headers[h] = res.headers[h].join(',')
           } else if (typeof res.headers[h] !== 'undefined' && typeof res.headers[h] !== 'string') {
             // NOTE: API Gateway (i.e. HttpApi) validates all headers to be a string
             res.headers[h] = res.headers[h].toString()
+          }
+          if (isSetCookie) {
+            cookies = Array.isArray(res.headers[h]) ? res.headers[h] : [res.headers[h]]
+            delete res.headers[h]
           }
         })
 
@@ -112,6 +117,8 @@ module.exports = (app, options) => {
           headers: res.headers,
           isBase64Encoded
         }
+
+        if (cookies) ret.cookies = cookies
         if (multiValueHeaders) ret.multiValueHeaders = multiValueHeaders
         resolve(ret)
       })
