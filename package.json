@@ -46,7 +46,7 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-standard": "^5.0.0",
     "fastify": "^3.27.4",
-    "serverless-http": "^2.7.0",
+    "serverless-http": "^3.0.0",
     "tap": "^16.0.1",
     "tsd": "^0.19.1"
   }
