@@ -18,7 +18,7 @@ jobs:
       contents: write
     strategy:
       matrix:
-        node-version: [16, 14, 12]
+        node-version: [18, 16, 14, 12]
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js
