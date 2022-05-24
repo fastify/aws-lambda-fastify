@@ -40,15 +40,20 @@
     "aws-serverless-express": "^3.4.0",
     "aws-serverless-fastify": "^1.0.28",
     "benchmark": "^2.1.4",
-    "eslint": "^8.14.0",
+    "eslint": "^8.16.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-n": "^15.2.0",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-standard": "^5.0.0",
-    "fastify": "^3.28.0",
+    "fastify": "^3.29.0",
     "serverless-http": "^3.0.1",
-    "tap": "^16.1.0",
+    "tap": "^16.2.0",
     "tsd": "^0.20.0"
+  },
+  "overrides": {
+    "aws-serverless-fastify": {
+      "fastify": "^3.29.0"
+    }
   }
 }
