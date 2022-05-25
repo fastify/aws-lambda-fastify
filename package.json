@@ -46,14 +46,14 @@
     "eslint-plugin-n": "^15.2.0",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-standard": "^5.0.0",
-    "fastify": "^3.29.0",
+    "fastify": "^4.0.0-rc.3",
     "serverless-http": "^3.0.1",
     "tap": "^16.2.0",
     "tsd": "^0.20.0"
   },
   "overrides": {
     "aws-serverless-fastify": {
-      "fastify": "^3.29.0"
+      "fastify": "^4.0.0-rc.3"
     }
   }
 }
