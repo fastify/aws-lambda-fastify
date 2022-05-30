@@ -7,6 +7,7 @@ test('GET', async (t) => new Promise((resolve, reject) => {
 
   const app = fastify()
   const event = {
+    version: '2.0',
     requestContext: { http: { method: 'GET' } },
     rawPath: '/test',
     headers: {
@@ -41,7 +42,8 @@ test('GET', async (t) => new Promise((resolve, reject) => {
     t.equal(ret.headers['content-length'], '17')
     t.ok(ret.headers.date)
     t.equal(ret.headers.connection, 'keep-alive')
-    t.same(ret.multiValueHeaders['set-cookie'], ['qwerty=one', 'qwerty=two'])
+    // t.same(ret.multiValueHeaders['set-cookie'], ['qwerty=one', 'qwerty=two'])
+    t.same(ret.cookies, ['qwerty=one', 'qwerty=two'])
 
     resolve()
   })
@@ -51,6 +53,7 @@ test('GET Broken', async (t) => new Promise((resolve, reject) => {
   t.plan(19)
 
   const event = {
+    version: '1.0',
     requestContext: { http: { method: 'GET' } },
     rawPath: '/test',
     headers: {

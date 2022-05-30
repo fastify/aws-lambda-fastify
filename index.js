@@ -118,8 +118,8 @@ module.exports = (app, options) => {
           isBase64Encoded
         }
 
-        if (cookies) ret.cookies = cookies
-        if (multiValueHeaders) ret.multiValueHeaders = multiValueHeaders
+        if (cookies && event.version === '2.0') ret.cookies = cookies
+        if (multiValueHeaders && event.version === '1.0') ret.multiValueHeaders = multiValueHeaders
         resolve(ret)
       })
     })
