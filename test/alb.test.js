@@ -53,7 +53,6 @@ test('GET Broken', async (t) => new Promise((resolve, reject) => {
   t.plan(19)
 
   const event = {
-    version: '1.0',
     requestContext: { http: { method: 'GET' } },
     rawPath: '/test',
     headers: {

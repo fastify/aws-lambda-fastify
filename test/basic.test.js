@@ -52,7 +52,7 @@ test('GET with base64 encoding response', async (t) => {
   const app = fastify()
   app.get('/test', async (request, reply) => {
     t.equal(request.headers['x-my-header'], 'wuuusaaa')
-    t.equal(request.headers['x-apigateway-event'], '%7B%22version%22%3A%221.0%22%2C%22httpMethod%22%3A%22GET%22%2C%22path%22%3A%22%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%2C%22Content-Type%22%3A%22application%2Fjson%22%7D%7D')
+    t.equal(request.headers['x-apigateway-event'], '%7B%22httpMethod%22%3A%22GET%22%2C%22path%22%3A%22%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%2C%22Content-Type%22%3A%22application%2Fjson%22%7D%7D')
     t.equal(request.headers['user-agent'], 'lightMyRequest')
     t.equal(request.headers.host, 'localhost:80')
     t.equal(request.headers['content-length'], '0')
@@ -62,7 +62,6 @@ test('GET with base64 encoding response', async (t) => {
   })
   const proxy = awsLambdaFastify(app, { binaryMimeTypes: ['application/octet-stream'], serializeLambdaArguments: true })
   const ret = await proxy({
-    version: '1.0',
     httpMethod: 'GET',
     path: '/test',
     headers: {
@@ -91,7 +90,6 @@ test('GET with multi-value query params', async (t) => {
   const proxy = awsLambdaFastify(app)
 
   const ret = await proxy({
-    version: '1.0',
     httpMethod: 'GET',
     path: '/test',
     queryStringParameters: {
@@ -115,7 +113,6 @@ test('GET with double encoded query value', async (t) => {
   const proxy = awsLambdaFastify(app)
 
   const ret = await proxy({
-    version: '1.0',
     httpMethod: 'GET',
     path: '/test',
     queryStringParameters: {
@@ -136,7 +133,7 @@ test('POST', async (t) => {
   app.post('/test', async (request, reply) => {
     t.equal(request.headers['content-type'], 'application/json')
     t.equal(request.headers['x-my-header'], 'wuuusaaa')
-    t.equal(request.headers['x-apigateway-event'], '%7B%22version%22%3A%221.0%22%2C%22httpMethod%22%3A%22POST%22%2C%22path%22%3A%22%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%2C%22Content-Type%22%3A%22application%2Fjson%22%7D%7D')
+    t.equal(request.headers['x-apigateway-event'], '%7B%22httpMethod%22%3A%22POST%22%2C%22path%22%3A%22%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%2C%22Content-Type%22%3A%22application%2Fjson%22%7D%7D')
     t.equal(request.headers['user-agent'], 'lightMyRequest')
     t.equal(request.headers.host, 'localhost:80')
     t.equal(request.headers['content-length'], '14')
@@ -148,7 +145,6 @@ test('POST', async (t) => {
   })
   const proxy = awsLambdaFastify(app, { serializeLambdaArguments: true })
   const ret = await proxy({
-    version: '1.0',
     httpMethod: 'POST',
     path: '/test',
     headers: {
@@ -176,7 +172,7 @@ test('POST with base64 encoding', async (t) => {
   app.post('/test', async (request, reply) => {
     t.equal(request.headers['content-type'], 'application/json')
     t.equal(request.headers['x-my-header'], 'wuuusaaa')
-    t.equal(request.headers['x-apigateway-event'], '%7B%22version%22%3A%221.0%22%2C%22httpMethod%22%3A%22POST%22%2C%22path%22%3A%22%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%2C%22Content-Type%22%3A%22application%2Fjson%22%2C%22x-multi%22%3A%22just-the-first%22%7D%2C%22multiValueHeaders%22%3A%7B%22x-multi%22%3A%5B%22just-the-first%22%2C%22and-the-second%22%5D%7D%2C%22isBase64Encoded%22%3Atrue%2C%22requestContext%22%3A%7B%22requestId%22%3A%22my-req-id%22%7D%7D')
+    t.equal(request.headers['x-apigateway-event'], '%7B%22httpMethod%22%3A%22POST%22%2C%22path%22%3A%22%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%2C%22Content-Type%22%3A%22application%2Fjson%22%2C%22x-multi%22%3A%22just-the-first%22%7D%2C%22multiValueHeaders%22%3A%7B%22x-multi%22%3A%5B%22just-the-first%22%2C%22and-the-second%22%5D%7D%2C%22isBase64Encoded%22%3Atrue%2C%22requestContext%22%3A%7B%22requestId%22%3A%22my-req-id%22%7D%7D')
     t.equal(request.headers['user-agent'], 'lightMyRequest')
     t.same(request.headers['x-multi'], 'just-the-first,and-the-second')
     t.equal(request.headers.host, 'localhost:80')
@@ -188,7 +184,6 @@ test('POST with base64 encoding', async (t) => {
   })
   const proxy = awsLambdaFastify(app, { serializeLambdaArguments: true })
   const ret = await proxy({
-    version: '1.0',
     httpMethod: 'POST',
     path: '/test',
     headers: {
@@ -220,7 +215,7 @@ test('subpath', async (t) => {
   const app = fastify()
   app.get('/test', async (request, reply) => {
     t.equal(request.headers['x-my-header'], 'wuuusaaa')
-    t.equal(request.headers['x-apigateway-event'], '%7B%22version%22%3A%221.0%22%2C%22httpMethod%22%3A%22GET%22%2C%22path%22%3A%22%2Fdev%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%7D%2C%22requestContext%22%3A%7B%22resourcePath%22%3A%22%2Ftest%22%2C%22stage%22%3A%22dev%22%7D%7D')
+    t.equal(request.headers['x-apigateway-event'], '%7B%22httpMethod%22%3A%22GET%22%2C%22path%22%3A%22%2Fdev%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%7D%2C%22requestContext%22%3A%7B%22resourcePath%22%3A%22%2Ftest%22%2C%22stage%22%3A%22dev%22%7D%7D')
     t.equal(request.headers['user-agent'], 'lightMyRequest')
     t.equal(request.headers.host, 'localhost:80')
     t.equal(request.headers['content-length'], '0')
@@ -230,7 +225,6 @@ test('subpath', async (t) => {
   })
   const proxy = awsLambdaFastify(app, { serializeLambdaArguments: true })
   const ret = await proxy({
-    version: '1.0',
     httpMethod: 'GET',
     path: '/dev/test',
     headers: {
@@ -268,7 +262,6 @@ test('serializeLambdaArguments = false', async (t) => {
   })
   const proxy = awsLambdaFastify(app)
   const ret = await proxy({
-    version: '1.0',
     httpMethod: 'GET',
     path: '/dev/test',
     headers: {

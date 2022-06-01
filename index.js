@@ -119,7 +119,7 @@ module.exports = (app, options) => {
         }
 
         if (cookies && event.version === '2.0') ret.cookies = cookies
-        if (multiValueHeaders && event.version === '1.0') ret.multiValueHeaders = multiValueHeaders
+        if (multiValueHeaders && (!event.version || event.version === '1.0')) ret.multiValueHeaders = multiValueHeaders
         resolve(ret)
       })
     })
