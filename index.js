@@ -93,7 +93,8 @@ module.exports = (app, options) => {
         let cookies
         Object.keys(res.headers).forEach((h) => {
           const isSetCookie = h.toLowerCase() === 'set-cookie'
-          if (Array.isArray(res.headers[h])) {
+          const isArraycookie = Array.isArray(res.headers[h])
+          if (isArraycookie) {
             if (isSetCookie) {
               multiValueHeaders = multiValueHeaders || {}
               multiValueHeaders[h] = res.headers[h]
@@ -103,8 +104,8 @@ module.exports = (app, options) => {
             res.headers[h] = res.headers[h].toString()
           }
           if (isSetCookie) {
-            cookies = Array.isArray(res.headers[h]) ? res.headers[h] : [res.headers[h]]
-            if (event.version === '2.0') delete res.headers[h]
+            cookies = isArraycookie ? res.headers[h] : [res.headers[h]]
+            if (event.version === '2.0' || isArraycookie) delete res.headers[h]
           }
         })
 

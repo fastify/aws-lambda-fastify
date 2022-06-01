@@ -128,7 +128,7 @@ test('GET with double encoded query value', async (t) => {
 })
 
 test('POST', async (t) => {
-  t.plan(17)
+  t.plan(18)
 
   const app = fastify()
   app.post('/test', async (request, reply) => {
@@ -163,6 +163,7 @@ test('POST', async (t) => {
   t.ok(ret.headers.date)
   t.equal(ret.headers.connection, 'keep-alive')
   t.same(ret.multiValueHeaders['set-cookie'], ['qwerty=one', 'qwerty=two'])
+  t.equal(ret.headers['set-cookie'], undefined)
   t.equal(ret.headers['x-custom-header'], 'ciao,salve')
 })
 
