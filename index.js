@@ -104,7 +104,7 @@ module.exports = (app, options) => {
           }
           if (isSetCookie) {
             cookies = Array.isArray(res.headers[h]) ? res.headers[h] : [res.headers[h]]
-            delete res.headers[h]
+            if (event.version === '2.0') delete res.headers[h]
           }
         })
 

@@ -45,7 +45,7 @@ test('GET', async (t) => {
 })
 
 test('GET with base64 encoding response', async (t) => {
-  t.plan(14)
+  t.plan(15)
 
   const readFileAsync = promisify(fs.readFile)
   const fileBuffer = await readFileAsync(__filename)
@@ -57,7 +57,7 @@ test('GET with base64 encoding response', async (t) => {
     t.equal(request.headers.host, 'localhost:80')
     t.equal(request.headers['content-length'], '0')
     reply.header('Set-Cookie', 'qwerty=one')
-    reply.header('Set-Cookie', 'qwerty=two')
+    // reply.header('Set-Cookie', 'qwerty=two')
     reply.send(fileBuffer)
   })
   const proxy = awsLambdaFastify(app, { binaryMimeTypes: ['application/octet-stream'], serializeLambdaArguments: true })
@@ -77,7 +77,8 @@ test('GET with base64 encoding response', async (t) => {
   t.ok(ret.headers['content-length'])
   t.ok(ret.headers.date)
   t.equal(ret.headers.connection, 'keep-alive')
-  t.same(ret.multiValueHeaders['set-cookie'], ['qwerty=one', 'qwerty=two'])
+  t.same(ret.multiValueHeaders, undefined)
+  t.equal(ret.headers['set-cookie'], 'qwerty=one')
 })
 
 test('GET with multi-value query params', async (t) => {
