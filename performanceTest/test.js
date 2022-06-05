@@ -10,7 +10,7 @@ const event = {
   queryStringParameters: ''
 }
 
-// aws-lambda-fastify stuff:
+// @fastify/aws-lambda stuff:
 const awsLambdaFastify = require('../index')
 const appAwsLambdaFastify = fastify()
 appAwsLambdaFastify.get('/test', async () => ({ hello: 'world' }))

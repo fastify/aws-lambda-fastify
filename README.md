@@ -1,7 +1,7 @@
 # Introduction
 
 ![CI](https://github.com/fastify/aws-lambda-fastify/workflows/CI/badge.svg)
-[![NPM version](https://img.shields.io/npm/v/aws-lambda-fastify.svg?style=flat)](https://www.npmjs.com/package/aws-lambda-fastify)
+[![NPM version](https://img.shields.io/npm/v/@fastify/aws-lambda.svg?style=flat)](https://www.npmjs.com/package/@fastify/aws-lambda)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://standardjs.com/)
 
 Inspired by the AWSLABS [aws-serverless-express](https://github.com/awslabs/aws-serverless-express) library tailor made for the [Fastify](https://www.fastify.io/) web framework.
@@ -13,12 +13,12 @@ Inspired by the AWSLABS [aws-serverless-express](https://github.com/awslabs/aws-
 ## 👨🏻‍💻Installation
 
 ```bash
-$ npm install aws-lambda-fastify
+$ npm install @fastify/aws-lambda
 ```
 
 ## Options
 
-**aws-lambda-fastify** can take options by passing them with : `awsLambdaFastify(app, options)`
+**@fastify/aws-lambda** can take options by passing them with : `awsLambdaFastify(app, options)`
 
 | property                       | description                                                                                                                          | default value |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ | ------------- |
@@ -33,7 +33,7 @@ $ npm install aws-lambda-fastify
 ### lambda.js
 
 ```js
-const awsLambdaFastify = require('aws-lambda-fastify')
+const awsLambdaFastify = require('@fastify/aws-lambda')
 const app = require('./app')
 
 const proxy = awsLambdaFastify(app)
@@ -110,7 +110,7 @@ Since [AWS Lambda now enables the use of ECMAScript (ES) modules](https://aws.am
 We can use this by calling the [`fastify.ready()`](https://www.fastify.io/docs/latest/Reference/Server/#ready) function outside of the Lambda handler function, like this:
 
 ```js
-import awsLambdaFastify from 'aws-lambda-fastify'
+import awsLambdaFastify from '@fastify/aws-lambda'
 import app from './app.js'
 export const handler = awsLambdaFastify(app)
 await app.ready() // needs to be placed after awsLambdaFastify call because of the decoration: https://github.com/fastify/aws-lambda-fastify/blob/master/index.js#L9
@@ -121,11 +121,11 @@ await app.ready() // needs to be placed after awsLambdaFastify call because of t
 
 ## ⚡️Some basic performance metrics
 
-**aws-lambda-fastify (decorateRequest : false)** x **56,892 ops/sec** ±3.73% (79 runs sampled)
+**@fastify/aws-lambda (decorateRequest : false)** x **56,892 ops/sec** ±3.73% (79 runs sampled)
 
-**aws-lambda-fastify** x **56,571 ops/sec** ±3.52% (82 runs sampled)
+**@fastify/aws-lambda** x **56,571 ops/sec** ±3.52% (82 runs sampled)
 
-**aws-lambda-fastify (serializeLambdaArguments : true)** x **56,499 ops/sec** ±3.56% (76 runs sampled)
+**@fastify/aws-lambda (serializeLambdaArguments : true)** x **56,499 ops/sec** ±3.56% (76 runs sampled)
 
 **[serverless-http](https://github.com/dougmoscrop/serverless-http)** x **45,867 ops/sec** ±4.42% (83 runs sampled)
 
@@ -133,7 +133,7 @@ await app.ready() // needs to be placed after awsLambdaFastify call because of t
 
 **[aws-serverless-express](https://github.com/awslabs/aws-serverless-express)** x **16,647 ops/sec** ±2.88% (87 runs sampled)
 
-Fastest is **aws-lambda-fastify (decorateRequest : false), aws-lambda-fastify**
+Fastest is **@fastify/aws-lambda (decorateRequest : false), @fastify/aws-lambda**
 
 #### ⚠️Considerations
 
@@ -146,13 +146,13 @@ Fastest is **aws-lambda-fastify (decorateRequest : false), aws-lambda-fastify**
 #### 🎖Who is using it?
 
 <a href="https://locize.com" target="_blank" rel="nofollow">
-  <img style="max-height: 80px;" src="https://raw.githubusercontent.com/fastify/aws-lambda-fastify/master/images/logos/locize.png" alt="locize is using aws-lambda-fastify"/>
+  <img style="max-height: 80px;" src="https://raw.githubusercontent.com/fastify/aws-lambda-fastify/master/images/logos/locize.png" alt="locize is using @fastify/aws-lambda"/>
 </a>
 <br />
 <a href="https://localistars.com" target="_blank" rel="nofollow">
-  <img style="max-height: 80px;" src="https://raw.githubusercontent.com/fastify/aws-lambda-fastify/master/images/logos/localistars.png" alt="localistars is using aws-lambda-fastify"/>
+  <img style="max-height: 80px;" src="https://raw.githubusercontent.com/fastify/aws-lambda-fastify/master/images/logos/localistars.png" alt="localistars is using @fastify/aws-lambda"/>
 </a>
 
 ---
 <small>The logos displayed in this page are property of the respective organisations and they are
-not distributed under the same license as aws-lambda-fastify (MIT).</small>
+not distributed under the same license as @fastify/aws-lambda (MIT).</small>
