@@ -13,7 +13,7 @@ Inspired by the AWSLABS [aws-serverless-express](https://github.com/awslabs/aws-
 ## 👨🏻‍💻Installation
 
 ```bash
-$ npm install @fastify/aws-lambda
+$ npm i @fastify/aws-lambda
 ```
 
 ## Options
