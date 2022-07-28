@@ -27,6 +27,7 @@ $ npm i @fastify/aws-lambda
 | decorateRequest       | Decorates the fastify request with the lambda Event and Context `request.awsLambda.event` `request.awsLambda.context`                    | `true`        |
 | decorationPropertyName       | The default property name for request decoration                    | `awsLambda`        |
 | callbackWaitsForEmptyEventLoop | See: [Official Documentation](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-context.html#nodejs-prog-model-context-properties) | `undefined`   |
+| isBinary                       | Function that receives the response and returns a boolean indicating if the response content is binary or not | `undefined` |
 
 ## 📖Example
 

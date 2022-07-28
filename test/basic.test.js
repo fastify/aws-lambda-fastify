@@ -81,7 +81,7 @@ test('GET with base64 encoding response', async (t) => {
   t.equal(ret.headers['set-cookie'], 'qwerty=one')
 })
 
-test('GET with Content-Encoding response', async (t) => {
+test('GET with custom binary check response', async (t) => {
   t.plan(15)
 
   const readFileAsync = promisify(fs.readFile)
@@ -97,7 +97,11 @@ test('GET with Content-Encoding response', async (t) => {
     reply.header('Content-Encoding', 'gzip')
     reply.send(fileBuffer)
   })
-  const proxy = awsLambdaFastify(app, { binaryMimeTypes: [], serializeLambdaArguments: true })
+  const proxy = awsLambdaFastify(app, {
+    binaryMimeTypes: [],
+    serializeLambdaArguments: true,
+    isBinary: (res) => !!(res.headers['Content-Encoding'] || res.headers['content-encoding'])
+  })
   const ret = await proxy({
     httpMethod: 'GET',
     path: '/test',
