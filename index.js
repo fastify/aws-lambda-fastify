@@ -110,7 +110,8 @@ module.exports = (app, options) => {
         })
 
         const contentType = (res.headers['content-type'] || res.headers['Content-Type'] || '').split(';')[0]
-        const isBase64Encoded = options.binaryMimeTypes.indexOf(contentType) > -1
+        const contentEncoding = res.headers['content-encoding'] || res.headers['Content-Encoding'] || ''
+        const isBase64Encoded = options.binaryMimeTypes.indexOf(contentType) > -1 || !!contentEncoding
 
         const ret = {
           statusCode: res.statusCode,
