@@ -81,6 +81,43 @@ test('GET with base64 encoding response', async (t) => {
   t.equal(ret.headers['set-cookie'], 'qwerty=one')
 })
 
+test('GET with Content-Encoding response', async (t) => {
+  t.plan(15)
+
+  const readFileAsync = promisify(fs.readFile)
+  const fileBuffer = await readFileAsync(__filename)
+  const app = fastify()
+  app.get('/test', async (request, reply) => {
+    t.equal(request.headers['x-my-header'], 'wuuusaaa')
+    t.equal(request.headers['x-apigateway-event'], '%7B%22httpMethod%22%3A%22GET%22%2C%22path%22%3A%22%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%2C%22Content-Type%22%3A%22application%2Fjson%22%7D%7D')
+    t.equal(request.headers['user-agent'], 'lightMyRequest')
+    t.equal(request.headers.host, 'localhost:80')
+    t.equal(request.headers['content-length'], '0')
+    reply.header('Set-Cookie', 'qwerty=one')
+    reply.header('Content-Encoding', 'gzip')
+    reply.send(fileBuffer)
+  })
+  const proxy = awsLambdaFastify(app, { binaryMimeTypes: [], serializeLambdaArguments: true })
+  const ret = await proxy({
+    httpMethod: 'GET',
+    path: '/test',
+    headers: {
+      'X-My-Header': 'wuuusaaa',
+      'Content-Type': 'application/json'
+    }
+  })
+  t.equal(ret.statusCode, 200)
+  t.equal(ret.body, fileBuffer.toString('base64'))
+  t.equal(ret.isBase64Encoded, true)
+  t.ok(ret.headers)
+  t.equal(ret.headers['content-type'], 'application/octet-stream')
+  t.ok(ret.headers['content-length'])
+  t.ok(ret.headers.date)
+  t.equal(ret.headers.connection, 'keep-alive')
+  t.same(ret.multiValueHeaders, undefined)
+  t.equal(ret.headers['set-cookie'], 'qwerty=one')
+})
+
 test('GET with multi-value query params', async (t) => {
   t.plan(2)
 
