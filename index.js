@@ -110,8 +110,10 @@ module.exports = (app, options) => {
         })
 
         const contentType = (res.headers['content-type'] || res.headers['Content-Type'] || '').split(';')[0]
-        const customBinaryCheck = typeof options.isBinary === 'function' && options.isBinary(res)
-        const isBase64Encoded = options.binaryMimeTypes.indexOf(contentType) > -1 || customBinaryCheck
+        const contentEncoding = res.headers['content-encoding'] || res.headers['Content-Encoding']
+        const isCompressed = contentEncoding && contentEncoding !== 'identity'
+        const customBinaryCheck = typeof options.enforceBase64 === 'function' && options.enforceBase64(res) === true
+        const isBase64Encoded = options.binaryMimeTypes.indexOf(contentType) > -1 || isCompressed || customBinaryCheck
 
         const ret = {
           statusCode: res.statusCode,

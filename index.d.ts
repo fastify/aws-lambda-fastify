@@ -7,7 +7,7 @@ export interface LambdaFastifyOptions {
   serializeLambdaArguments?: boolean;
   decorateRequest?: boolean;
   decorationPropertyName?: string;
-  isBinary?: (reply: FastifyReply) => boolean;
+  enforceBase64?: (reply: FastifyReply) => boolean;
 }
 
 export interface LambdaResponse {
