@@ -1,5 +1,5 @@
 import { Context } from "aws-lambda";
-import { FastifyInstance } from "fastify";
+import { FastifyInstance, FastifyReply } from "fastify";
 
 export interface LambdaFastifyOptions {
   binaryMimeTypes?: string[];
@@ -7,6 +7,7 @@ export interface LambdaFastifyOptions {
   serializeLambdaArguments?: boolean;
   decorateRequest?: boolean;
   decorationPropertyName?: string;
+  isBinary?: (reply: FastifyReply) => boolean;
 }
 
 export interface LambdaResponse {
