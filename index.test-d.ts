@@ -64,6 +64,14 @@ expectAssignable<LambdaFastifyOptions>({
   decorateRequest: true,
   decorationPropertyName: "myAWSstuff",
 });
+expectAssignable<LambdaFastifyOptions>({
+  binaryMimeTypes: ["foo", "bar"],
+  callbackWaitsForEmptyEventLoop: true,
+  serializeLambdaArguments: false,
+  decorateRequest: true,
+  decorationPropertyName: "myAWSstuff",
+  enforceBase64: (reply) => false,
+});
 
 expectError(awsLambdaFastify());
 expectError(awsLambdaFastify(app, { neh: "definition" }));
