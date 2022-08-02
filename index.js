@@ -1,10 +1,12 @@
-const isCompressed = (res) => {
+const isCompressedDefault = (res) => {
   const contentEncoding = res.headers['content-encoding'] || res.headers['Content-Encoding']
   return contentEncoding && contentEncoding !== 'identity'
 }
 
-const customBinaryCheck = (options, res) =>
-  typeof options.enforceBase64 === 'function' && options.enforceBase64(res) === true
+const customBinaryCheck = (options, res) => {
+  const enforceBase64 = typeof options.enforceBase64 === 'function' ? options.enforceBase64 : isCompressedDefault
+  return enforceBase64(res) === true
+}
 
 module.exports = (app, options) => {
   options = options || {}
@@ -118,7 +120,7 @@ module.exports = (app, options) => {
         })
 
         const contentType = (res.headers['content-type'] || res.headers['Content-Type'] || '').split(';')[0]
-        const isBase64Encoded = options.binaryMimeTypes.indexOf(contentType) > -1 || isCompressed(res) || customBinaryCheck(options, res)
+        const isBase64Encoded = options.binaryMimeTypes.indexOf(contentType) > -1 || customBinaryCheck(options, res)
 
         const ret = {
           statusCode: res.statusCode,
