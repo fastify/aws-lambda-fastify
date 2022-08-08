@@ -1,4 +1,4 @@
-import fastify from "fastify";
+import fastify, {LightMyRequestResponse} from "fastify";
 import awsLambdaFastify, {
   PromiseHandler,
   CallbackHandler,
@@ -70,7 +70,10 @@ expectAssignable<LambdaFastifyOptions>({
   serializeLambdaArguments: false,
   decorateRequest: true,
   decorationPropertyName: "myAWSstuff",
-  enforceBase64: (response) => false,
+  enforceBase64: (response) => {
+      expectType<LightMyRequestResponse>(response);
+      return false;
+  },
 });
 
 expectError(awsLambdaFastify());
