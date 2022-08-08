@@ -41,6 +41,7 @@
     "aws-serverless-fastify": "^1.0.28",
     "benchmark": "^2.1.4",
     "eslint": "^8.17.0",
+    "light-my-request": "^5.0.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-n": "^15.2.1",

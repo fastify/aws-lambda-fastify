@@ -138,7 +138,7 @@ test('GET with custom binary check response', async (t) => {
   const proxy = awsLambdaFastify(app, {
     binaryMimeTypes: [],
     serializeLambdaArguments: true,
-    enforceBase64: (reply) => reply.headers['x-base64-encoded'] === '1'
+    enforceBase64: (response) => response.headers['x-base64-encoded'] === '1'
   })
   const ret = await proxy({
     httpMethod: 'GET',

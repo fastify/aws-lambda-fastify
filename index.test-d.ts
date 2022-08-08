@@ -70,7 +70,7 @@ expectAssignable<LambdaFastifyOptions>({
   serializeLambdaArguments: false,
   decorateRequest: true,
   decorationPropertyName: "myAWSstuff",
-  enforceBase64: (reply) => false,
+  enforceBase64: (response) => false,
 });
 
 expectError(awsLambdaFastify());

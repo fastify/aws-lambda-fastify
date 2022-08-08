@@ -1,5 +1,6 @@
 import { Context } from "aws-lambda";
-import { FastifyInstance, FastifyReply } from "fastify";
+import { FastifyInstance } from "fastify";
+import {Response as LightMyRequestResponse} from "light-my-request";
 
 export interface LambdaFastifyOptions {
   binaryMimeTypes?: string[];
@@ -7,7 +8,7 @@ export interface LambdaFastifyOptions {
   serializeLambdaArguments?: boolean;
   decorateRequest?: boolean;
   decorationPropertyName?: string;
-  enforceBase64?: (reply: FastifyReply) => boolean;
+  enforceBase64?: (response: LightMyRequestResponse) => boolean;
 }
 
 export interface LambdaResponse {
