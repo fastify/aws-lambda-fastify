@@ -23,7 +23,7 @@ $ npm i @fastify/aws-lambda
 | property                       | description                                                                                                                          | default value |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ | ------------- |
 | binaryMimeTypes                | Array of binary MimeTypes to handle                                                                                                  | `[]`          |
-| enforceBase64                  | Function that receives the reply and returns a boolean indicating if the response content is binary or not and should be base64-encoded                          | `undefined`   |
+| enforceBase64                  | Function that receives the response and returns a boolean indicating if the response content is binary or not and should be base64-encoded                          | `undefined`   |
 | serializeLambdaArguments       | Activate the serialization of lambda Event and Context in http header `x-apigateway-event` `x-apigateway-context`                    | `false` *(was `true` for <v2.0.0)*        |
 | decorateRequest       | Decorates the fastify request with the lambda Event and Context `request.awsLambda.event` `request.awsLambda.context`                    | `true`        |
 | decorationPropertyName       | The default property name for request decoration                    | `awsLambda`        |
