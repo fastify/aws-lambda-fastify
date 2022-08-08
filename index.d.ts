@@ -1,6 +1,5 @@
 import { Context } from "aws-lambda";
-import { FastifyInstance } from "fastify";
-import {Response as LightMyRequestResponse} from "light-my-request";
+import { FastifyInstance, LightMyRequestResponse } from "fastify";
 
 export interface LambdaFastifyOptions {
   binaryMimeTypes?: string[];
