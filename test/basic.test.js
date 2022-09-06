@@ -194,6 +194,7 @@ test('GET with multi-value query params (queryStringParameters)', async (t) => {
   const proxy = awsLambdaFastify(app)
 
   const ret = await proxy({
+    version: '2.0',
     httpMethod: 'GET',
     path: '/test',
     queryStringParameters: {
