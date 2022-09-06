@@ -184,6 +184,26 @@ test('GET with multi-value query params', async (t) => {
   t.equal(ret.body, '{"foo":["qux","bar"]}')
 })
 
+test('GET with multi-value query params (queryStringParameters)', async (t) => {
+  t.plan(2)
+
+  const app = fastify()
+  app.get('/test', async (request, reply) => {
+    reply.send(request.query)
+  })
+  const proxy = awsLambdaFastify(app)
+
+  const ret = await proxy({
+    httpMethod: 'GET',
+    path: '/test',
+    queryStringParameters: {
+      foo: 'qux,bar'
+    }
+  })
+  t.equal(ret.statusCode, 200)
+  t.equal(ret.body, '{"foo":["qux","bar"]}')
+})
+
 test('GET with double encoded query value', async (t) => {
   t.plan(2)
 
