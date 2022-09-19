@@ -35,7 +35,7 @@
     "performance": "npm run lint && node performanceTest/test"
   },
   "devDependencies": {
-    "@types/aws-lambda": "8.10.103",
+    "@types/aws-lambda": "8.10.104",
     "aws-lambda": "^1.0.7",
     "aws-serverless-express": "^3.4.0",
     "aws-serverless-fastify": "^1.0.28",
