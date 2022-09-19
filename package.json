@@ -49,7 +49,7 @@
     "fastify": "^4.0.0-rc.3",
     "serverless-http": "^3.0.1",
     "tap": "^16.2.0",
-    "tsd": "^0.23.0"
+    "tsd": "^0.24.1"
   },
   "overrides": {
     "aws-serverless-fastify": {
