@@ -11,6 +11,7 @@ const customBinaryCheck = (options, res) => {
 module.exports = (app, options) => {
   options = options || {}
   options.binaryMimeTypes = options.binaryMimeTypes || []
+  options.enforceBinary = options.enforceBinary ?? false
   options.serializeLambdaArguments = options.serializeLambdaArguments !== undefined ? options.serializeLambdaArguments : false
   options.decorateRequest = options.decorateRequest !== undefined ? options.decorateRequest : true
   let currentAwsArguments = {}
@@ -75,7 +76,7 @@ module.exports = (app, options) => {
         }
       })
     }
-    const payload = Buffer.from(event.body, event.isBase64Encoded ? 'base64' : 'utf8')
+    const payload = Buffer.from(event.body, options.enforceBinary ? 'binary' : event.isBase64Encoded ? 'base64' : 'utf8')
     // NOTE: API Gateway is not setting Content-Length header on requests even when they have a body
     if (event.body && !headers['Content-Length'] && !headers['content-length']) headers['content-length'] = Buffer.byteLength(payload)
 
