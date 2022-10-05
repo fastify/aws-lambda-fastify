@@ -38,22 +38,22 @@
     "@types/aws-lambda": "8.10.106",
     "aws-lambda": "^1.0.7",
     "aws-serverless-express": "^3.4.0",
-    "aws-serverless-fastify": "^1.0.28",
+    "aws-serverless-fastify": "^1.0.29",
     "benchmark": "^2.1.4",
     "eslint": "^8.17.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-n": "^15.2.1",
-    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-n": "^15.3.0",
+    "eslint-plugin-promise": "^6.0.1",
     "eslint-plugin-standard": "^5.0.0",
-    "fastify": "^4.0.0-rc.3",
-    "serverless-http": "^3.0.1",
-    "tap": "^16.2.0",
+    "fastify": "^4.7.0",
+    "serverless-http": "^3.0.2",
+    "tap": "^16.3.0",
     "tsd": "^0.24.1"
   },
   "overrides": {
     "aws-serverless-fastify": {
-      "fastify": "^4.0.0-rc.3"
+      "fastify": "^4.7.0"
     }
   },
   "publishConfig": {
