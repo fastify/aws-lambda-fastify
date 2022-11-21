@@ -39,7 +39,7 @@
     "@types/aws-lambda": "8.10.108",
     "aws-lambda": "^1.0.7",
     "aws-serverless-express": "^3.4.0",
-    "aws-serverless-fastify": "^1.0.29",
+    "aws-serverless-fastify": "^3.0.0",
     "benchmark": "^2.1.4",
     "eslint": "^8.17.0",
     "eslint-config-standard": "^17.0.0",
