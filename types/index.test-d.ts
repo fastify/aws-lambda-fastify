@@ -4,7 +4,7 @@ import awsLambdaFastify, {
   CallbackHandler,
   LambdaFastifyOptions,
   LambdaResponse,
-} from ".";
+} from "..";
 
 import { expectType, expectError, expectAssignable } from "tsd";
 

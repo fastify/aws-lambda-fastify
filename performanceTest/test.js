@@ -1,3 +1,5 @@
+'use strict'
+
 const Benchmark = require('benchmark')
 const suite = new Benchmark.Suite()
 
@@ -69,6 +71,6 @@ suite
   })
   .on('complete', function () {
     console.log('Fastest is ' + this.filter('fastest').map('name'))
-    process.exit(0)
+    process.exit(0) // eslint-disable-line no-process-exit
   })
   .run({ async: true })

@@ -1,3 +1,5 @@
+'use strict'
+
 const isCompressedDefault = (res) => {
   const contentEncoding = res.headers['content-encoding'] || res.headers['Content-Encoding']
   return contentEncoding && contentEncoding !== 'identity'
@@ -91,7 +93,7 @@ module.exports = (app, options) => {
 
     // API gateway v2 cookies: https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html
     if (event.cookies && event.cookies.length) {
-      headers['cookie'] = event.cookies.join(';')
+      headers.cookie = event.cookies.join(';')
     }
 
     const prom = new Promise((resolve) => {
@@ -149,3 +151,5 @@ module.exports = (app, options) => {
     return prom
   }
 }
+module.exports.default = module.exports
+module.exports.awsLambdaFastify = module.exports
