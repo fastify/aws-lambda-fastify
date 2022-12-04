@@ -151,3 +151,5 @@ module.exports = (app, options) => {
     return prom
   }
 }
+module.exports.default = module.exports
+module.exports.awsLambdaFastify = module.exports
