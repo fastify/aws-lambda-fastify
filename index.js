@@ -1,3 +1,5 @@
+'use strict'
+
 const isCompressedDefault = (res) => {
   const contentEncoding = res.headers['content-encoding'] || res.headers['Content-Encoding']
   return contentEncoding && contentEncoding !== 'identity'

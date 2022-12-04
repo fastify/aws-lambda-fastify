@@ -1,3 +1,5 @@
+'use strict'
+
 const { promisify } = require('util')
 const { test } = require('tap')
 const fastify = require('fastify')

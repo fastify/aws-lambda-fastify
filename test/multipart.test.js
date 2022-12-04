@@ -1,3 +1,5 @@
+'use strict'
+
 const { test } = require('tap')
 const fastify = require('fastify')
 const awsLambdaFastify = require('../index')
