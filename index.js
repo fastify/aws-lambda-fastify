@@ -93,7 +93,7 @@ module.exports = (app, options) => {
 
     // API gateway v2 cookies: https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html
     if (event.cookies && event.cookies.length) {
-      headers['cookie'] = event.cookies.join(';')
+      headers.cookie = event.cookies.join(';')
     }
 
     const prom = new Promise((resolve) => {
