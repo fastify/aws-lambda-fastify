@@ -37,27 +37,27 @@
     "performance": "npm run lint && node performanceTest/test"
   },
   "devDependencies": {
-    "@fastify/multipart": "7.3.0",
+    "@fastify/multipart": "7.4.0",
     "@fastify/pre-commit": "^2.0.2",
     "@types/aws-lambda": "8.10.109",
     "aws-lambda": "^1.0.7",
     "aws-serverless-express": "^3.4.0",
-    "aws-serverless-fastify": "^3.0.0",
+    "aws-serverless-fastify": "^3.0.2",
     "benchmark": "^2.1.4",
-    "eslint": "^8.17.0",
+    "eslint": "^8.31.0",
     "eslint-config-standard": "^17.0.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-n": "^15.3.0",
-    "eslint-plugin-promise": "^6.0.1",
+    "eslint-plugin-import": "^2.27.4",
+    "eslint-plugin-n": "^15.6.1",
+    "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-standard": "^5.0.0",
-    "fastify": "^4.7.0",
-    "serverless-http": "^3.0.2",
-    "tap": "^16.3.0",
+    "fastify": "^4.11.0",
+    "serverless-http": "^3.1.1",
+    "tap": "^16.3.3",
     "tsd": "^0.25.0"
   },
   "overrides": {
     "aws-serverless-fastify": {
-      "fastify": "^4.7.0"
+      "fastify": "^4.11.0"
     }
   },
   "publishConfig": {
