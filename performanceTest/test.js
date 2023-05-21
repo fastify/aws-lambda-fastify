@@ -39,32 +39,90 @@ const appServerlessHttp = fastify()
 appServerlessHttp.get('/test', async () => ({ hello: 'world' }))
 const serverlessHttpProxy = serverlessHttp(appServerlessHttp)
 
+// middy
+const middy = require('@middy/core')
+const middyHandler = middy().handler(() => {})
+
+// middy w/ router
+const middyHttpRouter = require('@middy/http-router')
+const middyRouterHandler = middy().handler(
+  middyHttpRouter([
+    {
+      method: 'GET',
+      path: '/test',
+      handler: () => {}
+    }
+  ])
+)
 suite
-  .add('aws-serverless-express', (deferred) => {
-    appAwsServerlessExpress.ready(() => {
-      awsServerlessExpress.proxy(server, event, {}, 'CALLBACK', () => deferred.resolve())
-    })
-  }, { defer: true })
+  .add(
+    'aws-serverless-express',
+    (deferred) => {
+      appAwsServerlessExpress.ready(() => {
+        awsServerlessExpress.proxy(server, event, {}, 'CALLBACK', () =>
+          deferred.resolve()
+        )
+      })
+    },
+    { defer: true }
+  )
 
-  .add('aws-serverless-fastify', (deferred) => {
-    proxyAwsServerlessFastify(appAwsServerlessFastify, event, {}).then(() => deferred.resolve())
-  }, { defer: true })
+  .add(
+    'aws-serverless-fastify',
+    (deferred) => {
+      proxyAwsServerlessFastify(appAwsServerlessFastify, event, {}).then(() =>
+        deferred.resolve()
+      )
+    },
+    { defer: true }
+  )
 
-  .add('serverless-http', (deferred) => {
-    serverlessHttpProxy(event, {}).then(() => deferred.resolve())
-  }, { defer: true })
+  .add(
+    '@middy/core',
+    async () => {
+      await middyHandler(event)
+    },
+    { defer: false }
+  )
+  .add(
+    '@middy/core + @middy/http-router',
+    async () => {
+      await middyRouterHandler(event)
+    },
+    { defer: false }
+  )
 
-  .add('aws-lambda-fastify', (deferred) => {
-    proxy(event, {}, () => deferred.resolve())
-  }, { defer: true })
+  .add(
+    'serverless-http',
+    (deferred) => {
+      serverlessHttpProxy(event, {}).then(() => deferred.resolve())
+    },
+    { defer: true }
+  )
 
-  .add('aws-lambda-fastify (serializeLambdaArguments : true)', (deferred) => {
-    proxy(event, { serializeLambdaArguments: true }, () => deferred.resolve())
-  }, { defer: true })
+  .add(
+    'aws-lambda-fastify',
+    (deferred) => {
+      proxy(event, {}, () => deferred.resolve())
+    },
+    { defer: true }
+  )
 
-  .add('aws-lambda-fastify (decorateRequest : false)', (deferred) => {
-    proxy(event, { decorateRequest: false }, () => deferred.resolve())
-  }, { defer: true })
+  .add(
+    'aws-lambda-fastify (serializeLambdaArguments : true)',
+    (deferred) => {
+      proxy(event, { serializeLambdaArguments: true }, () => deferred.resolve())
+    },
+    { defer: true }
+  )
+
+  .add(
+    'aws-lambda-fastify (decorateRequest : false)',
+    (deferred) => {
+      proxy(event, { decorateRequest: false }, () => deferred.resolve())
+    },
+    { defer: true }
+  )
 
   .on('cycle', (event) => {
     console.log(String(event.target))
