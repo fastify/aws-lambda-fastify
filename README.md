@@ -128,6 +128,10 @@ await app.ready() // needs to be placed after awsLambdaFastify call because of t
 
 **@fastify/aws-lambda (serializeLambdaArguments : true)** x **56,499 ops/sec** ±3.56% (76 runs sampled)
 
+**[@middy/core](https://middy.js.org)** x **759,611 ops/sec** ±0.66% (91 runs sampled)
+
+**[@middy/core + @middy/http-router](https://middy.js.org)** **754,083 ops/sec** ±0.73% (92 runs sampled)
+
 **[serverless-http](https://github.com/dougmoscrop/serverless-http)** x **45,867 ops/sec** ±4.42% (83 runs sampled)
 
 **[aws-serverless-fastify](https://github.com/benMain/aws-serverless-fastify)** x **17,937 ops/sec** ±1.83% (86 runs sampled)

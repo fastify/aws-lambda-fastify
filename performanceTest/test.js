@@ -79,17 +79,17 @@ suite
 
   .add(
     '@middy/core',
-    async () => {
-      await middyHandler(event)
+    (deferred) => {
+      middyHandler(event).then(() => deferred.resolve())
     },
-    { defer: false }
+    { defer: true }
   )
   .add(
     '@middy/core + @middy/http-router',
-    async () => {
-      await middyRouterHandler(event)
+    (deferred) => {
+      middyRouterHandler(event).then(() => deferred.resolve())
     },
-    { defer: false }
+    { defer: true }
   )
 
   .add(
