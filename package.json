@@ -47,7 +47,7 @@
     "eslint": "^8.31.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.27.4",
-    "eslint-plugin-n": "^15.6.1",
+    "eslint-plugin-n": "^16.0.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-standard": "^5.0.0",
     "fastify": "^4.11.0",
