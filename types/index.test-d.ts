@@ -75,6 +75,18 @@ expectAssignable<LambdaFastifyOptions>({
       return false;
   },
 });
+expectAssignable<LambdaFastifyOptions>({
+  binaryMimeTypes: ["foo", "bar"],
+  callbackWaitsForEmptyEventLoop: true,
+  serializeLambdaArguments: false,
+  decorateRequest: true,
+  decorationPropertyName: "myAWSstuff",
+  enforceBase64: (response) => {
+      expectType<LightMyRequestResponse>(response);
+      return false;
+  },
+  retainStage: true,
+});
 
 expectError(awsLambdaFastify());
 expectError(awsLambdaFastify(app, { neh: "definition" }));
