@@ -15,6 +15,7 @@ module.exports = (app, options) => {
   options.binaryMimeTypes = options.binaryMimeTypes || []
   options.serializeLambdaArguments = options.serializeLambdaArguments !== undefined ? options.serializeLambdaArguments : false
   options.decorateRequest = options.decorateRequest !== undefined ? options.decorateRequest : true
+  options.retainStage = options.retainStage !== undefined ? options.retainStage : false
   let currentAwsArguments = {}
   if (options.decorateRequest) {
     options.decorationPropertyName = options.decorationPropertyName || 'awsLambda'
@@ -40,8 +41,8 @@ module.exports = (app, options) => {
     const method = event.httpMethod || (event.requestContext && event.requestContext.http ? event.requestContext.http.method : undefined)
     let url = event.path || event.rawPath || '/' // seen rawPath for HTTP-API
     // NOTE: if used directly via API Gateway domain and /stage
-    if (event.requestContext && event.requestContext.stage && event.requestContext.resourcePath &&
-        (url).indexOf(`/${event.requestContext.stage}/`) === 0 &&
+    if (!options.retainStage && event.requestContext && event.requestContext.stage && 
+        event.requestContext.resourcePath && (url).indexOf(`/${event.requestContext.stage}/`) === 0 &&
         event.requestContext.resourcePath.indexOf(`/${event.requestContext.stage}/`) !== 0) {
       url = url.substring(event.requestContext.stage.length + 1)
     }
