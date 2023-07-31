@@ -37,7 +37,7 @@
     "performance": "npm run lint && node performanceTest/test"
   },
   "devDependencies": {
-    "@fastify/multipart": "7.7.2",
+    "@fastify/multipart": "7.7.3",
     "@fastify/pre-commit": "^2.0.2",
     "@types/aws-lambda": "8.10.119",
     "aws-lambda": "^1.0.7",
