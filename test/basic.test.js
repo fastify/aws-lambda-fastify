@@ -1,9 +1,9 @@
 'use strict'
 
-const { promisify } = require('util')
+const { promisify } = require('node:util')
 const { test } = require('tap')
 const fastify = require('fastify')
-const fs = require('fs')
+const fs = require('node:fs')
 const awsLambdaFastify = require('../index')
 
 test('GET', async (t) => {
