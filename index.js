@@ -132,7 +132,7 @@ module.exports = (app, options) => {
           }
         })
 
-        const contentType = (res.headers['content-type'] || res.headers['Content-Type'] || '').split(';')[0]
+        const contentType = (res.headers['content-type'] || res.headers['Content-Type'] || '').split(';', 1)[0]
         const isBase64Encoded = options.binaryMimeTypes.indexOf(contentType) > -1 || customBinaryCheck(options, res)
 
         const ret = {
