@@ -35,7 +35,9 @@
     "test": "npm run test:unit && npm run test:typescript",
     "test:unit": "tap -J -R specy --no-coverage test/*test.js",
     "test:typescript": "tsd",
-    "performance": "npm run lint && node performanceTest/test"
+    "performance": "npm run lint && node performanceTest/test",
+    "preversion": "npm run test && git push",
+    "postversion": "git push && git push --tags"
   },
   "devDependencies": {
     "@fastify/multipart": "8.0.0",
