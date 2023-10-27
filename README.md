@@ -150,10 +150,6 @@ Fastest is **@fastify/aws-lambda (decorateRequest : false), @fastify/aws-lambda*
 <a href="https://locize.com" target="_blank" rel="nofollow">
   <img style="max-height: 80px;" src="https://raw.githubusercontent.com/fastify/aws-lambda-fastify/master/images/logos/locize.png" alt="locize is using @fastify/aws-lambda"/>
 </a>
-<br />
-<a href="https://localistars.com" target="_blank" rel="nofollow">
-  <img style="max-height: 80px;" src="https://raw.githubusercontent.com/fastify/aws-lambda-fastify/master/images/logos/localistars.png" alt="localistars is using @fastify/aws-lambda"/>
-</a>
 
 ---
 <small>The logos displayed in this page are property of the respective organisations and they are
