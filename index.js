@@ -39,7 +39,8 @@ module.exports = (app, options) => {
     event.body = event.body || ''
 
     const method = event.httpMethod || (event.requestContext && event.requestContext.http ? event.requestContext.http.method : undefined)
-    let url = event.path || event.rawPath || '/' // seen rawPath for HTTP-API
+    // NOTE: Use `event.pathParameters.proxy` if available ({proxy+}); fall back to `event.path`
+    let url = (event.pathParameters && event.pathParameters.proxy && `/${event.pathParameters.proxy}`) || event.path || event.rawPath || '/' // seen rawPath for HTTP-API
     // NOTE: if used directly via API Gateway domain and /stage
     if (!options.retainStage && event.requestContext && event.requestContext.stage &&
         event.requestContext.resourcePath && (url).indexOf(`/${event.requestContext.stage}/`) === 0 &&
