@@ -485,7 +485,7 @@ test('proxy in pathParameters with http api', async (t) => {
       proxy: 'projects'
     }
   }
-  app.get('/projects', async (request, reply) => {
+  app.get('/prod/projects', async (request, reply) => {
     t.equal(request.headers['x-my-header'], 'wuuusaaa')
     t.equal(request.headers['user-agent'], 'lightMyRequest')
     t.equal(request.headers.host, 'localhost:80')
@@ -494,6 +494,51 @@ test('proxy in pathParameters with http api', async (t) => {
     reply.send({ hello: 'world' })
   })
   const proxy = awsLambdaFastify(app)
+  const ret = await proxy(evt)
+  t.equal(ret.statusCode, 200)
+  t.equal(ret.body, '{"hello":"world"}')
+  t.equal(ret.isBase64Encoded, false)
+  t.ok(ret.headers)
+  t.equal(ret.headers['content-type'], 'application/json; charset=utf-8')
+  t.equal(ret.headers['content-length'], '17')
+  t.ok(ret.headers.date)
+  t.equal(ret.headers.connection, 'keep-alive')
+})
+
+test('proxy in pathParameters with http api (pathParameterUsedAsPath = "proxy")', async (t) => {
+  t.plan(13)
+
+  const app = fastify()
+  const evt = {
+    version: '2.0',
+    routeKey: 'GET /prod/{proxy+}',
+    rawPath: '/prod/projects',
+    rawQueryString: 't=1698604776681',
+    requestContext: {
+      http: {
+        method: 'GET',
+        path: '/prod/projects'
+      }
+    },
+    headers: {
+      'X-My-Header': 'wuuusaaa'
+    },
+    queryStringParameters: {
+      t: '1698604776681'
+    },
+    pathParameters: {
+      proxy: 'projects'
+    }
+  }
+  app.get('/projects', async (request, reply) => {
+    t.equal(request.headers['x-my-header'], 'wuuusaaa')
+    t.equal(request.headers['user-agent'], 'lightMyRequest')
+    t.equal(request.headers.host, 'localhost:80')
+    t.equal(request.headers['content-length'], '0')
+    t.equal(request.query.t, '1698604776681')
+    reply.send({ hello: 'world' })
+  })
+  const proxy = awsLambdaFastify(app, { pathParameterUsedAsPath: 'proxy' })
   const ret = await proxy(evt)
   t.equal(ret.statusCode, 200)
   t.equal(ret.body, '{"hello":"world"}')
@@ -541,7 +586,7 @@ test('proxy in pathParameters with rest api', async (t) => {
       stage: 'dev'
     }
   }
-  app.get('/projects', async (request, reply) => {
+  app.get('/area/projects', async (request, reply) => {
     t.equal(request.headers['x-my-header'], 'wuuusaaa')
     t.equal(request.headers['user-agent'], 'lightMyRequest')
     t.equal(request.headers.host, 'localhost:80')
@@ -550,6 +595,62 @@ test('proxy in pathParameters with rest api', async (t) => {
     reply.send({ hello: 'world' })
   })
   const proxy = awsLambdaFastify(app)
+  const ret = await proxy(evt)
+  t.equal(ret.statusCode, 200)
+  t.equal(ret.body, '{"hello":"world"}')
+  t.equal(ret.isBase64Encoded, false)
+  t.ok(ret.headers)
+  t.equal(ret.headers['content-type'], 'application/json; charset=utf-8')
+  t.equal(ret.headers['content-length'], '17')
+  t.ok(ret.headers.date)
+  t.equal(ret.headers.connection, 'keep-alive')
+})
+
+test('proxy in pathParameters with rest api (pathParameterUsedAsPath = "proxy")', async (t) => {
+  t.plan(13)
+
+  const app = fastify()
+  const evt = {
+    resource: '/area/project',
+    path: '/area/projects',
+    rawPath: '/prod/projects',
+    httpMethod: 'GET',
+    headers: {
+      'X-My-Header': 'wuuusaaa'
+    },
+    multiValueHeaders: {
+      'X-My-Header': [
+        'wuuusaaa'
+      ]
+    },
+    queryStringParameters: {
+      t: '1698604776681'
+    },
+    multiValueQueryStringParameters: {
+      t: [
+        '1698604776681'
+      ]
+    },
+    pathParameters: {
+      proxy: 'projects'
+    },
+    stageVariables: null,
+    requestContext: {
+      resourcePath: '/area/{proxy+}',
+      httpMethod: 'GET',
+      path: '/dev/area/projects',
+      stage: 'dev'
+    }
+  }
+  app.get('/projects', async (request, reply) => {
+    t.equal(request.headers['x-my-header'], 'wuuusaaa')
+    t.equal(request.headers['user-agent'], 'lightMyRequest')
+    t.equal(request.headers.host, 'localhost:80')
+    t.equal(request.headers['content-length'], '0')
+    t.equal(request.query.t, '1698604776681')
+    reply.send({ hello: 'world' })
+  })
+  const proxy = awsLambdaFastify(app, { pathParameterUsedAsPath: 'proxy' })
   const ret = await proxy(evt)
   t.equal(ret.statusCode, 200)
   t.equal(ret.body, '{"hello":"world"}')

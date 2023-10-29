@@ -29,6 +29,7 @@ $ npm i @fastify/aws-lambda
 | decorationPropertyName         | The default property name for request decoration                                                                                           | `awsLambda`                        |
 | callbackWaitsForEmptyEventLoop | See: [Official Documentation](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-context.html#nodejs-prog-model-context-properties)       | `undefined`                        |
 | retainStage                    | Retain the stage part of the API Gateway URL                                                                                               | `false`                            |
+| pathParameterUsedAsPath        | Use a defined pathParameter as path (i.e. `'proxy'`)                                                                                               | `false`                            |
 
 ## 📖Example
 
