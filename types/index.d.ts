@@ -12,6 +12,10 @@ declare namespace awsLambdaFastify {
     decorationPropertyName?: string;
     enforceBase64?: (response: LightMyRequestResponse) => boolean;
     retainStage?: boolean;
+    /**
+     * usually set to 'proxy', if used
+     */
+    pathParameterUsedAsPath?: string;
   }
   
   export interface LambdaResponse {

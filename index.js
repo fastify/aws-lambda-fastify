@@ -16,7 +16,7 @@ module.exports = (app, options) => {
   options.serializeLambdaArguments = options.serializeLambdaArguments !== undefined ? options.serializeLambdaArguments : false
   options.decorateRequest = options.decorateRequest !== undefined ? options.decorateRequest : true
   options.retainStage = options.retainStage !== undefined ? options.retainStage : false
-  options.proxiedPathParameterAsPath = options.proxiedPathParameterAsPath !== undefined ? options.proxiedPathParameterAsPath : false
+  options.pathParameterUsedAsPath = options.pathParameterUsedAsPath !== undefined ? options.pathParameterUsedAsPath : false
   let currentAwsArguments = {}
   if (options.decorateRequest) {
     options.decorationPropertyName = options.decorationPropertyName || 'awsLambda'
