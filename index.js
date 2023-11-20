@@ -98,8 +98,17 @@ module.exports = (app, options) => {
       headers.cookie = event.cookies.join(';')
     }
 
+    let remoteAddress
+    if (event.requestContext) {
+      if (event.requestContext.http && event.requestContext.http.sourceIp) {
+        remoteAddress = event.requestContext.http.sourceIp
+      } else if (event.requestContext.identity && event.requestContext.identity.sourceIp) {
+        remoteAddress = event.requestContext.identity.sourceIp
+      }
+    }
+
     const prom = new Promise((resolve) => {
-      app.inject({ method, url, query, payload, headers }, (err, res) => {
+      app.inject({ method, url, query, payload, headers, remoteAddress }, (err, res) => {
         currentAwsArguments = {}
         if (err) {
           console.error(err)
