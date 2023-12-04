@@ -42,7 +42,7 @@
   "devDependencies": {
     "@fastify/multipart": "8.0.0",
     "@fastify/pre-commit": "^2.0.2",
-    "@types/aws-lambda": "8.10.129",
+    "@types/aws-lambda": "8.10.130",
     "aws-lambda": "^1.0.7",
     "aws-serverless-express": "^3.4.0",
     "aws-serverless-fastify": "^3.0.4",
