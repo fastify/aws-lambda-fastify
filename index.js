@@ -37,7 +37,7 @@ module.exports = (app, options) => {
     if (options.callbackWaitsForEmptyEventLoop !== undefined) {
       context.callbackWaitsForEmptyEventLoop = options.callbackWaitsForEmptyEventLoop
     }
-    event.body = event.body || ''
+    // event.body = event.body || '' // do not magically default body to ''
 
     const method = event.httpMethod || (event.requestContext && event.requestContext.http ? event.requestContext.http.method : undefined)
     let url = (options.pathParameterUsedAsPath && event.pathParameters && event.pathParameters[options.pathParameterUsedAsPath] && `/${event.pathParameters[options.pathParameterUsedAsPath]}`) || event.path || event.rawPath || '/' // seen rawPath for HTTP-API
@@ -79,7 +79,7 @@ module.exports = (app, options) => {
         }
       })
     }
-    const payload = Buffer.from(event.body, event.isBase64Encoded ? 'base64' : 'utf8')
+    const payload = event.body !== null && event.body !== undefined ? Buffer.from(event.body, event.isBase64Encoded ? 'base64' : 'utf8') : event.body
     // NOTE: API Gateway is not setting Content-Length header on requests even when they have a body
     if (event.body && !headers['Content-Length'] && !headers['content-length']) headers['content-length'] = Buffer.byteLength(payload)
 
