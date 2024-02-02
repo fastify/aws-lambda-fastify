@@ -4,13 +4,16 @@ const Benchmark = require('benchmark')
 const suite = new Benchmark.Suite()
 
 const fastify = require('fastify')
-const event = {
+const createEvent = () => ({
   httpMethod: 'GET',
+  rawPath: '/test',
   path: '/test',
   headers: {},
-  requestContext: { requestId: 'requestId' },
-  queryStringParameters: ''
-}
+  multiValueHeaders: {},
+  requestContext: { requestId: 'requestId', http: { method: 'GET' }, identity: { sourceIp: '0.0.0.0' } },
+  queryStringParameters: null,
+  multiValueQueryStringParameters: null
+})
 
 // @fastify/aws-lambda stuff:
 const awsLambdaFastify = require('../index')
@@ -39,31 +42,50 @@ const appServerlessHttp = fastify()
 appServerlessHttp.get('/test', async () => ({ hello: 'world' }))
 const serverlessHttpProxy = serverlessHttp(appServerlessHttp)
 
+// @h4ad/serverless-adapter stuff:
+const serverlessAdapter = require('@h4ad/serverless-adapter')
+const { DefaultHandler } = require('@h4ad/serverless-adapter/lib/handlers/default')
+const { PromiseResolver } = require('@h4ad/serverless-adapter/lib/resolvers/promise')
+const { FastifyFramework } = require('@h4ad/serverless-adapter/lib/frameworks/fastify')
+const { ApiGatewayV1Adapter } = require('@h4ad/serverless-adapter/lib/adapters/aws')
+const appServerlessAdapter = fastify()
+appServerlessAdapter.get('/test', async () => ({ hello: 'world' }))
+const serverlessAdapterProxy = serverlessAdapter.ServerlessAdapter.new(appServerlessAdapter)
+  .setFramework(new FastifyFramework())
+  .setHandler(new DefaultHandler())
+  .setResolver(new PromiseResolver())
+  .addAdapter(new ApiGatewayV1Adapter())
+  .build()
+
 suite
   .add('aws-serverless-express', (deferred) => {
     appAwsServerlessExpress.ready(() => {
-      awsServerlessExpress.proxy(server, event, {}, 'CALLBACK', () => deferred.resolve())
+      awsServerlessExpress.proxy(server, createEvent(), {}, 'CALLBACK', () => deferred.resolve())
     })
   }, { defer: true })
 
   .add('aws-serverless-fastify', (deferred) => {
-    proxyAwsServerlessFastify(appAwsServerlessFastify, event, {}).then(() => deferred.resolve())
+    proxyAwsServerlessFastify(appAwsServerlessFastify, createEvent(), {}).then(() => deferred.resolve())
   }, { defer: true })
 
   .add('serverless-http', (deferred) => {
-    serverlessHttpProxy(event, {}).then(() => deferred.resolve())
+    serverlessHttpProxy(createEvent(), {}).then(() => deferred.resolve())
+  }, { defer: true })
+
+  .add('@h4ad/serverless-adapter', (deferred) => {
+    serverlessAdapterProxy(createEvent(), {}).then(() => deferred.resolve())
   }, { defer: true })
 
   .add('aws-lambda-fastify', (deferred) => {
-    proxy(event, {}, () => deferred.resolve())
+    proxy(createEvent(), {}, () => deferred.resolve())
   }, { defer: true })
 
   .add('aws-lambda-fastify (serializeLambdaArguments : true)', (deferred) => {
-    proxy(event, { serializeLambdaArguments: true }, () => deferred.resolve())
+    proxy(createEvent(), { serializeLambdaArguments: true }, () => deferred.resolve())
   }, { defer: true })
 
   .add('aws-lambda-fastify (decorateRequest : false)', (deferred) => {
-    proxy(event, { decorateRequest: false }, () => deferred.resolve())
+    proxy(createEvent(), { decorateRequest: false }, () => deferred.resolve())
   }, { defer: true })
 
   .on('cycle', (event) => {
