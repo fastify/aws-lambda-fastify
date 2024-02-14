@@ -44,7 +44,6 @@
     "@fastify/pre-commit": "^2.1.0",
     "@h4ad/serverless-adapter": "4.2.0",
     "@types/aws-lambda": "8.10.133",
-    "aws-lambda": "^1.0.7",
     "aws-serverless-express": "^3.4.0",
     "aws-serverless-fastify": "^3.0.6",
     "benchmark": "^2.1.4",
