@@ -17,7 +17,7 @@ on:
 
 jobs:
   test:
-    uses: fastify/workflows/.github/workflows/plugins-ci.yml@29329a13c391edeae7d2aa401cbf7664ef830393
+    uses: fastify/workflows/.github/workflows/plugins-ci.yml@v4.1.0
     with:
       lint: true
       license-check: true
