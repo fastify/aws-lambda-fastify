@@ -93,7 +93,6 @@ test('should parse the multipart form-data successfully given utf8 encoded form 
 
   app.register(multipart, { attachFieldsToBody: true })
   app.post('/test', async (request, reply) => {
-    console.log(request.body)
     t.equal(request.body.html.fieldname, 'html')
     t.equal(request.body.html.encoding, '7bit')
     t.equal(request.body.html.mimetype, 'text/plain')
