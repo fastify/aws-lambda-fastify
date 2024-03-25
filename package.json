@@ -40,7 +40,7 @@
     "postversion": "git push && git push --tags"
   },
   "devDependencies": {
-    "@fastify/multipart": "8.1.0",
+    "@fastify/multipart": "8.2.0",
     "@fastify/pre-commit": "^2.1.0",
     "@h4ad/serverless-adapter": "4.2.1",
     "@types/aws-lambda": "8.10.136",
