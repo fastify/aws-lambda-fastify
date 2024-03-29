@@ -33,7 +33,7 @@
   "scripts": {
     "lint": "eslint .",
     "test": "npm run test:unit && npm run test:typescript",
-    "test:unit": "tap --disable-coverage test/*test.js",
+    "test:unit": "tap",
     "test:typescript": "tsd",
     "performance": "npm run lint && node performanceTest/test",
     "preversion": "npm run test && git push",
