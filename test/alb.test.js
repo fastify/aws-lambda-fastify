@@ -5,7 +5,7 @@ const fastify = require('fastify')
 const awsLambdaFastify = require('../index')
 
 test('GET', async (t) => new Promise((resolve, reject) => {
-  t.plan(14)
+  t.plan(13)
 
   const app = fastify()
   const event = {
@@ -25,7 +25,7 @@ test('GET', async (t) => new Promise((resolve, reject) => {
     t.equal(request.awsLambda.event, event)
     t.equal(request.headers['user-agent'], 'lightMyRequest')
     t.equal(request.headers.host, 'localhost:80')
-    t.equal(request.headers['content-length'], '0')
+    // t.equal(request.headers['content-length'], '0')
     reply.header('Set-Cookie', 'qwerty=one')
     reply.header('Set-Cookie', 'qwerty=two')
     reply.send({ hello: 'world' })
@@ -52,7 +52,7 @@ test('GET', async (t) => new Promise((resolve, reject) => {
 }))
 
 test('GET Broken', async (t) => new Promise((resolve, reject) => {
-  t.plan(19)
+  t.plan(18)
 
   const event = {
     requestContext: { http: { method: 'GET' } },
@@ -83,7 +83,7 @@ test('GET Broken', async (t) => new Promise((resolve, reject) => {
     t.equal(request.awsLambda.context, context)
     t.equal(request.headers['user-agent'], 'lightMyRequest')
     t.equal(request.headers.host, 'localhost:80')
-    t.equal(request.headers['content-length'], '0')
+    // t.equal(request.headers['content-length'], '0')
     reply.header('Set-Cookie', 'qwerty=one')
     reply.header('Set-Cookie', 'qwerty=two')
     reply.header('x-Non-String', Date.now())

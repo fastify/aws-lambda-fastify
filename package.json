@@ -20,13 +20,13 @@
   "author": "Adriano Raiano <adriano@raiano.ch>",
   "repository": {
     "type": "git",
-    "url": "git@github.com:fastify/aws-lambda-fastify.git"
+    "url": "git+ssh://git@github.com/fastify/aws-lambda-fastify.git"
   },
   "bugs": {
     "url": "https://github.com/fastify/aws-lambda-fastify/issues"
   },
   "license": "MIT",
-  "version": "3.4.2",
+  "version": "4.0.0",
   "main": "index.js",
   "type": "commonjs",
   "types": "types/index.d.ts",

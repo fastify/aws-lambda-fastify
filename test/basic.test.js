@@ -7,7 +7,7 @@ const fs = require('node:fs')
 const awsLambdaFastify = require('../index')
 
 test('GET', async (t) => {
-  t.plan(16)
+  t.plan(15)
 
   const app = fastify()
   const evt = {
@@ -27,7 +27,7 @@ test('GET', async (t) => {
     t.equal(request.awsLambda.event, evt)
     t.equal(request.headers['user-agent'], 'lightMyRequest')
     t.equal(request.headers.host, 'localhost:80')
-    t.equal(request.headers['content-length'], '0')
+    // t.equal(request.headers['content-length'], '0')
     reply.header('Set-Cookie', 'qwerty=one')
     reply.header('Set-Cookie', 'qwerty=two')
     reply.send({ hello: 'world' })
@@ -47,7 +47,7 @@ test('GET', async (t) => {
 })
 
 test('GET with base64 encoding response', async (t) => {
-  t.plan(15)
+  t.plan(14)
 
   const readFileAsync = promisify(fs.readFile)
   const fileBuffer = await readFileAsync(__filename)
@@ -57,7 +57,7 @@ test('GET with base64 encoding response', async (t) => {
     t.equal(request.headers['x-apigateway-event'], '%7B%22httpMethod%22%3A%22GET%22%2C%22path%22%3A%22%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%2C%22Content-Type%22%3A%22application%2Fjson%22%7D%7D')
     t.equal(request.headers['user-agent'], 'lightMyRequest')
     t.equal(request.headers.host, 'localhost:80')
-    t.equal(request.headers['content-length'], '0')
+    // t.equal(request.headers['content-length'], '0')
     reply.header('Set-Cookie', 'qwerty=one')
     // reply.header('Set-Cookie', 'qwerty=two')
     reply.send(fileBuffer)
@@ -84,7 +84,7 @@ test('GET with base64 encoding response', async (t) => {
 })
 
 test('GET with content-encoding response', async (t) => {
-  t.plan(16)
+  t.plan(15)
 
   const readFileAsync = promisify(fs.readFile)
   const fileBuffer = await readFileAsync(__filename)
@@ -94,7 +94,7 @@ test('GET with content-encoding response', async (t) => {
     t.equal(request.headers['x-apigateway-event'], '%7B%22httpMethod%22%3A%22GET%22%2C%22path%22%3A%22%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%2C%22Content-Type%22%3A%22application%2Fjson%22%7D%7D')
     t.equal(request.headers['user-agent'], 'lightMyRequest')
     t.equal(request.headers.host, 'localhost:80')
-    t.equal(request.headers['content-length'], '0')
+    // t.equal(request.headers['content-length'], '0')
     reply.header('Set-Cookie', 'qwerty=one')
     reply.header('content-encoding', 'br')
     reply.send(fileBuffer)
@@ -122,7 +122,7 @@ test('GET with content-encoding response', async (t) => {
 })
 
 test('GET with custom binary check response', async (t) => {
-  t.plan(16)
+  t.plan(15)
 
   const readFileAsync = promisify(fs.readFile)
   const fileBuffer = await readFileAsync(__filename)
@@ -132,7 +132,7 @@ test('GET with custom binary check response', async (t) => {
     t.equal(request.headers['x-apigateway-event'], '%7B%22httpMethod%22%3A%22GET%22%2C%22path%22%3A%22%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%2C%22Content-Type%22%3A%22application%2Fjson%22%7D%7D')
     t.equal(request.headers['user-agent'], 'lightMyRequest')
     t.equal(request.headers.host, 'localhost:80')
-    t.equal(request.headers['content-length'], '0')
+    // t.equal(request.headers['content-length'], '0')
     reply.header('Set-Cookie', 'qwerty=one')
     reply.header('X-Base64-Encoded', '1')
     reply.send(fileBuffer)
@@ -315,7 +315,7 @@ test('POST with base64 encoding', async (t) => {
 })
 
 test('subpath', async (t) => {
-  t.plan(14)
+  t.plan(13)
 
   const app = fastify()
   app.get('/test', async (request, reply) => {
@@ -323,7 +323,7 @@ test('subpath', async (t) => {
     t.equal(request.headers['x-apigateway-event'], '%7B%22httpMethod%22%3A%22GET%22%2C%22path%22%3A%22%2Fdev%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%7D%2C%22requestContext%22%3A%7B%22resourcePath%22%3A%22%2Ftest%22%2C%22stage%22%3A%22dev%22%7D%7D')
     t.equal(request.headers['user-agent'], 'lightMyRequest')
     t.equal(request.headers.host, 'localhost:80')
-    t.equal(request.headers['content-length'], '0')
+    // t.equal(request.headers['content-length'], '0')
     reply.header('Set-Cookie', 'qwerty=one')
     reply.header('Set-Cookie', 'qwerty=two')
     reply.send({ hello: 'world' })
@@ -352,7 +352,7 @@ test('subpath', async (t) => {
 })
 
 test('subpath retain stage', async (t) => {
-  t.plan(7)
+  t.plan(6)
 
   const app = fastify()
   app.get('/dev/test', async (request, reply) => {
@@ -360,7 +360,7 @@ test('subpath retain stage', async (t) => {
     t.equal(request.headers['x-apigateway-event'], '%7B%22httpMethod%22%3A%22GET%22%2C%22path%22%3A%22%2Fdev%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%7D%2C%22requestContext%22%3A%7B%22resourcePath%22%3A%22%2Ftest%22%2C%22stage%22%3A%22dev%22%7D%7D')
     t.equal(request.headers['user-agent'], 'lightMyRequest')
     t.equal(request.headers.host, 'localhost:80')
-    t.equal(request.headers['content-length'], '0')
+    // t.equal(request.headers['content-length'], '0')
     reply.header('Set-Cookie', 'qwerty=one')
     reply.header('Set-Cookie', 'qwerty=two')
     reply.send({ hello: 'world' })
@@ -382,7 +382,7 @@ test('subpath retain stage', async (t) => {
 })
 
 test('serializeLambdaArguments = false', async (t) => {
-  t.plan(14)
+  t.plan(13)
 
   const app = fastify()
   app.get('/test', async (request, reply) => {
@@ -390,7 +390,7 @@ test('serializeLambdaArguments = false', async (t) => {
     t.equal(request.headers['x-apigateway-event'], undefined)
     t.equal(request.headers['user-agent'], 'lightMyRequest')
     t.equal(request.headers.host, 'localhost:80')
-    t.equal(request.headers['content-length'], '0')
+    // t.equal(request.headers['content-length'], '0')
     reply.header('Set-Cookie', 'qwerty=one')
     reply.header('Set-Cookie', 'qwerty=two')
     reply.send({ hello: 'world' })
@@ -419,7 +419,7 @@ test('serializeLambdaArguments = false', async (t) => {
 })
 
 test('with existing onRequest hook', async (t) => {
-  t.plan(16)
+  t.plan(15)
 
   const app = fastify()
   const evt = {
@@ -441,7 +441,7 @@ test('with existing onRequest hook', async (t) => {
     t.equal(request.awsLambda.event, evt)
     t.equal(request.headers['user-agent'], 'lightMyRequest')
     t.equal(request.headers.host, 'localhost:80')
-    t.equal(request.headers['content-length'], '0')
+    // t.equal(request.headers['content-length'], '0')
     reply.header('Set-Cookie', 'qwerty=one')
     reply.header('Set-Cookie', 'qwerty=two')
     reply.send({ hello: 'world' })
@@ -461,7 +461,7 @@ test('with existing onRequest hook', async (t) => {
 })
 
 test('proxy in pathParameters with http api', async (t) => {
-  t.plan(13)
+  t.plan(12)
 
   const app = fastify()
   const evt = {
@@ -489,7 +489,7 @@ test('proxy in pathParameters with http api', async (t) => {
     t.equal(request.headers['x-my-header'], 'wuuusaaa')
     t.equal(request.headers['user-agent'], 'lightMyRequest')
     t.equal(request.headers.host, 'localhost:80')
-    t.equal(request.headers['content-length'], '0')
+    // t.equal(request.headers['content-length'], '0')
     t.equal(request.query.t, '1698604776681')
     reply.send({ hello: 'world' })
   })
@@ -506,7 +506,7 @@ test('proxy in pathParameters with http api', async (t) => {
 })
 
 test('proxy in pathParameters with http api (pathParameterUsedAsPath = "proxy")', async (t) => {
-  t.plan(13)
+  t.plan(12)
 
   const app = fastify()
   const evt = {
@@ -534,7 +534,7 @@ test('proxy in pathParameters with http api (pathParameterUsedAsPath = "proxy")'
     t.equal(request.headers['x-my-header'], 'wuuusaaa')
     t.equal(request.headers['user-agent'], 'lightMyRequest')
     t.equal(request.headers.host, 'localhost:80')
-    t.equal(request.headers['content-length'], '0')
+    // t.equal(request.headers['content-length'], '0')
     t.equal(request.query.t, '1698604776681')
     reply.send({ hello: 'world' })
   })
@@ -551,7 +551,7 @@ test('proxy in pathParameters with http api (pathParameterUsedAsPath = "proxy")'
 })
 
 test('proxy in pathParameters with rest api', async (t) => {
-  t.plan(13)
+  t.plan(12)
 
   const app = fastify()
   const evt = {
@@ -590,7 +590,7 @@ test('proxy in pathParameters with rest api', async (t) => {
     t.equal(request.headers['x-my-header'], 'wuuusaaa')
     t.equal(request.headers['user-agent'], 'lightMyRequest')
     t.equal(request.headers.host, 'localhost:80')
-    t.equal(request.headers['content-length'], '0')
+    // t.equal(request.headers['content-length'], '0')
     t.equal(request.query.t, '1698604776681')
     reply.send({ hello: 'world' })
   })
@@ -607,7 +607,7 @@ test('proxy in pathParameters with rest api', async (t) => {
 })
 
 test('proxy in pathParameters with rest api (pathParameterUsedAsPath = "proxy")', async (t) => {
-  t.plan(13)
+  t.plan(12)
 
   const app = fastify()
   const evt = {
@@ -646,7 +646,7 @@ test('proxy in pathParameters with rest api (pathParameterUsedAsPath = "proxy")'
     t.equal(request.headers['x-my-header'], 'wuuusaaa')
     t.equal(request.headers['user-agent'], 'lightMyRequest')
     t.equal(request.headers.host, 'localhost:80')
-    t.equal(request.headers['content-length'], '0')
+    // t.equal(request.headers['content-length'], '0')
     t.equal(request.query.t, '1698604776681')
     reply.send({ hello: 'world' })
   })

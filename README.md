@@ -4,11 +4,11 @@
 [![NPM version](https://img.shields.io/npm/v/@fastify/aws-lambda.svg?style=flat)](https://www.npmjs.com/package/@fastify/aws-lambda)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://standardjs.com/)
 
-Inspired by the AWSLABS [aws-serverless-express](https://github.com/awslabs/aws-serverless-express) library tailor made for the [Fastify](https://www.fastify.io/) web framework.
+Inspired by the AWSLABS [aws-serverless-express](https://github.com/awslabs/aws-serverless-express) library tailor made for the [Fastify](https://fastify.dev/) web framework.
 
-**No use of internal sockets, makes use of Fastify's [inject](https://www.fastify.io/docs/latest/Guides/Testing/#testing-with-http-injection) function.**
+**No use of internal sockets, makes use of Fastify's [inject](https://fastify.dev/docs/latest/Guides/Testing/#testing-with-http-injection) function.**
 
-**Seems [faster](https://github.com/fastify/aws-lambda-fastify#some-basic-performance-metrics)** *(as the name implies)* **than [aws-serverless-express](https://github.com/awslabs/aws-serverless-express) and [aws-serverless-fastify](https://github.com/benMain/aws-serverless-fastify) 😉**
+**Seems [faster](https://github.com/fastify/aws-lambda-fastify#%EF%B8%8Fsome-basic-performance-metrics)** *(as the name implies)* **than [aws-serverless-express](https://github.com/awslabs/aws-serverless-express) and [aws-serverless-fastify](https://github.com/benMain/aws-serverless-fastify) 😉**
 
 ## 👨🏻‍💻Installation
 
@@ -110,7 +110,7 @@ app.get('/', (request, reply) => {
 
 Since [AWS Lambda now enables the use of ECMAScript (ES) modules](https://aws.amazon.com/blogs/compute/using-node-js-es-modules-and-top-level-await-in-aws-lambda/) in Node.js 14 runtimes, you could lower the cold start latency when used with [Provisioned Concurrency](https://aws.amazon.com/blogs/compute/new-for-aws-lambda-predictable-start-up-times-with-provisioned-concurrency/) thanks to the top-level await functionality.
 
-We can use this by calling the [`fastify.ready()`](https://www.fastify.io/docs/latest/Reference/Server/#ready) function outside of the Lambda handler function, like this:
+We can use this by calling the [`fastify.ready()`](https://fastify.dev/docs/latest/Reference/Server/#ready) function outside of the Lambda handler function, like this:
 
 ```js
 import awsLambdaFastify from '@fastify/aws-lambda'
@@ -143,7 +143,7 @@ Fastest is **@fastify/aws-lambda (decorateRequest : false), @fastify/aws-lambda*
  - For apps that may not see traffic for several minutes at a time, you could see [cold starts](https://aws.amazon.com/blogs/compute/container-reuse-in-lambda/)
  - Stateless only
  - API Gateway has a timeout of 29 seconds, and Lambda has a maximum execution time of 15 minutes. (Using Application Load Balancer has no timeout limit, so the lambda maximum execution time is relevant)
- - If you are using another web framework beside Fastify (i.e. Connect, Express, Koa, Restana, Sails, Hapi, Restify) or want to use a more generic serverless proxy framework, have a look at: [serverless-http](https://github.com/dougmoscrop/serverless-http)
+ - If you are using another web framework beside Fastify (i.e. Connect, Express, Koa, Restana, Sails, Hapi, Restify) or want to use a more generic serverless proxy framework, have a look at: [serverless-http](https://github.com/dougmoscrop/serverless-http) or [serverless-adapter](https://github.com/H4ad/serverless-adapter)
 
 
 #### 🎖Who is using it?
