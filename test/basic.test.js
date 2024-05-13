@@ -207,6 +207,69 @@ test('GET with multi-value query params (queryStringParameters)', async (t) => {
   t.equal(ret.body, '{"foo":["qux","bar"]}')
 })
 
+test('GET with multi-value query params (queryStringParameters) with parseCommaSeparatedQueryParams disabled', async (t) => {
+  t.plan(2)
+
+  const app = fastify()
+  app.get('/test', async (request, reply) => {
+    reply.send(request.query)
+  })
+  const proxy = awsLambdaFastify(app, { parseCommaSeparatedQueryParams: false })
+
+  const ret = await proxy({
+    version: '2.0',
+    httpMethod: 'GET',
+    path: '/test',
+    queryStringParameters: {
+      foo: 'qux,bar'
+    }
+  })
+  t.equal(ret.statusCode, 200)
+  t.equal(ret.body, '{"foo":"qux,bar"}')
+})
+
+test('GET Retains queryStringParameters in the original awsLambda onRequest hook when parseCommaSeparatedQueryParams is enabled by default', async (t) => {
+  t.plan(2)
+
+  const app = fastify()
+  app.get('/test', async (request, reply) => {
+    t.same(request.awsLambda.event.queryStringParameters, { foo: 'qux,bar' })
+    reply.send(request.query)
+  })
+  const proxy = awsLambdaFastify(app)
+
+  const ret = await proxy({
+    version: '2.0',
+    httpMethod: 'GET',
+    path: '/test',
+    queryStringParameters: {
+      foo: 'qux,bar'
+    }
+  })
+  t.equal(ret.statusCode, 200)
+})
+
+test('GET Retains queryStringParameters in the original awsLambda onRequest hook when parseCommaSeparatedQueryParams is disabled', async (t) => {
+  t.plan(2)
+
+  const app = fastify()
+  app.get('/test', async (request, reply) => {
+    t.same(request.awsLambda.event.queryStringParameters, { foo: 'qux,bar' })
+    reply.send(request.query)
+  })
+  const proxy = awsLambdaFastify(app, { parseCommaSeparatedQueryParams: false })
+
+  const ret = await proxy({
+    version: '2.0',
+    httpMethod: 'GET',
+    path: '/test',
+    queryStringParameters: {
+      foo: 'qux,bar'
+    }
+  })
+  t.equal(ret.statusCode, 200)
+})
+
 test('GET with double encoded query value', async (t) => {
   t.plan(2)
 
