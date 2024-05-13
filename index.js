@@ -17,6 +17,7 @@ module.exports = (app, options) => {
   options.decorateRequest = options.decorateRequest !== undefined ? options.decorateRequest : true
   options.retainStage = options.retainStage !== undefined ? options.retainStage : false
   options.pathParameterUsedAsPath = options.pathParameterUsedAsPath !== undefined ? options.pathParameterUsedAsPath : false
+  options.parseCommaSeparatedQueryParams = options.parseCommaSeparatedQueryParams !== undefined ? options.parseCommaSeparatedQueryParams : true
   let currentAwsArguments = {}
   if (options.decorateRequest) {
     options.decorationPropertyName = options.decorationPropertyName || 'awsLambda'
@@ -48,6 +49,7 @@ module.exports = (app, options) => {
       url = url.substring(event.requestContext.stage.length + 1)
     }
     const query = {}
+    const parsedCommaSeparatedQuery = {}
     if (event.requestContext && event.requestContext.elb) {
       if (event.multiValueQueryStringParameters) {
         Object.keys(event.multiValueQueryStringParameters).forEach((q) => {
@@ -56,20 +58,20 @@ module.exports = (app, options) => {
       } else if (event.queryStringParameters) {
         Object.keys(event.queryStringParameters).forEach((q) => {
           query[decodeURIComponent(q)] = decodeURIComponent(event.queryStringParameters[q])
-          if (event.version === '2.0' && typeof query[decodeURIComponent(q)] === 'string' && query[decodeURIComponent(q)].indexOf(',') > 0) {
-            query[decodeURIComponent(q)] = query[decodeURIComponent(q)].split(',')
+          if (options.parseCommaSeparatedQueryParams && event.version === '2.0' && typeof query[decodeURIComponent(q)] === 'string' && query[decodeURIComponent(q)].indexOf(',') > 0) {
+            parsedCommaSeparatedQuery[decodeURIComponent(q)] = query[decodeURIComponent(q)].split(',')
           }
         })
       }
     } else {
-      if (event.queryStringParameters && event.version === '2.0') {
+      if (event.queryStringParameters && options.parseCommaSeparatedQueryParams && event.version === '2.0') {
         Object.keys(event.queryStringParameters).forEach((k) => {
           if (typeof event.queryStringParameters[k] === 'string' && event.queryStringParameters[k].indexOf(',') > 0) {
-            event.queryStringParameters[k] = event.queryStringParameters[k].split(',')
+            parsedCommaSeparatedQuery[decodeURIComponent(k)] = event.queryStringParameters[k].split(',')
           }
         })
       }
-      Object.assign(query, event.multiValueQueryStringParameters || event.queryStringParameters)
+      Object.assign(query, event.multiValueQueryStringParameters || event.queryStringParameters, parsedCommaSeparatedQuery)
     }
     const headers = Object.assign({}, event.headers)
     if (event.multiValueHeaders) {
