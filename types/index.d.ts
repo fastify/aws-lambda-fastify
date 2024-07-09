@@ -16,6 +16,16 @@ declare namespace awsLambdaFastify {
      * usually set to 'proxy', if used
      */
     pathParameterUsedAsPath?: string;
+    /**
+     * Parse querystring with commas into an array of values.
+     * Affects the behavior of the querystring parser with commas while using [Payload Format Version 2.0](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html#http-api-develop-integrations-lambda.proxy-format)
+     * 
+     * e.g. when set to `true` (default) `?foo=qux,bar` => `{ foo: ['qux', 'bar'] }`
+     * 
+     * e.g. when set to `false` `?foo=qux,bar` => `{ foo: 'qux,bar' }`
+     * @default true
+     */
+    parseCommaSeparatedQueryParams?: boolean;
   }
   
   export interface LambdaResponse {

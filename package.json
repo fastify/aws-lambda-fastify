@@ -26,7 +26,7 @@
     "url": "https://github.com/fastify/aws-lambda-fastify/issues"
   },
   "license": "MIT",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "main": "index.js",
   "type": "commonjs",
   "types": "types/index.d.ts",
@@ -40,7 +40,7 @@
     "postversion": "git push && git push --tags"
   },
   "devDependencies": {
-    "@fastify/multipart": "8.1.0",
+    "@fastify/multipart": "8.3.0",
     "@fastify/pre-commit": "^2.1.0",
     "@types/aws-lambda": "8.10.136",
     "aws-lambda": "^1.0.7",
@@ -56,7 +56,7 @@
     "fastify": "^4.26.2",
     "serverless-http": "^3.2.0",
     "tap": "18.7.1",
-    "tsd": "^0.30.7"
+    "tsd": "^0.31.0"
   },
   "overrides": {
     "aws-serverless-fastify": {

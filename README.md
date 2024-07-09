@@ -30,7 +30,7 @@ $ npm i @fastify/aws-lambda
 | callbackWaitsForEmptyEventLoop | See: [Official Documentation](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-context.html#nodejs-prog-model-context-properties)       | `undefined`                        |
 | retainStage                    | Retain the stage part of the API Gateway URL                                                                                               | `false`                            |
 | pathParameterUsedAsPath        | Use a defined pathParameter as path (i.e. `'proxy'`)                                                                                               | `false`                            |
-
+| parseCommaSeparatedQueryParams        | Parse querystring with commas into an array of values. Affects the behavior of the querystring parser with commas while using [Payload Format Version 2.0](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html#http-api-develop-integrations-lambda.proxy-format)                                                                                               | `true`                            |
 ## 📖Example
 
 ### lambda.js
