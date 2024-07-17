@@ -40,7 +40,7 @@
     "postversion": "git push && git push --tags"
   },
   "devDependencies": {
-    "@fastify/multipart": "8.3.0",
+    "@fastify/multipart": "^9.0.0-pre.fv5.1",
     "@fastify/pre-commit": "^2.1.0",
     "@types/aws-lambda": "8.10.136",
     "aws-lambda": "^1.0.7",
@@ -53,14 +53,14 @@
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-standard": "^5.0.0",
-    "fastify": "^4.26.2",
+    "fastify": "^5.0.0-alpha.3",
     "serverless-http": "^3.2.0",
     "tap": "18.7.1",
     "tsd": "^0.31.0"
   },
   "overrides": {
     "aws-serverless-fastify": {
-      "fastify": "^4.26.2"
+      "fastify": "^5.0.0-alpha.3"
     }
   },
   "publishConfig": {
