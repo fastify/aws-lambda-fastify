@@ -43,7 +43,7 @@
     "@fastify/multipart": "8.3.0",
     "@fastify/pre-commit": "^2.1.0",
     "@h4ad/serverless-adapter": "4.2.1",
-    "@types/aws-lambda": "8.10.143",
+    "@types/aws-lambda": "8.10.145",
     "aws-serverless-express": "^3.4.0",
     "aws-serverless-fastify": "^3.0.6",
     "benchmark": "^2.1.4",
