@@ -19,15 +19,15 @@ declare namespace awsLambdaFastify {
     /**
      * Parse querystring with commas into an array of values.
      * Affects the behavior of the querystring parser with commas while using [Payload Format Version 2.0](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html#http-api-develop-integrations-lambda.proxy-format)
-     * 
+     *
      * e.g. when set to `true` (default) `?foo=qux,bar` => `{ foo: ['qux', 'bar'] }`
-     * 
+     *
      * e.g. when set to `false` `?foo=qux,bar` => `{ foo: 'qux,bar' }`
      * @default true
      */
     parseCommaSeparatedQueryParams?: boolean;
   }
-  
+
   export interface LambdaResponse {
     statusCode: number;
     body: string;
@@ -35,18 +35,18 @@ declare namespace awsLambdaFastify {
     isBase64Encoded: boolean;
     cookies?: string[]
   }
-  
+
   export type PromiseHandler<TEvent = any, TResult = LambdaResponse> = (
     event: TEvent,
     context: Context
   ) => Promise<TResult>;
-  
+
   export type CallbackHandler<TEvent = any, TResult = LambdaResponse> = (
     event: TEvent,
     context: Context,
     callback: (err?: Error, result?: TResult) => void
   ) => void;
-  
+
   export const awsLambdaFastify: AwsLambdaFastify
   export { awsLambdaFastify as default }
 }
