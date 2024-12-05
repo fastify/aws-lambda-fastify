@@ -1,6 +1,6 @@
 # Introduction
 
-![CI](https://github.com/fastify/aws-lambda-fastify/workflows/CI/badge.svg)
+[![CI](https://github.com/fastify/aws-lambda-fastify/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/fastify/aws-lambda-fastify/actions/workflows/ci.yml)
 [![NPM version](https://img.shields.io/npm/v/@fastify/aws-lambda.svg?style=flat)](https://www.npmjs.com/package/@fastify/aws-lambda)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://standardjs.com/)
 
