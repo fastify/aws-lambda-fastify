@@ -93,6 +93,6 @@ suite
   })
   .on('complete', function () {
     console.log('Fastest is ' + this.filter('fastest').map('name'))
-    process.exit(0) // eslint-disable-line no-process-exit
+    process.exit(0)
   })
   .run({ async: true })
