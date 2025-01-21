@@ -164,6 +164,7 @@ describe('ALB Tests', async () => {
     const proxy = awsLambdaFastify(app)
 
     const ret = proxy(event, null, function callback (err, ret) {
+      // eslint-disable-next-line no-undef
       if (err) return reject(err)
 
       assert.deepStrictEqual(ret.headers, {})
