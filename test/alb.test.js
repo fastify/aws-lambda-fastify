@@ -164,7 +164,8 @@ describe('ALB Tests', async () => {
     const proxy = awsLambdaFastify(app)
 
     const ret = proxy(event, null, function callback (err, ret) {
-      assert.err(err)
+      if (err) return reject(err)
+
       assert.deepStrictEqual(ret.headers, {})
       assert.deepStrictEqual(ret.statusCode, 500)
       assert.deepStrictEqual(ret.body, '')

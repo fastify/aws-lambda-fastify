@@ -33,7 +33,7 @@
   "scripts": {
     "lint": "eslint .",
     "test": "npm run test:unit && npm run test:typescript",
-    "test:unit": "tap -J -R specy --no-coverage test/*test.js",
+    "test:unit": "node --test test/*test.js",
     "test:typescript": "tsd",
     "performance": "npm run lint && node performanceTest/test",
     "preversion": "npm run test && git push",
@@ -55,7 +55,6 @@
     "eslint-plugin-standard": "^5.0.0",
     "fastify": "^5.0.0",
     "serverless-http": "^3.2.0",
-    "tap": "^16.3.9",
     "tsd": "^0.31.0"
   },
   "publishConfig": {
