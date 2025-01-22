@@ -18,6 +18,7 @@ module.exports = (app, options) => {
   options.retainStage = options.retainStage !== undefined ? options.retainStage : false
   options.pathParameterUsedAsPath = options.pathParameterUsedAsPath !== undefined ? options.pathParameterUsedAsPath : false
   options.parseCommaSeparatedQueryParams = options.parseCommaSeparatedQueryParams !== undefined ? options.parseCommaSeparatedQueryParams : true
+  options.payloadAsStream = options.payloadAsStream !== undefined ? options.payloadAsStream : false
   let currentAwsArguments = {}
   if (options.decorateRequest) {
     options.decorationPropertyName = options.decorationPropertyName || 'awsLambda'
@@ -110,7 +111,7 @@ module.exports = (app, options) => {
     }
 
     const prom = new Promise((resolve) => {
-      app.inject({ method, url, query, payload, headers, remoteAddress }, (err, res) => {
+      app.inject({ method, url, query, payload, headers, remoteAddress, payloadAsStream: options.payloadAsStream }, (err, res) => {
         currentAwsArguments = {}
         if (err) {
           console.error(err)
@@ -149,14 +150,22 @@ module.exports = (app, options) => {
 
         const ret = {
           statusCode: res.statusCode,
-          body: isBase64Encoded ? res.rawPayload.toString('base64') : res.payload,
           headers: res.headers,
           isBase64Encoded
         }
 
         if (cookies && event.version === '2.0') ret.cookies = cookies
         if (multiValueHeaders && (!event.version || event.version === '1.0')) ret.multiValueHeaders = multiValueHeaders
-        resolve(ret)
+
+        if (!options.payloadAsStream) {
+          ret.body = isBase64Encoded ? res.rawPayload.toString('base64') : res.payload
+          return resolve(ret)
+        }
+
+        resolve({
+          meta: ret,
+          stream: res.stream()
+        })
       })
     })
     if (!callback) return prom
