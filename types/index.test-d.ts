@@ -4,6 +4,7 @@ import awsLambdaFastify, {
   CallbackHandler,
   LambdaFastifyOptions,
   LambdaResponse,
+  LambdaResponseStreamed,
 } from "..";
 
 import { expectType, expectError, expectAssignable } from "tsd";
@@ -38,12 +39,16 @@ expectType<PromiseHandler<unknown>>(awsLambdaFastify(app));
 expectType<Promise<Record<string, string>>>(proxyPromise({}, lambdaCtx));
 expectType<PromiseHandler<unknown, LambdaResponse>>(awsLambdaFastify(app, {}));
 expectType<PromiseHandler<unknown, boolean>>(
-  awsLambdaFastify<unknown, boolean>(app)
+  awsLambdaFastify<unknown, {}, boolean>(app)
 );
 
 // Default type
 const proxyDefault = awsLambdaFastify(app);
 expectType<Promise<LambdaResponse>>(proxyDefault({}, lambdaCtx));
+
+// Streamed default type
+const proxyStreamed = awsLambdaFastify(app, { payloadAsStream: true });
+expectType<Promise<LambdaResponseStreamed>>(proxyStreamed({}, lambdaCtx));
 
 expectAssignable<LambdaFastifyOptions>({ binaryMimeTypes: ["foo", "bar"] });
 expectAssignable<LambdaFastifyOptions>({

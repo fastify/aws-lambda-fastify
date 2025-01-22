@@ -1,5 +1,6 @@
 import { Context } from "aws-lambda";
 import { FastifyInstance, LightMyRequestResponse } from "fastify";
+import { Readable } from 'node:stream'
 
 type AwsLambdaFastify = typeof awsLambdaFastify
 
@@ -26,14 +27,23 @@ declare namespace awsLambdaFastify {
      * @default true
      */
     parseCommaSeparatedQueryParams?: boolean;
+    payloadAsStream?: boolean;
   }
 
-  export interface LambdaResponse {
+  export interface LambdaResponseBase {
     statusCode: number;
-    body: string;
     headers: Record<string, string>;
     isBase64Encoded: boolean;
-    cookies?: string[]
+    cookies?: string[];
+  }
+
+  export interface LambdaResponse extends LambdaResponseBase {
+    body: string;
+  }
+
+  export interface LambdaResponseStreamed {
+    meta: LambdaResponseBase;
+    stream: Readable;
   }
 
   export type PromiseHandler<TEvent = any, TResult = LambdaResponse> = (
@@ -51,14 +61,26 @@ declare namespace awsLambdaFastify {
   export { awsLambdaFastify as default }
 }
 
-declare function awsLambdaFastify<TEvent, TResult = awsLambdaFastify.LambdaResponse>(
+declare function awsLambdaFastify<
+  TEvent,
+  TOptions extends awsLambdaFastify.LambdaFastifyOptions = awsLambdaFastify.LambdaFastifyOptions,
+  TResult = TOptions["payloadAsStream"] extends true
+    ? awsLambdaFastify.LambdaResponseStreamed
+    : awsLambdaFastify.LambdaResponse
+>(
   app: FastifyInstance,
-  options?: awsLambdaFastify.LambdaFastifyOptions
+  options?: TOptions
 ): awsLambdaFastify.PromiseHandler<TEvent, TResult>;
 
-declare function awsLambdaFastify<TEvent, TResult = awsLambdaFastify.LambdaResponse>(
+declare function awsLambdaFastify<
+  TEvent,
+  TOptions extends awsLambdaFastify.LambdaFastifyOptions = awsLambdaFastify.LambdaFastifyOptions,
+  TResult = TOptions["payloadAsStream"] extends true
+    ? awsLambdaFastify.LambdaResponseStreamed
+    : awsLambdaFastify.LambdaResponse
+>(
   app: FastifyInstance,
-  options?: awsLambdaFastify.LambdaFastifyOptions
+  options?: TOptions
 ): awsLambdaFastify.CallbackHandler<TEvent, TResult>;
 
 export = awsLambdaFastify
