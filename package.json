@@ -31,7 +31,7 @@
   "type": "commonjs",
   "types": "types/index.d.ts",
   "scripts": {
-    "lint": "eslint --fix .",
+    "lint": "eslint .",
     "test": "npm run test:unit && npm run test:typescript",
     "test:unit": "node scripts/unit.js",
     "test:typescript": "tsd",
