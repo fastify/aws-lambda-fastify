@@ -115,10 +115,19 @@ module.exports = (app, options) => {
         currentAwsArguments = {}
         if (err) {
           console.error(err)
+          if (!options.payloadAsStream) {
+            return resolve({
+              statusCode: 500,
+              body: '',
+              headers: {}
+            })
+          }
           return resolve({
-            statusCode: 500,
-            body: '',
-            headers: {}
+            meta: {
+              statusCode: 500,
+              headers: {}
+            },
+            stream: (res && res.stream()) || require('node:stream').Readable.from('')
           })
         }
         // chunked transfer not currently supported by API Gateway
