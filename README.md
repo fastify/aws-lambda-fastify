@@ -31,6 +31,7 @@ $ npm i @fastify/aws-lambda
 | retainStage                    | Retain the stage part of the API Gateway URL                                                                                               | `false`                            |
 | pathParameterUsedAsPath        | Use a defined pathParameter as path (i.e. `'proxy'`)                                                                                               | `false`                            |
 | parseCommaSeparatedQueryParams        | Parse querystring with commas into an array of values. Affects the behavior of the querystring parser with commas while using [Payload Format Version 2.0](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html#http-api-develop-integrations-lambda.proxy-format)                                                                                               | `true`                            |
+| payloadAsStream        |  If set to true the response is a stream and can be used with `awslambda.streamifyResponse`                                                                                                | `false`                            |
 ## 📖Example
 
 ### lambda.js
@@ -120,6 +121,27 @@ await app.ready() // needs to be placed after awsLambdaFastify call because of t
 ```
 
 *[Here](https://github.com/fastify/aws-lambda-fastify/issues/89) you can find the approriate issue discussing this feature.*
+
+
+#### Support for response streaming (`payloadAsStream`)
+
+```js
+import awsLambdaFastify from '@fastify/aws-lambda'
+import { promisify } from 'util'
+import stream from 'stream'
+import app from './app.js'
+
+const pipeline = promisify(stream.pipeline)
+const proxy = awsLambdaFastify(app, { payloadAsStream: true })
+export const handler = awslambda.streamifyResponse(async (event, responseStream, context) => {
+  const { meta, stream } = await proxy(event, context)
+  responseStream = awslambda.HttpResponseStream.from(responseStream, meta)
+  await pipeline(stream, responseStream)
+})
+await app.ready() // https://github.com/fastify/aws-lambda-fastify/issues/89
+```
+
+*[Here](https://github.com/fastify/aws-lambda-fastify/issues/154) you can find the approriate issue discussing this feature.*
 
 
 ## ⚡️Some basic performance metrics
