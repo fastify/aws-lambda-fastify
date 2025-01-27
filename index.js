@@ -122,12 +122,14 @@ module.exports = (app, options) => {
               headers: {}
             })
           }
+          const stream = res.stream()
           return resolve({
             meta: {
               statusCode: 500,
               headers: {}
             },
-            stream: (res && res.stream()) || require('node:stream').Readable.from('')
+            // fix issue with Lambda where streaming repsonses always require a body to be present
+            stream: stream.readableLength > 0 ? stream : require('node:stream').Readable.from('')
           })
         }
         // chunked transfer not currently supported by API Gateway
@@ -171,9 +173,11 @@ module.exports = (app, options) => {
           return resolve(ret)
         }
 
+        const stream = res.stream()
         resolve({
           meta: ret,
-          stream: res.stream()
+          // fix issue with Lambda where streaming repsonses always require a body to be present
+          stream: stream.readableLength > 0 ? stream : require('node:stream').Readable.from('')
         })
       })
     })
