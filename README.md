@@ -1,6 +1,6 @@
 # Introduction
 
-[![CI](https://github.com/fastify/aws-lambda-fastify/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/fastify/aws-lambda-fastify/actions/workflows/ci.yml)
+[![CI](https://github.com/fastify/aws-lambda-fastify/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/fastify/aws-lambda-fastify/actions/workflows/ci.yml)
 [![NPM version](https://img.shields.io/npm/v/@fastify/aws-lambda.svg?style=flat)](https://www.npmjs.com/package/@fastify/aws-lambda)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://standardjs.com/)
 
@@ -117,7 +117,7 @@ We can use this by calling the [`fastify.ready()`](https://fastify.dev/docs/late
 import awsLambdaFastify from '@fastify/aws-lambda'
 import app from './app.js'
 export const handler = awsLambdaFastify(app)
-await app.ready() // needs to be placed after awsLambdaFastify call because of the decoration: https://github.com/fastify/aws-lambda-fastify/blob/master/index.js#L9
+await app.ready() // needs to be placed after awsLambdaFastify call because of the decoration: https://github.com/fastify/aws-lambda-fastify/blob/main/index.js#L9
 ```
 
 *[Here](https://github.com/fastify/aws-lambda-fastify/issues/89) you can find the approriate issue discussing this feature.*
@@ -171,7 +171,7 @@ Fastest is **@fastify/aws-lambda (decorateRequest : false), @fastify/aws-lambda*
 #### 🎖Who is using it?
 
 <a href="https://locize.com" target="_blank" rel="nofollow">
-  <img style="max-height: 80px;" src="https://raw.githubusercontent.com/fastify/aws-lambda-fastify/master/images/logos/locize.png" alt="locize is using @fastify/aws-lambda"/>
+  <img style="max-height: 80px;" src="https://raw.githubusercontent.com/fastify/aws-lambda-fastify/main/images/logos/locize.png" alt="locize is using @fastify/aws-lambda"/>
 </a>
 
 ---
