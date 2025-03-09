@@ -127,8 +127,8 @@ await app.ready() // needs to be placed after awsLambdaFastify call because of t
 
 ```js
 import awsLambdaFastify from '@fastify/aws-lambda'
-import { promisify } from 'util'
-import stream from 'stream'
+import { promisify } from 'node:util'
+import stream from 'node:stream'
 import app from './app.js'
 
 const pipeline = promisify(stream.pipeline)
