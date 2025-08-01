@@ -33,7 +33,8 @@ module.exports = (app, options) => {
       })
     })
   }
-  return (event, context, callback) => {
+  return function (event, context) {
+    const callback = arguments[2] // https://github.com/aws/aws-lambda-nodejs-runtime-interface-client/issues/137
     currentAwsArguments.event = event
     currentAwsArguments.context = context
     if (options.callbackWaitsForEmptyEventLoop !== undefined) {
