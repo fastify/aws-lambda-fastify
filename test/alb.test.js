@@ -237,6 +237,12 @@ describe('ALB Tests', async () => {
     assert.equal(ret.body, '{"hello":"world"}')
     console.log(JSON.stringify(ret.multiValueHeaders))
     assert.ok(ret.multiValueHeaders)
-    assert.equal(ret.multiValueHeaders['x-my-header'], 'wuuusaaa')
+    assert.equal(
+      ret.headers['content-type'],
+      ['application/json; charset=utf-8']
+    )
+    assert.equal(ret.headers['content-length'], ['17'])
+    assert.ok(ret.headers.date)
+    assert.equal(ret.headers.connection, ['keep-alive'])
   })
 })

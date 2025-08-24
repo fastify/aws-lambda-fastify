@@ -169,14 +169,14 @@ module.exports = (app, options) => {
           isBase64Encoded
         }
 
-        if (options.albMultiValueHeaders) {
-          ret.multiValueHeaders = {
-            ...headers,
-            ...(ret.multiValueHeaders || {})
-          }
-        }
         if (cookies && event.version === '2.0') ret.cookies = cookies
         if (multiValueHeaders && (!event.version || event.version === '1.0')) ret.multiValueHeaders = multiValueHeaders
+        if (options.albMultiValueHeaders) {
+          if (!ret.multiValueHeaders) ret.multiValueHeaders = {}
+          Object.entries(ret.headers).forEach(([key, value]) => {
+            ret.multiValueHeaders[key] = [value]
+          })
+        }
 
         if (!options.payloadAsStream) {
           ret.body = isBase64Encoded ? res.rawPayload.toString('base64') : res.payload
