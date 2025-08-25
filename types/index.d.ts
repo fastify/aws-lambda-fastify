@@ -28,6 +28,11 @@ declare namespace awsLambdaFastify {
      */
     parseCommaSeparatedQueryParams?: boolean;
     payloadAsStream?: boolean;
+    /**
+     * Enable support for multi-value headers in the response when using ALB.
+     * @default false
+     */
+    albMultiValueHeaders?: boolean;
   }
 
   export interface LambdaResponseBase {
