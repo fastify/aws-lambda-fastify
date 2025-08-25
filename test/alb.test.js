@@ -235,7 +235,6 @@ describe('ALB Tests', async () => {
     })
     assert.equal(ret.statusCode, 200)
     assert.equal(ret.body, '{"hello":"world"}')
-    console.log(JSON.stringify(ret.multiValueHeaders))
     assert.ok(ret.multiValueHeaders)
     assert.equal(
       ret.headers['content-type'],
