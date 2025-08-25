@@ -19,6 +19,7 @@ module.exports = (app, options) => {
   options.pathParameterUsedAsPath = options.pathParameterUsedAsPath !== undefined ? options.pathParameterUsedAsPath : false
   options.parseCommaSeparatedQueryParams = options.parseCommaSeparatedQueryParams !== undefined ? options.parseCommaSeparatedQueryParams : true
   options.payloadAsStream = options.payloadAsStream !== undefined ? options.payloadAsStream : false
+  options.albMultiValueHeaders = options.albMultiValueHeaders !== undefined ? options.albMultiValueHeaders : false
   let currentAwsArguments = {}
   if (options.decorateRequest) {
     options.decorationPropertyName = options.decorationPropertyName || 'awsLambda'
@@ -80,6 +81,8 @@ module.exports = (app, options) => {
       Object.keys(event.multiValueHeaders).forEach((h) => {
         if (event.multiValueHeaders[h].length > 1) {
           headers[h] = event.multiValueHeaders[h]
+        } else if (event.multiValueHeaders[h].length === 1 && options.albMultiValueHeaders) {
+          headers[h] = event.multiValueHeaders[h][0]
         }
       })
     }
@@ -168,6 +171,12 @@ module.exports = (app, options) => {
 
         if (cookies && event.version === '2.0') ret.cookies = cookies
         if (multiValueHeaders && (!event.version || event.version === '1.0')) ret.multiValueHeaders = multiValueHeaders
+        if (options.albMultiValueHeaders) {
+          if (!ret.multiValueHeaders) ret.multiValueHeaders = {}
+          Object.entries(ret.headers).forEach(([key, value]) => {
+            ret.multiValueHeaders[key] = [value]
+          })
+        }
 
         if (!options.payloadAsStream) {
           ret.body = isBase64Encoded ? res.rawPayload.toString('base64') : res.payload

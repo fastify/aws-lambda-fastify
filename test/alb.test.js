@@ -214,4 +214,35 @@ describe('ALB Tests', async () => {
     assert.equal(ret.statusCode, 200)
     assert.equal(ret.body, '{"q$":["foo@bar","foo?bar"]}')
   })
+
+  it('GET with multi-value headers', async () => {
+    const app = fastify()
+    app.get('/test', async (request, reply) => {
+      assert.equal(request.headers['x-my-header'], 'wuuusaaa')
+      reply.send({ hello: 'world' })
+    })
+    const proxy = awsLambdaFastify(app, {
+      albMultiValueHeaders: true
+    })
+
+    const ret = await proxy({
+      requestContext: { elb: { targetGroupArn: 'xxx' } },
+      httpMethod: 'GET',
+      path: '/test',
+      multiValueHeaders: {
+        'x-my-header': ['wuuusaaa']
+      }
+    })
+    assert.equal(ret.statusCode, 200)
+    assert.equal(ret.body, '{"hello":"world"}')
+    console.log(JSON.stringify(ret.multiValueHeaders))
+    assert.ok(ret.multiValueHeaders)
+    assert.equal(
+      ret.headers['content-type'],
+      ['application/json; charset=utf-8']
+    )
+    assert.equal(ret.headers['content-length'], ['17'])
+    assert.ok(ret.headers.date)
+    assert.equal(ret.headers.connection, ['keep-alive'])
+  })
 })
