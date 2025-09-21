@@ -43,7 +43,6 @@
     "@eslint/eslintrc": "3.3.1",
     "@eslint/js": "9.34.0",
     "@fastify/multipart": "^9.0.2",
-    "@fastify/pre-commit": "^2.2.0",
     "@h4ad/serverless-adapter": "4.4.0",
     "@types/aws-lambda": "8.10.152",
     "@types/node": "^24.1.0",
@@ -63,9 +62,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "pre-commit": [
-    "lint",
-    "test"
-  ]
+  }
 }
