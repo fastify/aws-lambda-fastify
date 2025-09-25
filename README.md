@@ -82,6 +82,126 @@ When you execute your Fastify application like always,
 i.e. `node app.js` *(the detection for this could be `require.main === module`)*,
 you can normally listen to your port, so you can still run your Fastify function locally.
 
+## Usage with NestJS
+
+### main.ts
+
+```typescript
+import { NestFactory } from '@nestjs/core';
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
+import { AppModule } from './app.module';
+import awsLambdaFastify, { PromiseHandler } from '@fastify/aws-lambda';
+import fastify, { FastifyInstance, FastifyServerOptions } from 'fastify';
+import { Context, APIGatewayProxyEvent } from 'aws-lambda';
+import { Logger } from '@nestjs/common';
+
+interface NestApp {
+  app: NestFastifyApplication;
+  instance: FastifyInstance;
+}
+
+let cachedNestApp;
+
+async function bootstrapServer(): Promise {
+
+  const serverOptions: FastifyServerOptions = {
+      logger: (process.env.LOGGER || '0') == '1',
+  };
+  const instance: FastifyInstance = fastify(serverOptions);
+  const app = await NestFactory.create<NestFastifyApplication>(
+      AppModule,
+      new FastifyAdapter(instance),
+      {
+          logger: !process.env.AWS_EXECUTION_ENV ? new Logger() : console,
+      },
+  );
+
+  const CORS_OPTIONS = {
+      origin: '*',
+      allowedHeaders: '*',
+      exposedHeaders: '*',
+      credentials: false,
+      methods: ['GET', 'PUT', 'OPTIONS', 'POST', 'DELETE'],
+  };
+
+  app.register(require('fastify-cors'), CORS_OPTIONS);
+
+  app.setGlobalPrefix(process.env.API_PREFIX);
+
+  await app.init();
+
+  return {
+      app,
+      instance
+  };
+}
+
+export const handler = async (
+  event: APIGatewayProxyEvent,
+  context: Context,
+): Promise<PromiseHandler> => {
+    if (!cachedNestApp) {
+      const nestApp = await bootstrap();
+      cachedNestApp = awsLambdaFastify(nestApp.instance, {
+        decorateRequest: true,
+      });
+    }
+
+  return cachedNestApp(event, context);
+};
+```
+
+Notice we are caching the initialized app. In a lambda environment, the handler will be called on each new request. Anything outside the handler may be cached between calls, which lasts as long as AWS has kept the same lambda execution environment up for your function. By storing the initialized app as a variable, we can minimize the cold-start time of our app since it will be constructed once per execution environment spin up.
+
+## Usage with NestJS/GraphQL
+In addition to the above, when using NestJS with GraphQL in a lambda environment, you will need to copy your `schema.gql` into your `dist` folder rather than relying on the `autoSchemaFile` option since this tries to write to `/src` directory inside a running lambda function and you are only allowed to write to `/tmp` directory. You can modify your build script in your `package.json` to acheive this:
+
+```js
+    "build": "nest build && yarn copyschema",
+    "copyschema": "cp src/schema.gql dist/schema.gql"
+```
+
+You will also need to modify your `app.module.ts` file:
+
+### app.module.ts
+```typescript
+@Module({
+  imports: [
+    GraphQLModule.forRootAsync<MercuriusDriverConfig>({
+      imports: [XYZModule],
+      useFactory: () => {
+        const schemaModuleOptions: Partial<GqlModuleOptions> = {};
+
+        if (process.env.NODE_ENV !== 'production' || process.env.IS_OFFLINE) {
+          schemaModuleOptions.autoSchemaFile = join(
+            process.cwd(),
+            'src/schema.gql',
+          );
+        } else {
+          schemaModuleOptions.typePaths = ['dist/*.gql'];
+        }
+
+        return {
+          graphiql: true,
+          context: (req: any) => ({
+            XYZLoader: createXYZLoader(XYZService),
+            headers: req.headers,
+          }),
+          ...schemaModuleOptions,
+        };
+      },
+      driver: MercuriusDriver,
+    }),
+    XYZModule,
+  ],
+  controllers: [AppController],
+  providers: [AppService],
+})
+```
+
 ### 📣Hint
 
 #### Lambda arguments
