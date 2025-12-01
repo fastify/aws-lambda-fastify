@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "3.3.1",
-    "@eslint/js": "9.39.0",
+    "@eslint/js": "9.39.1",
     "@fastify/multipart": "^9.0.2",
     "@h4ad/serverless-adapter": "4.4.0",
     "@types/aws-lambda": "8.10.157",
