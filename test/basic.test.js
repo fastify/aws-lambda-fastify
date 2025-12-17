@@ -133,6 +133,39 @@ describe('Basic Tests', () => {
     assert.equal(ret.headers['set-cookie'], 'qwerty=one')
   })
 
+  it('GET with base64 encoding disabled', async () => {
+    const fileBuffer = await readFileAsync(__filename)
+    const app = fastify()
+
+    app.get('/test', async (_request, reply) => {
+      reply.send(fileBuffer)
+    })
+
+    const proxy = awsLambdaFastify(app, {
+      binaryMimeTypes: ['application/octet-stream'],
+      serializeLambdaArequestrguments: true,
+      disableBase64Encoding: true
+    })
+
+    const ret = await proxy({
+      httpMethod: 'GET',
+      path: '/test',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    assert.equal(ret.statusCode, 200)
+    assert.equal(ret.body, fileBuffer.toString())
+    assert.equal(ret.isBase64Encoded, undefined)
+    assert.ok(ret.headers)
+    assert.equal(ret.headers['content-type'], 'application/octet-stream')
+    assert.ok(ret.headers['content-length'])
+    assert.ok(ret.headers.date)
+    assert.equal(ret.headers.connection, 'keep-alive')
+    assert.equal(ret.multiValueHeaders, undefined)
+  })
+
   it('GET with content-encoding response', async () => {
     const app1 = fastify()
     const fileBuffer = await readFileAsync(__filename)

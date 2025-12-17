@@ -2,21 +2,10 @@
 
 const { describe, it } = require('node:test')
 const assert = require('node:assert')
-const { promisify } = require('node:util')
 const { Readable } = require('node:stream')
 const fastify = require('fastify')
 const awsLambdaFastify = require('../index')
-
-const accumulate = promisify(function (stream, cb) {
-  const chunks = []
-  stream.on('error', cb)
-  stream.on('data', (chunk) => {
-    chunks.push(chunk)
-  })
-  stream.on('end', () => {
-    cb(null, Buffer.concat(chunks))
-  })
-})
+const { accumulate } = require('./utils')
 
 describe('Basic Stream Tests', () => {
   it('GET a normal response as stream', async () => {
@@ -70,7 +59,7 @@ describe('Basic Stream Tests', () => {
     const data = await accumulate(stream)
     assert.equal(data.toString(), '{"hello":"world"}', 'Response body should match')
 
-    assert.equal(meta.isBase64Encoded, false, 'isBase64Encoded should be false')
+    assert.equal(meta.isBase64Encoded, undefined, 'isBase64Encoded should not be set')
     assert.ok(meta.headers, 'Headers should be defined')
     assert.equal(
       meta.headers['content-type'],
@@ -147,7 +136,7 @@ describe('Basic Stream Tests', () => {
     const data = await accumulate(stream)
     assert.equal(data.toString(), '{"hello":"world"}', 'Response body should match')
 
-    assert.equal(meta.isBase64Encoded, false, 'isBase64Encoded should be false')
+    assert.equal(meta.isBase64Encoded, undefined, 'isBase64Encoded should not be set')
     assert.ok(meta.headers, 'Headers should be defined')
     assert.equal(
       meta.headers['content-type'],
@@ -170,5 +159,31 @@ describe('Basic Stream Tests', () => {
       ['qwerty=one', 'qwerty=two'],
       'Cookies should match'
     )
+  })
+
+  it('GET a streamed response as stream with disableBase64Encoding false', async () => {
+    const app = fastify()
+
+    const evt = {
+      version: '2.0',
+      httpMethod: 'GET',
+      path: '/test',
+      headers: {
+        'X-My-Header': 'wuuusaaa'
+      },
+      cookies: ['foo=bar'],
+      queryStringParameters: ''
+    }
+
+    app.get('/test', async (_request, reply) => {
+      reply.header('content-type', 'application/json; charset=utf-8')
+      return reply.send(Readable.from(JSON.stringify({ hello: 'world' })))
+    })
+
+    const proxy = awsLambdaFastify(app, { payloadAsStream: true, disableBase64Encoding: false })
+
+    const { meta } = await proxy(evt)
+
+    assert.equal(meta.isBase64Encoded, false)
   })
 })

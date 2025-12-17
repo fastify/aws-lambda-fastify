@@ -2,8 +2,10 @@
 
 const { describe, it } = require('node:test')
 const assert = require('node:assert')
+const { Readable } = require('node:stream')
 const fastify = require('fastify')
 const awsLambdaFastify = require('../index')
+const { accumulate } = require('./utils')
 
 describe('ALB Tests', async () => {
   it('GET request', async () => {
@@ -55,6 +57,33 @@ describe('ALB Tests', async () => {
     assert.ok(ret.headers.date)
     assert.equal(ret.headers.connection, 'keep-alive')
     assert.deepStrictEqual(ret.cookies, ['qwerty=one', 'qwerty=two'])
+  })
+
+  it('GET streamed response with payloadAsStream', async () => {
+    const app = fastify()
+    app.get('/stream', async (_request, reply) => {
+      reply.header('content-type', 'application/json; charset=utf-8')
+      return reply.send(Readable.from(JSON.stringify({ hello: 'world' })))
+    })
+
+    const proxy = awsLambdaFastify(app, {
+      payloadAsStream: true
+    })
+
+    const { meta, stream } = await proxy({
+      requestContext: { elb: { targetGroupArn: 'xxx' } },
+      httpMethod: 'GET',
+      path: '/stream',
+      headers: {
+        'X-My-Header': 'wuuusaaa'
+      }
+    })
+
+    assert.equal(meta.statusCode, 200)
+    assert.equal(meta.isBase64Encoded, false)
+
+    const data = await accumulate(stream)
+    assert.equal(data.toString(), '{"hello":"world"}')
   })
 
   it('GET Broken', async () => {

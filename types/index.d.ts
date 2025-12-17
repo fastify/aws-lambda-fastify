@@ -12,6 +12,7 @@ declare namespace awsLambdaFastify {
     decorateRequest?: boolean;
     decorationPropertyName?: string;
     enforceBase64?: (response: LightMyRequestResponse) => boolean;
+    disableBase64Encoding?: boolean;
     retainStage?: boolean;
     /**
      * usually set to 'proxy', if used
@@ -38,7 +39,7 @@ declare namespace awsLambdaFastify {
   export interface LambdaResponseBase {
     statusCode: number;
     headers: Record<string, string>;
-    isBase64Encoded: boolean;
+    isBase64Encoded?: boolean;
     cookies?: string[];
   }
 

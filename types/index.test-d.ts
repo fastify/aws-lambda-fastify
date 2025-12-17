@@ -92,6 +92,9 @@ expectAssignable<LambdaFastifyOptions>({
   },
   retainStage: true,
 });
+expectAssignable<LambdaFastifyOptions>({
+  disableBase64Encoding: true,
+});
 
 expectError(awsLambdaFastify());
 expectError(awsLambdaFastify(app, { neh: "definition" }));
