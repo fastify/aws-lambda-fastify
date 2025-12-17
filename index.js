@@ -20,6 +20,7 @@ module.exports = (app, options) => {
   options.parseCommaSeparatedQueryParams = options.parseCommaSeparatedQueryParams !== undefined ? options.parseCommaSeparatedQueryParams : true
   options.payloadAsStream = options.payloadAsStream !== undefined ? options.payloadAsStream : false
   options.albMultiValueHeaders = options.albMultiValueHeaders !== undefined ? options.albMultiValueHeaders : false
+  options.disableBase64Encoding = options.disableBase64Encoding !== undefined ? options.disableBase64Encoding : false
   let currentAwsArguments = {}
   if (options.decorateRequest) {
     options.decorationPropertyName = options.decorationPropertyName || 'awsLambda'
@@ -161,13 +162,14 @@ module.exports = (app, options) => {
         })
 
         const contentType = (res.headers['content-type'] || res.headers['Content-Type'] || '').split(';', 1)[0]
-        const isBase64Encoded = options.binaryMimeTypes.indexOf(contentType) > -1 || customBinaryCheck(options, res)
+        const shouldBase64Encode = !options.disableBase64Encoding && (options.binaryMimeTypes.indexOf(contentType) > -1 || customBinaryCheck(options, res))
 
         const ret = {
           statusCode: res.statusCode,
-          headers: res.headers,
-          isBase64Encoded
+          headers: res.headers
         }
+
+        if (!options.disableBase64Encoding) ret.isBase64Encoded = shouldBase64Encode
 
         if (cookies && event.version === '2.0') ret.cookies = cookies
         if (multiValueHeaders && (!event.version || event.version === '1.0')) ret.multiValueHeaders = multiValueHeaders
@@ -179,7 +181,7 @@ module.exports = (app, options) => {
         }
 
         if (!options.payloadAsStream) {
-          ret.body = isBase64Encoded ? res.rawPayload.toString('base64') : res.payload
+          ret.body = shouldBase64Encode ? res.rawPayload.toString('base64') : res.payload
           return resolve(ret)
         }
 
