@@ -10,6 +10,13 @@ const customBinaryCheck = (options, res) => {
   return enforceBase64(res) === true
 }
 
+const disableBase64EncodingDefault = (options) => {
+  if (options.payloadAsStream) {
+    return (event) => !event.requestContext?.elb
+  }
+  return (_event) => false
+}
+
 module.exports = (app, options) => {
   options = options || {}
   options.binaryMimeTypes = options.binaryMimeTypes || []
@@ -20,7 +27,12 @@ module.exports = (app, options) => {
   options.parseCommaSeparatedQueryParams = options.parseCommaSeparatedQueryParams !== undefined ? options.parseCommaSeparatedQueryParams : true
   options.payloadAsStream = options.payloadAsStream !== undefined ? options.payloadAsStream : false
   options.albMultiValueHeaders = options.albMultiValueHeaders !== undefined ? options.albMultiValueHeaders : false
-  options.disableBase64Encoding = options.disableBase64Encoding !== undefined ? options.disableBase64Encoding : false
+  if (options.disableBase64Encoding === undefined) {
+    options.disableBase64Encoding = disableBase64EncodingDefault(options)
+  } else {
+    const opt = options.disableBase64Encoding
+    options.disableBase64Encoding = (_event) => opt
+  }
   let currentAwsArguments = {}
   if (options.decorateRequest) {
     options.decorationPropertyName = options.decorationPropertyName || 'awsLambda'
@@ -161,15 +173,16 @@ module.exports = (app, options) => {
           }
         })
 
+        const isBase64Disabled = options.disableBase64Encoding(event)
         const contentType = (res.headers['content-type'] || res.headers['Content-Type'] || '').split(';', 1)[0]
-        const shouldBase64Encode = !options.disableBase64Encoding && (options.binaryMimeTypes.indexOf(contentType) > -1 || customBinaryCheck(options, res))
+        const shouldBase64Encode = !isBase64Disabled && (options.binaryMimeTypes.indexOf(contentType) > -1 || customBinaryCheck(options, res))
 
         const ret = {
           statusCode: res.statusCode,
           headers: res.headers
         }
 
-        if (!options.disableBase64Encoding) ret.isBase64Encoded = shouldBase64Encode
+        if (!isBase64Disabled) ret.isBase64Encoded = shouldBase64Encode
 
         if (cookies && event.version === '2.0') ret.cookies = cookies
         if (multiValueHeaders && (!event.version || event.version === '1.0')) ret.multiValueHeaders = multiValueHeaders
