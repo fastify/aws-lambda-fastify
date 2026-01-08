@@ -8,17 +8,6 @@ export default defineConfig([
     ignores: neostandard.resolveIgnoresFromGitignore()
   }),
   {
-    languageOptions: {
-      globals: {
-        describe: false,
-        it: false,
-        before: false,
-        after: false,
-        beforeEach: false,
-        afterEach: false
-      }
-    },
-
     rules: {
       'array-bracket-spacing': 0,
       'dot-notation': 0
