@@ -1,32 +1,27 @@
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
 import js from '@eslint/js'
-import { FlatCompat } from '@eslint/eslintrc'
+import { defineConfig } from 'eslint/config'
+import neostandard from 'neostandard'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all
-})
+export default defineConfig([
+  js.configs.recommended,
+  neostandard({
+    ignores: neostandard.resolveIgnoresFromGitignore()
+  }),
+  {
+    languageOptions: {
+      globals: {
+        describe: false,
+        it: false,
+        before: false,
+        after: false,
+        beforeEach: false,
+        afterEach: false
+      }
+    },
 
-export default [{
-  ignores: ['node_modules']
-}, ...compat.extends('standard'), {
-  languageOptions: {
-    globals: {
-      describe: false,
-      it: false,
-      before: false,
-      after: false,
-      beforeEach: false,
-      afterEach: false
+    rules: {
+      'array-bracket-spacing': 0,
+      'dot-notation': 0
     }
-  },
-
-  rules: {
-    'array-bracket-spacing': 0,
-    'dot-notation': 0
-  }
-}]
+  }]
+)
