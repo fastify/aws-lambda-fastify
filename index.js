@@ -206,7 +206,7 @@ module.exports = (app, options) => {
         })
       })
     })
-    if (!callback) return prom
+    if (typeof callback !== 'function') return prom
     prom.then((ret) => callback(null, ret)).catch(callback)
     return prom
   }
