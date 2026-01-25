@@ -1,5 +1,7 @@
 'use strict'
 
+const crypto = require('node:crypto')
+
 const isCompressedDefault = (res) => {
   const contentEncoding = res.headers['content-encoding'] || res.headers['Content-Encoding']
   return contentEncoding && contentEncoding !== 'identity'
@@ -33,29 +35,101 @@ module.exports = (app, options) => {
     const opt = options.disableBase64Encoding
     options.disableBase64Encoding = (_event) => opt
   }
-  let currentAwsArguments = {}
+
+  // Symbol for request-local storage on the Fastify Request instance
+  const AWS_ARGS = Symbol('awsLambdaArgs')
+
+  // Map to temporarily hold event/context per-invocation when serializeLambdaArguments is false.
+  // Keys are unique tokens passed via a header per inject call.
+  const awsRequestMap = new Map()
+
   if (options.decorateRequest) {
     options.decorationPropertyName = options.decorationPropertyName || 'awsLambda'
+
+    // Lazy getter that closes over the Fastify request instance (req).
     app.decorateRequest(options.decorationPropertyName, {
-      getter: () => ({
-        get event () {
-          return currentAwsArguments.event
-        },
-        get context () {
-          return currentAwsArguments.context
+      getter: function () {
+        const req = this
+
+        // fast path: already attached to the request instance
+        if (req[AWS_ARGS]) {
+          const store = req[AWS_ARGS]
+          return {
+            get event () { return store.event },
+            get context () { return store.context }
+          }
         }
-      })
+
+        try {
+          const headers = req.headers || {}
+
+          // 1) serialized-header path (serializeLambdaArguments === true)
+          const evHeader = headers['x-apigateway-event'] || headers['X-APIGATEWAY-EVENT']
+          const ctxHeader = headers['x-apigateway-context'] || headers['X-APIGATEWAY-CONTEXT']
+
+          if (evHeader) {
+            // decode then parse (fall back to raw JSON if decodeURIComponent fails)
+            let evt
+            try {
+              evt = JSON.parse(decodeURIComponent(evHeader))
+            } catch (e) {
+              evt = undefined
+            }
+            let ctx
+            if (ctxHeader) {
+              try {
+                ctx = JSON.parse(decodeURIComponent(ctxHeader))
+              } catch (e) {
+                ctx = undefined
+              }
+            }
+            req[AWS_ARGS] = { event: evt, context: ctx }
+            const store = req[AWS_ARGS]
+            return {
+              get event () { return store.event },
+              get context () { return store.context }
+            }
+          }
+
+          // 2) token-map path (non-serialized flow)
+          const token = headers['x-aws-lambda-fastify-request']
+          if (token) {
+            const storeFromMap = awsRequestMap.get(token)
+            if (storeFromMap) {
+              // attach to request and remove mapping + token header
+              req[AWS_ARGS] = { event: storeFromMap.event, context: storeFromMap.context }
+              awsRequestMap.delete(token)
+              // remove token header so it is not visible to user code
+              delete headers['x-aws-lambda-fastify-request']
+              const store = req[AWS_ARGS]
+              return {
+                get event () { return store.event },
+                get context () { return store.context }
+              }
+            }
+          }
+        } catch (err) {
+          // swallow parsing errors; fall through to undefined getters
+        }
+
+        // nothing found — return getters that yield undefined
+        return {
+          get event () { return undefined },
+          get context () { return undefined }
+        }
+      }
     })
   }
+
   return function (event, context) {
     const callback = arguments[2] // https://github.com/aws/aws-lambda-nodejs-runtime-interface-client/issues/137
-    currentAwsArguments.event = event
-    currentAwsArguments.context = context
+
     if (options.callbackWaitsForEmptyEventLoop !== undefined) {
       context.callbackWaitsForEmptyEventLoop = options.callbackWaitsForEmptyEventLoop
     }
     // event.body = event.body || '' // do not magically default body to ''
 
+    // Build method/url, query, headers, payload as before
     const method = event.httpMethod || (event.requestContext && event.requestContext.http ? event.requestContext.http.method : undefined)
     let url = (options.pathParameterUsedAsPath && event.pathParameters && event.pathParameters[options.pathParameterUsedAsPath] && `/${event.pathParameters[options.pathParameterUsedAsPath]}`) || event.path || event.rawPath || '/' // seen rawPath for HTTP-API
     // NOTE: if used directly via API Gateway domain and /stage
@@ -64,6 +138,7 @@ module.exports = (app, options) => {
         event.requestContext.resourcePath.indexOf(`/${event.requestContext.stage}/`) !== 0) {
       url = url.substring(event.requestContext.stage.length + 1)
     }
+
     const query = {}
     const parsedCommaSeparatedQuery = {}
     if (event.requestContext && event.requestContext.elb) {
@@ -89,6 +164,7 @@ module.exports = (app, options) => {
       }
       Object.assign(query, event.multiValueQueryStringParameters || event.queryStringParameters, parsedCommaSeparatedQuery)
     }
+
     const headers = Object.assign({}, event.headers)
     if (event.multiValueHeaders) {
       Object.keys(event.multiValueHeaders).forEach((h) => {
@@ -99,14 +175,24 @@ module.exports = (app, options) => {
         }
       })
     }
+
     const payload = event.body !== null && event.body !== undefined ? Buffer.from(event.body, event.isBase64Encoded ? 'base64' : 'utf8') : event.body
     // NOTE: API Gateway is not setting Content-Length header on requests even when they have a body
     if (event.body && !headers['Content-Length'] && !headers['content-length']) headers['content-length'] = Buffer.byteLength(payload)
 
+    // preserve the original serializeLambdaArguments behaviour
     if (options.serializeLambdaArguments) {
-      event.body = undefined // remove body from event only when setting request headers
+      if (event.body) event.body = undefined // remove body from event only when setting request headers
       headers['x-apigateway-event'] = encodeURIComponent(JSON.stringify(event))
       if (context) headers['x-apigateway-context'] = encodeURIComponent(JSON.stringify(context))
+    }
+
+    // For decorateRequest + non-serialized path, create token + map entry
+    let tokenForThisInvocation
+    if (options.decorateRequest && !options.serializeLambdaArguments) {
+      tokenForThisInvocation = crypto.randomBytes(12).toString('hex')
+      headers['x-aws-lambda-fastify-request'] = tokenForThisInvocation
+      awsRequestMap.set(tokenForThisInvocation, { event, context })
     }
 
     if (event.requestContext && event.requestContext.requestId) {
@@ -129,7 +215,9 @@ module.exports = (app, options) => {
 
     const prom = new Promise((resolve) => {
       app.inject({ method, url, query, payload, headers, remoteAddress, payloadAsStream: options.payloadAsStream }, (err, res) => {
-        currentAwsArguments = {}
+        // cleanup mapping if still present (safe to call even if getter already removed it)
+        if (tokenForThisInvocation) awsRequestMap.delete(tokenForThisInvocation)
+
         if (err) {
           console.error(err)
           if (!options.payloadAsStream) {

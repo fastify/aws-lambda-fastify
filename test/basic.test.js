@@ -24,36 +24,47 @@ describe('Basic Tests', () => {
     }
 
     app.get('/test', async (request, reply) => {
+      console.log('CHECK THIS!!!!!!')
+      console.log(1)
       assert.equal(
         request.headers['x-my-header'],
         'wuuusaaa',
         'Header "X-My-Header" should match'
       )
+      console.log(2)
       assert.equal(
         request.headers.cookie,
         'foo=bar',
         'Cookie header should match'
       )
+      console.log(3)
       assert.equal(
         request.headers['x-apigateway-event'],
         '%7B%22version%22%3A%222.0%22%2C%22httpMethod%22%3A%22GET%22%2C%22path%22%3A%22%2Ftest%22%2C%22headers%22%3A%7B%22X-My-Header%22%3A%22wuuusaaa%22%7D%2C%22cookies%22%3A%5B%22foo%3Dbar%22%5D%2C%22queryStringParameters%22%3A%22%22%7D',
         'x-apigateway-event header should match'
       )
+      console.log(4)
+      console.log(request.awsLambda)
+      console.log(request.awsLambda.event)
+      console.log(evt)
       assert.deepEqual(
         request.awsLambda.event,
         evt,
         'Lambda event object should match'
       )
+      console.log(5)
       assert.equal(
         request.headers['user-agent'],
         'lightMyRequest',
         'User-agent header should match'
       )
+      console.log(6)
       assert.equal(
         request.headers.host,
         'localhost:80',
         'Host header should match'
       )
+      console.log(7)
 
       reply.header('Set-Cookie', 'qwerty=one')
       reply.header('Set-Cookie', 'qwerty=two')
