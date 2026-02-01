@@ -44,7 +44,7 @@
     "@eslint/js": "9.39.2",
     "@fastify/multipart": "^9.3.0",
     "@h4ad/serverless-adapter": "4.4.0",
-    "@types/aws-lambda": "8.10.159",
+    "@types/aws-lambda": "8.10.160",
     "@types/node": "^25.0.3",
     "aws-serverless-express": "^3.4.0",
     "aws-serverless-fastify": "^3.1.3",
