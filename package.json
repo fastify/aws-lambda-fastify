@@ -40,7 +40,7 @@
     "postversion": "git push && git push --tags"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "3.3.3",
+    "@eslint/eslintrc": "3.3.4",
     "@eslint/js": "9.39.2",
     "@fastify/multipart": "^9.3.0",
     "@h4ad/serverless-adapter": "4.4.0",
