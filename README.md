@@ -21,8 +21,8 @@ $ npm i @fastify/aws-lambda
 
 | property                       | description                                                                                                                                | default value                      |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------- |
-| binaryMimeTypes                | Array of binary MimeTypes to handle                                                                                                        | `[]`                               |
-| enforceBase64                  | Function that receives the response and returns a boolean indicating if the response content is binary or not and should be base64-encoded | `undefined`                        |
+| binaryMimeTypes                | Array of `Content-Type` values to treat as binary (base64-encoded for API Gateway). See [Binary responses](#binary-responses).             | `[]`                               |
+| enforceBase64                  | Function `(res) => boolean` that decides whether the response body should be base64-encoded. When omitted, a built-in default base64-encodes any response with a non-identity `Content-Encoding` (i.e. `gzip`, `br`, `deflate`, `zstd`, …). See [Binary responses](#binary-responses). | `undefined` *(falls back to a `Content-Encoding`-aware default)* |
 | disableBase64Encoding          | Disable base64 encoding of responses and omit the `isBase64Encoded` property. When `undefined`, it is automatically enabled when `payloadAsStream` is `true` and the request does not come from an ALB. | `undefined`                        |
 | serializeLambdaArguments       | Activate the serialization of lambda Event and Context in http header `x-apigateway-event` `x-apigateway-context`                          | `false` *(was `true` for <v2.0.0)* |
 | decorateRequest                | Decorates the fastify request with the lambda Event and Context `request.awsLambda.event` `request.awsLambda.context`                      | `true`                             |
@@ -33,6 +33,48 @@ $ npm i @fastify/aws-lambda
 | parseCommaSeparatedQueryParams | Parse querystring with commas into an array of values. Affects the behavior of the querystring parser with commas while using [Payload Format Version 2.0](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html#http-api-develop-integrations-lambda.proxy-format)                                                                                                                       | `true`                             |
 | payloadAsStream                |  If set to true the response is a stream and can be used with `awslambda.streamifyResponse`                                                | `false`                            |
 | albMultiValueHeaders           |  Set to true if using ALB with multi value headers attribute                                                                               | `false`                            |
+
+## Binary responses
+
+API Gateway needs to know when a response body is binary so it can be base64-encoded over the wire (`isBase64Encoded: true` in the Lambda return payload). **@fastify/aws-lambda** decides this via two complementary paths — at least one match triggers base64 encoding:
+
+- **`binaryMimeTypes`** — matches the response `Content-Type` against an allowlist. Use this when binary-ness is a property of the content type itself (e.g. `application/octet-stream`, `image/png`, `application/zip`).
+- **`enforceBase64`** — a function called with the response. Use this when binary-ness depends on something other than `Content-Type` — most commonly when the body is **compressed** (binary bytes) but the content type itself is text-like (e.g. `application/json` with `Content-Encoding: br`).
+
+When `enforceBase64` is omitted, a built-in default kicks in that base64-encodes any response with a non-identity `Content-Encoding`. **So compressed responses (`gzip`, `br`, `deflate`, `zstd`, …) work out of the box — you don't need to write your own callback for the common case.**
+
+### Example — let compressed responses pass through automatically
+
+```js
+const fastify = require('fastify')
+const compress = require('@fastify/compress')
+const awsLambdaFastify = require('@fastify/aws-lambda')
+
+const app = fastify()
+app.register(compress, { global: true, encodings: ['br', 'gzip'] })
+app.get('/', (req, reply) => reply.send({ hello: 'world' }))
+
+// Responses gain Content-Encoding: br|gzip, and the default behaviour
+// auto-base64-encodes them for API Gateway. No extra option needed.
+exports.handler = awsLambdaFastify(app)
+```
+
+### Example — add a custom rule on top of the default
+
+```js
+exports.handler = awsLambdaFastify(app, {
+  binaryMimeTypes: ['application/octet-stream', 'image/png'],
+  // Custom rule for binary detection. Note: when you pass enforceBase64,
+  // it REPLACES the built-in Content-Encoding default — it doesn't compose.
+  // Re-implement the compression check yourself if you still want it.
+  enforceBase64: (res) => {
+    if (res.headers['content-type'] === 'application/x-protobuf') return true
+    const enc = res.headers['content-encoding']
+    return !!enc && enc !== 'identity'
+  }
+})
+```
+
 ## 📖Example
 
 ### lambda.js
