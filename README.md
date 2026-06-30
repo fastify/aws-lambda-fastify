@@ -3,11 +3,11 @@
 [![CI](https://github.com/fastify/aws-lambda-fastify/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/fastify/aws-lambda-fastify/actions/workflows/ci.yml)
 [![NPM version](https://img.shields.io/npm/v/@fastify/aws-lambda.svg?style=flat)](https://www.npmjs.com/package/@fastify/aws-lambda)
 
-Inspired by the AWSLABS [aws-serverless-express](https://github.com/awslabs/aws-serverless-express) library tailor made for the [Fastify](https://fastify.dev/) web framework.
+Inspired by the Code Genie [serverless-express](https://github.com/CodeGenieApp/serverless-express) library tailor made for the [Fastify](https://fastify.dev/) web framework.
 
 **No use of internal sockets, makes use of Fastify's [inject](https://fastify.dev/docs/latest/Guides/Testing/#testing-with-http-injection) function.**
 
-**Seems [faster](https://github.com/fastify/aws-lambda-fastify#%EF%B8%8Fsome-basic-performance-metrics)** *(as the name implies)* **than [aws-serverless-express](https://github.com/awslabs/aws-serverless-express) and [aws-serverless-fastify](https://github.com/benMain/aws-serverless-fastify) 😉**
+**Seems [faster](https://github.com/fastify/aws-lambda-fastify#%EF%B8%8Fsome-basic-performance-metrics)** *(as the name implies)* **than [serverless-express](https://github.com/CodeGenieApp/serverless-express) and [aws-serverless-fastify](https://github.com/benMain/aws-serverless-fastify) 😉**
 
 ## 👨🏻‍💻Installation
 
@@ -27,7 +27,7 @@ $ npm i @fastify/aws-lambda
 | serializeLambdaArguments       | Activate the serialization of lambda Event and Context in http header `x-apigateway-event` `x-apigateway-context`                          | `false` *(was `true` for <v2.0.0)* |
 | decorateRequest                | Decorates the fastify request with the lambda Event and Context `request.awsLambda.event` `request.awsLambda.context`                      | `true`                             |
 | decorationPropertyName         | The default property name for request decoration                                                                                           | `awsLambda`                        |
-| callbackWaitsForEmptyEventLoop | See: [Official Documentation](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-context.html#nodejs-prog-model-context-properties)       | `undefined`                        |
+| callbackWaitsForEmptyEventLoop | See: [Official Documentation](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-context.html)       | `undefined`                        |
 | retainStage                    | Retain the stage part of the API Gateway URL                                                                                               | `false`                            |
 | pathParameterUsedAsPath        | Use a defined pathParameter as path (i.e. `'proxy'`)                                                                                       | `false`                            |
 | parseCommaSeparatedQueryParams | Parse querystring with commas into an array of values. Affects the behavior of the querystring parser with commas while using [Payload Format Version 2.0](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html#http-api-develop-integrations-lambda.proxy-format)                                                                                                                       | `true`                             |
@@ -199,7 +199,7 @@ await app.ready() // https://github.com/fastify/aws-lambda-fastify/issues/89
 
 **[aws-serverless-fastify](https://github.com/benMain/aws-serverless-fastify)** x **17,937 ops/sec** ±1.83% (86 runs sampled)
 
-**[aws-serverless-express](https://github.com/awslabs/aws-serverless-express)** x **16,647 ops/sec** ±2.88% (87 runs sampled)
+**[serverless-express](https://github.com/CodeGenieApp/serverless-express)** x **16,647 ops/sec** ±2.88% (87 runs sampled)
 
 Fastest is **@fastify/aws-lambda (decorateRequest : false), @fastify/aws-lambda**
 
@@ -213,7 +213,7 @@ Fastest is **@fastify/aws-lambda (decorateRequest : false), @fastify/aws-lambda*
 
 #### 🎖Who is using it?
 
-<a href="https://locize.com" target="_blank" rel="nofollow">
+<a href="https://www.locize.com" target="_blank" rel="nofollow">
   <img style="max-height: 80px;" src="https://raw.githubusercontent.com/fastify/aws-lambda-fastify/main/images/logos/locize.png" alt="locize is using @fastify/aws-lambda"/>
 </a>
 
