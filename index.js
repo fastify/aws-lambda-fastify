@@ -12,6 +12,11 @@ const customBinaryCheck = (options, res) => {
   return enforceBase64(res) === true
 }
 
+// Header names reserved for this library's own internal protocol.
+// They are always stripped from the incoming event so a client can never forge them.
+const TOKEN_HEADER = 'x-aws-lambda-fastify-request'
+const RESERVED_HEADERS = [TOKEN_HEADER, 'x-apigateway-event', 'x-apigateway-context']
+
 const disableBase64EncodingDefault = (options) => {
   if (options.payloadAsStream) {
     return (event) => !event.requestContext?.elb
@@ -39,7 +44,7 @@ module.exports = (app, options) => {
   // Symbol for request-local storage on the Fastify Request instance
   const AWS_ARGS = Symbol('awsLambdaArgs')
 
-  // Map to temporarily hold event/context per-invocation when serializeLambdaArguments is false.
+  // Map to temporarily hold event/context per-invocation.
   // Keys are unique tokens passed via a header per inject call.
   const awsRequestMap = new Map()
 
@@ -51,71 +56,26 @@ module.exports = (app, options) => {
       getter: function () {
         const req = this
 
-        // fast path: already attached to the request instance
-        if (req[AWS_ARGS]) {
-          const store = req[AWS_ARGS]
-          return {
-            get event () { return store.event },
-            get context () { return store.context }
-          }
-        }
-
-        try {
+        // Resolve via the internal per-invocation token only (unless already attached to
+        // the request instance). The `x-apigateway-event` / `x-apigateway-context` headers
+        // are client controllable and must never be trusted here, see GHSA-m93c-jj3f-68ph.
+        if (!req[AWS_ARGS]) {
           const headers = req.headers || {}
-
-          // 1) serialized-header path (serializeLambdaArguments === true)
-          const evHeader = headers['x-apigateway-event'] || headers['X-APIGATEWAY-EVENT']
-          const ctxHeader = headers['x-apigateway-context'] || headers['X-APIGATEWAY-CONTEXT']
-
-          if (evHeader) {
-            // decode then parse (fall back to raw JSON if decodeURIComponent fails)
-            let evt
-            try {
-              evt = JSON.parse(decodeURIComponent(evHeader))
-            } catch (e) {
-              evt = undefined
-            }
-            let ctx
-            if (ctxHeader) {
-              try {
-                ctx = JSON.parse(decodeURIComponent(ctxHeader))
-              } catch (e) {
-                ctx = undefined
-              }
-            }
-            req[AWS_ARGS] = { event: evt, context: ctx }
-            const store = req[AWS_ARGS]
-            return {
-              get event () { return store.event },
-              get context () { return store.context }
-            }
+          const token = headers[TOKEN_HEADER]
+          const storeFromMap = token && awsRequestMap.get(token)
+          if (storeFromMap) {
+            // attach to request and remove mapping + token header
+            req[AWS_ARGS] = { event: storeFromMap.event, context: storeFromMap.context }
+            awsRequestMap.delete(token)
+            // remove token header so it is not visible to user code
+            delete headers[TOKEN_HEADER]
           }
-
-          // 2) token-map path (non-serialized flow)
-          const token = headers['x-aws-lambda-fastify-request']
-          if (token) {
-            const storeFromMap = awsRequestMap.get(token)
-            if (storeFromMap) {
-              // attach to request and remove mapping + token header
-              req[AWS_ARGS] = { event: storeFromMap.event, context: storeFromMap.context }
-              awsRequestMap.delete(token)
-              // remove token header so it is not visible to user code
-              delete headers['x-aws-lambda-fastify-request']
-              const store = req[AWS_ARGS]
-              return {
-                get event () { return store.event },
-                get context () { return store.context }
-              }
-            }
-          }
-        } catch (err) {
-          // swallow parsing errors; fall through to undefined getters
         }
 
-        // nothing found — return getters that yield undefined
+        const store = req[AWS_ARGS] || {}
         return {
-          get event () { return undefined },
-          get context () { return undefined }
+          get event () { return store.event },
+          get context () { return store.context }
         }
       }
     })
@@ -175,6 +135,10 @@ module.exports = (app, options) => {
         }
       })
     }
+    // never let a client smuggle in our own reserved headers (GHSA-m93c-jj3f-68ph)
+    Object.keys(headers).forEach((h) => {
+      if (RESERVED_HEADERS.includes(h.toLowerCase())) delete headers[h]
+    })
 
     const payload = event.body !== null && event.body !== undefined ? Buffer.from(event.body, event.isBase64Encoded ? 'base64' : 'utf8') : event.body
     // NOTE: API Gateway is not setting Content-Length header on requests even when they have a body
@@ -187,11 +151,12 @@ module.exports = (app, options) => {
       if (context) headers['x-apigateway-context'] = encodeURIComponent(JSON.stringify(context))
     }
 
-    // For decorateRequest + non-serialized path, create token + map entry
+    // the decoration is always resolved through this token, never through the
+    // (client controllable) serialized headers
     let tokenForThisInvocation
-    if (options.decorateRequest && !options.serializeLambdaArguments) {
+    if (options.decorateRequest) {
       tokenForThisInvocation = crypto.randomBytes(12).toString('hex')
-      headers['x-aws-lambda-fastify-request'] = tokenForThisInvocation
+      headers[TOKEN_HEADER] = tokenForThisInvocation
       awsRequestMap.set(tokenForThisInvocation, { event, context })
     }
 
