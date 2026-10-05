@@ -36,9 +36,7 @@
     "test": "npm run test:unit && npm run test:typescript",
     "test:unit": "node scripts/unit.js",
     "test:typescript": "tstyche",
-    "performance": "npm run lint && node performanceTest/test",
-    "preversion": "npm run test && git push",
-    "postversion": "git push && git push --tags"
+    "performance": "npm run lint && node performanceTest/test"
   },
   "devDependencies": {
     "@eslint/eslintrc": "3.3.5",
