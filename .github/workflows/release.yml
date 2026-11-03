@@ -19,6 +19,6 @@ jobs:
     permissions:
       id-token: write # required for npm provenance via OIDC
       contents: write # required to push the release commit and the tag
-    uses: fastify/workflows/.github/workflows/reusable-release.yml@b1a11bce713bc857e52b2231fec3c89071ad3135
+    uses: fastify/workflows/.github/workflows/reusable-release.yml@6d3d0270cc69d31a846f126855fcb6306515ad33
     with:
       semver: ${{ inputs.semver }}
